@@ -10,11 +10,9 @@ int binary_search(int *arr, int inf, int sup, int value) {
         return m;
     } else if (arr[m] <= value) {
         return binary_search(arr, (inf - m + 1), sup, value);
-    } else if (arr[m] >= m) {
+    } else {
         return binary_search(arr, inf, (sup - m - 1), value);
     }
-    ;
-    
 }
 
 int main() {
