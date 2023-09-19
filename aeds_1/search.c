@@ -1,44 +1,62 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-int sequencial_search(int *v, int n, int chave)
-{
-    int i;
-    for (i = 0; i < n; ++i)
-    {
-        if (v[i] == chave)
-        {
+/**
+ * Itera por todos os elementos do vetor ate encontrar a chave,
+ * Se encontrar retorna seu indice, se não retorna -1
+ * @param[v] Ponteiro para o vetor
+ * @param[n] Tamanho do vetor começando em 1
+ * @param[chave] Elemento que se busca
+ */
+int sequencialSearch(int *v, int n, int chave) {
+    for (int i = 0; i < n; ++i) {
+        if (v[i] == chave) {
             return i;
         }
     }
     return -1;
 }
 
-int binary_search(int *arr, int inf, int sup, int value)
-{
+/**
+ * @brief Pesquisa utilizada em vetores ordenados.
+ * Divide o vetor sempre na metade.
+ * Se a chave for maior que a metade, chama-se recursivamente para buscar na metade menor.
+ * Caso contrario busca na metade maior.
+ *
+ * @param arr Vetor onde se quer buscar o valor
+ * @param inf Limite inferior do vetor
+ * @param sup Limite superior do vetor
+ * @param value Valor que se quer encontrar
+ * @return Indice de onde o elemento foi encontrado ou -1 se não for encontrado
+ */
+int binarySearch(int *arr, int inf, int sup, int value) {
+    /* Calcula a metade do vetor */
     int m = (inf + sup) / 2;
-    if (inf > sup)
-    {
+    if (inf > sup) {
         return -1;
-    }
-    else if (arr[m] == value)
-    {
+    } else if (arr[m] == value) {
         return m;
-    }
-    else if (arr[m] <= value)
-    {
-        return binary_search(arr, (inf + m + 1), sup, value);
-    }
-    else
-    {
-        return binary_search(arr, inf, (sup - m - 1), value);
+    } else if (arr[m] <= value) {
+        /* 
+         * Se o valor desejado for maior que o valor na metade do vetor 
+         * Recursivamente chame a função novamente na metade acima do meio do vetor
+        */
+        return binarySearch(arr, (inf + m + 1), sup, value);
+    } else {
+        /* 
+         * Se o valor desejado for menor que o valor na metade do vetor 
+         * Recursivamente chame a função novamente na metade abaixo do meio do vetor
+        */
+        return binarySearch(arr, inf, (sup - m - 1), value);
     }
 }
 
-int main()
-{
+int main() {
+    /* Declaração de um vetor generico */
     int arr[10] = {1, 1, 2, 3, 5, 7, 10, 22, 34, 54};
 
-    printf("%d\n", sequencial_search(arr, 9, 22));
-    printf("%d\n", binary_search(arr, 0, 9, 22));
+    /* Pesquisa atravês do metodo Pesquisa Sequencial */
+    printf("%d\n", sequencialSearch(arr, 10, 54));
+
+    /* Pesquisa atravês do metodo Pesquisa Binaria */
+    printf("%d\n", binarySearch(arr, 0, 10, 54));
 }
