@@ -70,11 +70,31 @@ void insercao(int *v, int n) {
     }
 }
 
+/**
+ * @brief Percorre um vetor simultaneamente a partir do início ate a metade e da
+ * metade ate o fim. Junta as duas partes em um vetor auxiliar de forma que elas
+ * estejam ordenadas no vetor auxiliar
+ *
+ * @param v Ponteiro para o vetor
+ * @param e Posição de inicio
+ * @param m Posição da metade
+ * @param d Posição do fim
+ */
 void merge(int *v, int e, int m, int d) {
-    // e1 = e; d1 = m; e2 = m + 1; d2 = d
+    /* Relação com o código do professor e1 = e; d1 = m; e2 = m + 1; d2 = d */
+
+    /* i salva a posição de inicio para poder ser alterada */
+    /* j salva a posição de inicio da segunda metade do vetor */
+    /* j salva a posição de iteração do vetor auxiliar */
     int i = e, j = (m + 1), k = 0;
+
+    /* Tamanho mínimo para comportar a quantidade de elementos a serem
+     * analisados */
     int vAux[d - e + 1];
 
+    /* Enquanto i e j estiver no intervalo valido. Procura qual e o menor entre
+     * eles e salva na posição k do vetor auxiliar, incrementando somente a
+     * variável referente ao seu índice e o índice do vetor auxiliar */
     while (i <= m && j <= d) {
         if (v[i] <= v[j]) {
             vAux[k] = v[i];
@@ -86,6 +106,9 @@ void merge(int *v, int e, int m, int d) {
         k++;
     }
 
+    /* Apos i ou j saírem do espaço permitido adicione os elementos restantes do
+     * vetor que ainda esta no espaço permitido no vetor auxiliar. Esses
+     * elementos restantes não estarão ordenados */
     while (i <= m) {
         vAux[k] = v[i];
         k++;
@@ -97,33 +120,64 @@ void merge(int *v, int e, int m, int d) {
         j++;
     }
 
+    /* Passa os valores do vetor auxiliar para o vetor original */
     for (i = 0; i < k; i++) {
         v[i + e] = vAux[i];
     }
 }
 
+/**
+ * @brief Divide um vetor sucessivas vezes baseado na metade e ordena partes
+ * dele para ordena-lo
+ *
+ * @param v Vetor
+ * @param e Posição de inicio
+ * @param d Posição do fim
+ */
 void mergeSort(int *v, int e, int d) {
+    /* Se o lado esquerdo for menor que realize a ordenação da parte */
     if (e < d) {
+        /* Calcule a metade do vetor */
         int m = (e + d) / 2;
+        /* Chame o mergeSort da direita ate a metade */
         mergeSort(v, e, m);
+        /* Chame o mergeSort da metade + 1 ate a esquerda */
         mergeSort(v, m + 1, d);
+        /* Realiza o merge com todo o espaço */
         merge(v, e, m, d);
     }
 }
 
+/**
+ * @brief
+ *
+ * @param v Vetor
+ * @param e Posição da esquerda
+ * @param d Posição da direita
+ * @return int
+ */
 int particao(int *v, int e, int d) {
     int i = e, j = d;
+    /* Pivô e o elemento na metade do vetor */
     int pivo = v[(e + d) / 2];
 
+    /* Enquanto a esquerda for <= a direita */
     while (i <= j) {
+        /* Procura um elemento da esquerda que seja maior que o pivô, salva sua
+         * posição em i */
         while (v[i] < pivo) {
             i++;
         }
+        /* Procura um elemento da esquerda que seja menor que o pivô, salva sua
+         * posição em j */
         while (v[j] > pivo) {
             j--;
         }
 
+        /* Enquanto a esquerda for <= a direita */
         if (i < j) {
+            /* Troca o elemento da esquerda que e maior que o pivô com o da
+             * direita que e maior que o pivô*/
             troca(v, i, j);
             i++;
             j--;
@@ -134,28 +188,87 @@ int particao(int *v, int e, int d) {
     return j;
 }
 
+/**
+ * @brief
+ *
+ * @param v Vetor
+ * @param e Posição da esquerda
+ * @param d Posição da direita
+ */
 void quickSort(int *v, int e, int d) {
     if (e < d) {
+        /* Recebe um pivô da partição para dividir o vetor */
         int pivo = particao(v, e, d);
+        /* Chama o quickSort da direita ate o pivô */
         quickSort(v, e, pivo);
+        /* Chama o quickSort da posição apos o pivô ate a esquerda */
         quickSort(v, pivo + 1, d);
     }
 }
 
+/**
+ * @brief Usa um pulo para separar a distância entre os números comparados
+ * dentro do vetor. Conforme o algoritmo vai avançando o pulo vai diminuindo
+ * até ser 1, e o vetor estar devidamente ordenado
+ *
+ * @param v Vetor
+ * @param n Tamanho do vetor
+ */
 void shellSort(int *v, int n) {
+    /* Calcula o pulo como a metade do tamanho */
     int p = n / 2;
     while (p > 0) {
+        /* Para todos os valores de pulo ate o tamanho do vetor */
         for (int i = p; i < n; i++) {
+            /* Salva o valor do vetor na posição atual */
             int aux = v[i];
+            /* Salva a posição atual em uma variável de posição que possa ser
+             * alterada  */
             int j = i;
 
+            /* Enquanto a posição do vetor na posição j-p for menor do que o
+             * valor atual, a posição atual recebe o valor que e maior, o j
+             * diminui em p, voltando para a posição onde ocorreu a comparação
+             * para verificar se tem como realizar mais uma troca */
             while (j >= p && v[j - p] > aux) {
                 v[j] = v[j - p];
                 j -= p;
             }
+            /* Para evitar realizar trocas aux salva o valor de comparação,
+             * assim sempre que ocorre  v[j] = v[j - p] o valor de referencia
+             * seria perdido, portanto ele e guardado em uma variável para
+             * utilizar ao final*/
             v[j] = aux;
         }
+        /* Calcula o proximo pulo */
         p = p / 2;
+    }
+}
+
+/**
+ * @brief Formata um vetor para transforma-lo em um heap de maximo. Um heap onde
+ * o pai sempre e maior que o filho
+ *
+ * @param v Vetor
+ * @param n Tamanho do vetor
+ */
+void sobeHeap(int *v, int n) {
+    for (int i = 1; i < n; i++) {
+        /* Salva a posição da interação e o valor */
+        int k = i;
+        int t = v[k];
+
+        /* Enquando o pai for menor que o filho */
+        while (v[k / 2] < t) {
+            /* O filho recebe o valor do pai */
+            v[k] = v[(k / 2)];
+            /* A posição do filho vira a posição do pai para ser comparado com o
+             * novo pai do elemento */
+            k /= 2;
+        }
+        /* Como não houve troca, a ultima posição k recebera o valor do
+         * elemento que era o filho original */
+        v[k] = t;
     }
 }
 
@@ -172,11 +285,12 @@ int main(int argc, char const *argv[]) {
     printf("\n");
 
     /* Retire o comentário para utilizar uma função de sort especifica*/
-    selecao(v, s);
+    // selecao(v, s);
     // insercao(v, s);
-    // mergeSort(v, 0, s - 1);
-    // quickSort(v, 0, s - 1);
+    // mergeSort(v, 0, s - 1);  /* Recebe a ultima posição do vetor */
+    // quickSort(v, 0, s - 1);  /* Recebe a ultima posição do vetor */
     // shellSort(v, s);
+    sobeHeap(v, s);
 
     printf("----- Vetor Final -----\n");
     for (int i = 0; i < s; i++) {
