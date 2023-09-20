@@ -253,7 +253,7 @@ void shellSort(int *v, int n) {
  * @param n Tamanho do vetor
  */
 void sobeHeap(int *v, int n) {
-    for (int i = 1; i < n; i++) {
+    for (int i = 1; i <= n; i++) {
         /* Salva a posição da interação e o valor */
         int k = i;
         int t = v[k];
@@ -272,6 +272,66 @@ void sobeHeap(int *v, int n) {
     }
 }
 
+/**
+ * @brief Formata um vetor para transforma-lo em um heap de minimo. Um heap onde
+ * o pai sempre e menor que os filhos
+ *
+ * @param v Vetor
+ * @param k Posição nó pai
+ * @param n Tamanho do vetor
+ */
+void desceHeap(int *v, int k, int n) {
+    int t, x, j;
+    /* Salva o valor do pai */
+    t = v[k];
+    /* Verifica se existem filhos para k */
+    x = (k <= (n / 2));
+
+    while (x) {
+        /* Filho da esquerda */
+        j = 2 * k;
+        /* Se existe o filho da direita e o filho da esquerda for menor que
+         * filho da direita*/
+        if ((j < n) && (v[j] < v[j + 1])) {
+            /* Filho da direita existe e e maior que o da esquerda */
+            j++;
+        }
+        /* Se o filho selecionado e menor que o pai */
+        if (t >= v[j]) {
+            x = 0;
+        } else {
+            /* Pai recebe o filho */
+            v[k] = v[j];
+            k = j;
+            /* Verifica se o filho tem outros filhos*/
+            x = (k <= (n / 2));
+        }
+    }
+    /* Como não houve troca, a ultima posição k recebera o valor do
+     * elemento que era o filho original */
+    v[k] = t;
+}
+
+/**
+ * @brief Algoritomo de ordenação que recebe um heap de maximo como parametro
+ *
+ * @param v Vetor
+ * @param n Ultima posição do vetor
+ */
+void heapSort(int *v, int n) {
+    /* Cria um heap de maximo */
+    sobeHeap(v, n);
+
+    for (int i = n; i > 0; i--) {
+        /* Em um heap de maximo a primeira posição e sempre a maior, portanto
+         * troca com a ultima*/
+        troca(v, 0, i);
+        /* Aplica o desce heap para ordenar um galho da arvore, sempre ignorando
+         * os ultimos elementos pois a troca ja deixa eles oredenados*/
+        desceHeap(v, 0, i - 1);
+    }
+}
+
 int main(int argc, char const *argv[]) {
     /* Declaração de um vetor genérico */
     int v[10] = {17, 2, 9, 4, 6, 1, 8, 3, 10, 5};
@@ -287,10 +347,10 @@ int main(int argc, char const *argv[]) {
     /* Retire o comentário para utilizar uma função de sort especifica*/
     // selecao(v, s);
     // insercao(v, s);
-    // mergeSort(v, 0, s - 1);  /* Recebe a ultima posição do vetor */
-    // quickSort(v, 0, s - 1);  /* Recebe a ultima posição do vetor */
+    // mergeSort(v, 0, s - 1); /* Recebe a ultima posição do vetor */
+    // quickSort(v, 0, s - 1); /* Recebe a ultima posição do vetor */
     // shellSort(v, s);
-    sobeHeap(v, s);
+    // heapSort(v, s - 1); /* Recebe a ultima posição do vetor */
 
     printf("----- Vetor Final -----\n");
     for (int i = 0; i < s; i++) {
