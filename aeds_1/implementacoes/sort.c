@@ -149,7 +149,9 @@ void mergeSort(int *v, int e, int d) {
 }
 
 /**
- * @brief
+ * @brief Passa da esquerda para a direita e da direita ate a esquerda
+ * procurando os elementos que estam na ordem erradas quando comparados com o
+ * elemento no meio do vetor e troca-los
  *
  * @param v Vetor
  * @param e Posição da esquerda
@@ -189,7 +191,7 @@ int particao(int *v, int e, int d) {
 }
 
 /**
- * @brief
+ * @brief Baseado em um pivo, separa o vetor em diversas partes para ordenar
  *
  * @param v Vetor
  * @param e Posição da esquerda
