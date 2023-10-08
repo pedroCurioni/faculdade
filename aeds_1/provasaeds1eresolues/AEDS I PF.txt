@@ -1,0 +1,145 @@
+#------------- Complexidades ------------------
+Espaço | Estrutura | Casos
+O(1)     Bubble      O(n^2) 
+O(1)     Inserção    melhor O(n); pior O(n^2) -> estável 
+O(1)     Seleção     O(n^2) -> não-estável
+
+métodos eficientes:
+O(n)     Quicksort   melhor, medio O(nlogn); pior O(n^2) -> mais rapido, não-estável, 'Divisao e Conquista'
+O(n)     Mergesort   O(nlogn) -> estável
+O(1)     Shellsort   O(n^1,25)
+
+         HEAP-Sort:  O(nlogn)
+         B S T :     O(logn)
+
+#------------- 2020.2 -------------------------
+1.
+void espelho (arvore *a){
+	arvore* aux;
+	if (*a){
+		aux = (*a)->esq;
+		(*a)->esq = (*a)->dir;
+		(*a)->dir = aux;
+		espelho(&(*a)->esq));
+		espelho(&(*a)->dir));
+}
+
+2.
+recursivo:
+busca (struct no* p, int k)
+	if( p == null){
+		return;
+	}else if( k < p->c ){
+		busca(p->esq);
+	}else{
+		busca(p->dir);
+	}
+
+3.
+int a, *b, **c, ***d;
+
+*b = &a; **c = &b; ***d = &c;
+
+printf("num: %d", a);
+printf("dobro = %d\n", ( *b * 2) );
+printf("triplo= %d\n", (**c * 3) );
+printf("quad  = %d\n",(***d * 4) );
+
+4. É uma estrutura que manipula um conjunto de elementos
+disjuntos particionados em subconjuntos. nesta configuração
+cada nó aponta para seu pai.
+operações -> make-set(x); find-set(x); union(x,y).
+formas -> vet caract; lista encad; flor de conj.
+aplicações -> connected-component; same-component.
+
+#------------- 2021.1 -------------------------
+1.
+d) A linha 8 deve ser corrigida da seguinte forma: while(j >= 0 && v[j] > chave) e a linha 10, do seguinte modo:
+v[j+1] = v[j];.
+
+2. Fibonnaci
+Considerando a implementação acima, avalie as afirmações a seguir:
+1 de 3
+I. A complexidade de tempo da função fib é exponencial no valor de n.
+II. A complexidade de espaço da função fib é exponencial no valor de n.
+III. É possível implementar uma versão iterativa da função fib com complexidade de tempo linear no valor de n e
+complexidade de espaço constante.
+É correto o que se afirma em:
+
+c) I e III, apenas. Justificativa: I. recursividade do algoritmo, III. prog dinâmica, torna-se possivel escrever um algoritmo que atenda aos requisitos de asserção
+
+3. Fila - Pilha - Fila
+
+4.
+I. Uma vez que o heap é implementado como uma árvore binária de pesquisa essencialmente completa, o custo computacional
+para sua construção é O(n log n).
+II. A implementação de heaps utilizando-se vetores é eficiente em tempo de execução e em espaço de armazenamento,
+pois o pai de um elemento armazenado na posição i se encontra armazenado na posição 2i + 1.
+III. O custo computacional para se recuperar de forma ordenada os m documentos mais relevantes armazenados em um
+heap de tamanho n é O(m log n).
+IV. Determinar o documento com maior valor de relev^ancia armazenado em um heap tem custo computacional O(1).
+É correto apenas o que se afirma em:
+
+c) III e IV.
+
+5. busca binaria num 287
+I. 7, 342, 199, 201, 310, 258, 287.
+II. 110, 132, 133, 156, 289, 288, 287.
+III. 252, 266, 271, 294, 295, 289, 287.
+IV. 715, 112, 530, 249, 406, 234, 287.
+
+c) I e II
+
+#------------- 2021.2 -------------------------
+1.
+MERGE-SORT (ordenação por intercalação)
+A complexidade de algoritmos é uma importante preocupação
+por se mostrar uma projeção de algoritmos de maneira eficiente
+em que se torna possivel o desenvolvimento de aspectos do
+algoritmo que é essencial para a analise de eficiencia.
+Para uma definição de medidas um elemento essencial para
+a medida em que se acostuma a medição de algoritmo de tempo
+ou de espaço usado em que o tempo pode ser considerado para o tempo.
+
+2.exerc push e pop
+
+I. O algoritmo visita cada nó da árvore binária exatamente uma vez ao longo do percurso.
+II. O algoritmo só funcionará corretamente se o procedimento pop() for projetado de forma a retornar 'lambda' caso a pilha
+esteja vazia.
+III. Empilhar e desempilhar ponteiros para nós da árvore são operações que podem ser implementadas com custo constante.
+IV. A complexidade do pior caso para o procedimento preordem() é O(n).
+
+b) Todos os itens estão certos
+
+3. Seq Fibonnaci, nr de chamadas
+c) 15
+fib(5)-------------------------> 2 + 3 = 5
+	fib(3)-----------> 1 + 1 = 2           
+		fib(1)----------> 1
+		fib(2)--> 0 + 1 = 1
+			fib(0)-> 0
+			fib(1)-> 1
+	fib(4)------------------> 1 + 2 = 3
+		fib(2)--> 0 + 1 = 1
+			fib(0)-> 0
+			fib(1)-> 1
+		fib(3)-----------> 1 + 1 = 2
+			fib(1)----------> 1
+			fib(2)--> 0 + 1 = 1
+				fib(0)-> 0
+				fib(1)-> 1
+
+4.
+I. A complexidade computacional de ambas as funções push e pop é O(1).
+
+II. O valor exibido pelo programa seria o mesmo caso a instrução da linha 36 fosse substituída por a += a;.
+
+III. Em relação ao vazamento de memória (memory leak), é opcional chamar a função free(p), pois o vetor usado pela
+pilha é alocado estaticamente.
+
+É correto o que se afirma em:
+
+d) I e II, apenas.
+
+5. Kruskal
+
