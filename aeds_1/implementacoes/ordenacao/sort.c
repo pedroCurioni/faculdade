@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]) {
     // mergeSort(v, 0, s - 1); /* Recebe a ultima posição do vetor */
     // quickSort(v, 0, s - 1); /* Recebe a ultima posição do vetor */
     // shellSort(v, s);
-    // heapSort(v, s - 1); /* Recebe a ultima posição do vetor */
+    heapSort(v, s - 1); /* Recebe a ultima posição do vetor */
 
     printf("----- Vetor Final -----\n");
     for (int i = 0; i < s; i++) {
