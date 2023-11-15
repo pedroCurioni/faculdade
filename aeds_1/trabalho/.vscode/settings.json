@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "interface.h": "c",
+        "random": "c",
+        "utils.h": "c",
+        "carrinho.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c",
+        "unistd.h": "c",
+        "numeric": "cpp",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "criptografia.h": "c"
+    }
+}
