@@ -74,10 +74,10 @@ $(function() {
 
 <p>Definições de funções relacionada a criptografia dos dados.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
-<code>#include &lt;string.h&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="cliente_8h_source.html">cliente.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="produto_8h_source.html">produto.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="cliente_8h_source.html">cliente.h</a>&quot;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for criptografia.h:</div>
 <div class="dyncontent">
@@ -88,24 +88,21 @@ Include dependency graph for criptografia.h:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a317d148e27fc8941b56c91281e2b52df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a317d148e27fc8941b56c91281e2b52df">encrypt</a> (char *data, char *password)</td></tr>
-<tr class="memdesc:a317d148e27fc8941b56c91281e2b52df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta o dado recebido atraves de uma senha, utilizando a cifra de XOR.  <a href="criptografia_8h.html#a317d148e27fc8941b56c91281e2b52df">More...</a><br /></td></tr>
-<tr class="separator:a317d148e27fc8941b56c91281e2b52df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37eff001dd36585665dc011ccb80f095"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a37eff001dd36585665dc011ccb80f095">encrypt_produto</a> (struct <a class="el" href="structProduto.html">Produto</a> *cab_produto, char *senha)</td></tr>
-<tr class="memdesc:a37eff001dd36585665dc011ccb80f095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta a lista de produtos.  <a href="criptografia_8h.html#a37eff001dd36585665dc011ccb80f095">More...</a><br /></td></tr>
-<tr class="separator:a37eff001dd36585665dc011ccb80f095"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa30d7a1cd7040a5ec3eb573ff3ac580"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#aaa30d7a1cd7040a5ec3eb573ff3ac580">encrypt_cliente</a> (struct <a class="el" href="structCliente.html">Cliente</a> *cab_cliente, char *senha)</td></tr>
-<tr class="memdesc:aaa30d7a1cd7040a5ec3eb573ff3ac580"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta a lista de cliente.  <a href="criptografia_8h.html#aaa30d7a1cd7040a5ec3eb573ff3ac580">More...</a><br /></td></tr>
-<tr class="separator:aaa30d7a1cd7040a5ec3eb573ff3ac580"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7eb245bdec08c345f6a4c4fbd012b89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#aa7eb245bdec08c345f6a4c4fbd012b89">decrypt</a> (char *data, char *password)</td></tr>
-<tr class="memdesc:aa7eb245bdec08c345f6a4c4fbd012b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Desencripta o dado recedo através de uma senha.  <a href="criptografia_8h.html#aa7eb245bdec08c345f6a4c4fbd012b89">More...</a><br /></td></tr>
-<tr class="separator:aa7eb245bdec08c345f6a4c4fbd012b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a176a2e5fa004a1d7c673ea8da8aa0cb7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a176a2e5fa004a1d7c673ea8da8aa0cb7">decrypt_produto</a> (struct <a class="el" href="structProduto.html">Produto</a> *cab_produto, char *senha)</td></tr>
-<tr class="memdesc:a176a2e5fa004a1d7c673ea8da8aa0cb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Desencripta a lista de produtos.  <a href="criptografia_8h.html#a176a2e5fa004a1d7c673ea8da8aa0cb7">More...</a><br /></td></tr>
-<tr class="separator:a176a2e5fa004a1d7c673ea8da8aa0cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1afbd9de80588942524580c36bb8bbe3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a1afbd9de80588942524580c36bb8bbe3">decrypt_cliente</a> (struct <a class="el" href="structCliente.html">Cliente</a> *cab_cliente, char *senha)</td></tr>
-<tr class="memdesc:a1afbd9de80588942524580c36bb8bbe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Desencripta a lista de cliente.  <a href="criptografia_8h.html#a1afbd9de80588942524580c36bb8bbe3">More...</a><br /></td></tr>
-<tr class="separator:a1afbd9de80588942524580c36bb8bbe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7d2fc45e187233afe0782a2d6feea4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#ae7d2fc45e187233afe0782a2d6feea4b">encrypt_decrypt_string</a> (char *data, char *password)</td></tr>
+<tr class="memdesc:ae7d2fc45e187233afe0782a2d6feea4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta/Decripta a string recebida atraves de uma senha, utilizando a cifra de XOR Para desfazer um XOR basta realiza-lo novamente.  <a href="criptografia_8h.html#ae7d2fc45e187233afe0782a2d6feea4b">More...</a><br /></td></tr>
+<tr class="separator:ae7d2fc45e187233afe0782a2d6feea4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ee7241e1d86da53839ffb896204a783"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a7ee7241e1d86da53839ffb896204a783">encrypt_decrypt_int</a> (int *value, int key)</td></tr>
+<tr class="memdesc:a7ee7241e1d86da53839ffb896204a783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta/Decripta o inteiro recebido atraves de uma senha, utilizando a cifra de XOR Para desfazer um XOR basta realiza-lo novamente.  <a href="criptografia_8h.html#a7ee7241e1d86da53839ffb896204a783">More...</a><br /></td></tr>
+<tr class="separator:a7ee7241e1d86da53839ffb896204a783"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73605cd9041b7a390a758845c3f262b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a73605cd9041b7a390a758845c3f262b5">encrypt_decrypt_float</a> (float *value, int key)</td></tr>
+<tr class="memdesc:a73605cd9041b7a390a758845c3f262b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta/Decripta o float recebido atraves de uma senha, utilizando a cifra de XOR Para desfazer um XOR basta realiza-lo novamente.  <a href="criptografia_8h.html#a73605cd9041b7a390a758845c3f262b5">More...</a><br /></td></tr>
+<tr class="separator:a73605cd9041b7a390a758845c3f262b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b8c0fe268d127055dccfe68df7b11ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a2b8c0fe268d127055dccfe68df7b11ae">encrypt_decrypt_produto</a> (struct <a class="el" href="structProduto.html">Produto</a> *cab_produto, char *senha)</td></tr>
+<tr class="memdesc:a2b8c0fe268d127055dccfe68df7b11ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta a lista de produtos.  <a href="criptografia_8h.html#a2b8c0fe268d127055dccfe68df7b11ae">More...</a><br /></td></tr>
+<tr class="separator:a2b8c0fe268d127055dccfe68df7b11ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44664e7511cf1bf087f57f8013063571"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="criptografia_8h.html#a44664e7511cf1bf087f57f8013063571">encrypt_decrypt_cliente</a> (struct <a class="el" href="structCliente.html">Cliente</a> *cab_cliente, char *senha)</td></tr>
+<tr class="memdesc:a44664e7511cf1bf087f57f8013063571"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encripta a lista de cliente.  <a href="criptografia_8h.html#a44664e7511cf1bf087f57f8013063571">More...</a><br /></td></tr>
+<tr class="separator:a44664e7511cf1bf087f57f8013063571"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Definições de funções relacionada a criptografia dos dados. </p>
@@ -114,162 +111,14 @@ Functions</h2></td></tr>
 <dl class="section date"><dt>Date</dt><dd>2023-11-13</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2023 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="aa7eb245bdec08c345f6a4c4fbd012b89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa7eb245bdec08c345f6a4c4fbd012b89">&#9670;&nbsp;</a></span>decrypt()</h2>
+<a id="a44664e7511cf1bf087f57f8013063571"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44664e7511cf1bf087f57f8013063571">&#9670;&nbsp;</a></span>encrypt_decrypt_cliente()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void decrypt </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>password</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Desencripta o dado recedo através de uma senha. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>Dado que se quer descriptografar </td></tr>
-    <tr><td class="paramname">password</td><td>Sehna, Chave de criptografia </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1afbd9de80588942524580c36bb8bbe3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1afbd9de80588942524580c36bb8bbe3">&#9670;&nbsp;</a></span>decrypt_cliente()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void decrypt_cliente </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structCliente.html">Cliente</a> *&#160;</td>
-          <td class="paramname"><em>cab_cliente</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>senha</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Desencripta a lista de cliente. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">cab_cliente</td><td>Ponteiro para o inicio da lista de cliente </td></tr>
-    <tr><td class="paramname">senha</td><td>Chave de criptografia </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a176a2e5fa004a1d7c673ea8da8aa0cb7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a176a2e5fa004a1d7c673ea8da8aa0cb7">&#9670;&nbsp;</a></span>decrypt_produto()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void decrypt_produto </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structProduto.html">Produto</a> *&#160;</td>
-          <td class="paramname"><em>cab_produto</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>senha</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Desencripta a lista de produtos. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">cab_produto</td><td>Ponteiro para o inicio da lista de produto </td></tr>
-    <tr><td class="paramname">senha</td><td>Chave de criptografia </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a317d148e27fc8941b56c91281e2b52df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a317d148e27fc8941b56c91281e2b52df">&#9670;&nbsp;</a></span>encrypt()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void encrypt </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>password</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Encripta o dado recebido atraves de uma senha, utilizando a cifra de XOR. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>Dado que se quer criptografar </td></tr>
-    <tr><td class="paramname">password</td><td>Sehna, Chave de criptografia </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aaa30d7a1cd7040a5ec3eb573ff3ac580"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa30d7a1cd7040a5ec3eb573ff3ac580">&#9670;&nbsp;</a></span>encrypt_cliente()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void encrypt_cliente </td>
+          <td class="memname">void encrypt_decrypt_cliente </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structCliente.html">Cliente</a> *&#160;</td>
           <td class="paramname"><em>cab_cliente</em>, </td>
@@ -299,14 +148,88 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a37eff001dd36585665dc011ccb80f095"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37eff001dd36585665dc011ccb80f095">&#9670;&nbsp;</a></span>encrypt_produto()</h2>
+<a id="a73605cd9041b7a390a758845c3f262b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73605cd9041b7a390a758845c3f262b5">&#9670;&nbsp;</a></span>encrypt_decrypt_float()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void encrypt_produto </td>
+          <td class="memname">void encrypt_decrypt_float </td>
+          <td>(</td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Encripta/Decripta o float recebido atraves de uma senha, utilizando a cifra de XOR Para desfazer um XOR basta realiza-lo novamente. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Dado que se quer criptografar </td></tr>
+    <tr><td class="paramname">password</td><td>Sehna, Chave de criptografia </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7ee7241e1d86da53839ffb896204a783"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ee7241e1d86da53839ffb896204a783">&#9670;&nbsp;</a></span>encrypt_decrypt_int()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void encrypt_decrypt_int </td>
+          <td>(</td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Encripta/Decripta o inteiro recebido atraves de uma senha, utilizando a cifra de XOR Para desfazer um XOR basta realiza-lo novamente. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Valor que se quer criptografar </td></tr>
+    <tr><td class="paramname">password</td><td>Sehna, Chave de criptografia </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2b8c0fe268d127055dccfe68df7b11ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b8c0fe268d127055dccfe68df7b11ae">&#9670;&nbsp;</a></span>encrypt_decrypt_produto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void encrypt_decrypt_produto </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structProduto.html">Produto</a> *&#160;</td>
           <td class="paramname"><em>cab_produto</em>, </td>
@@ -330,6 +253,43 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">cab_produto</td><td>Ponteiro para o inicio da lista de produto </td></tr>
     <tr><td class="paramname">senha</td><td>Chave de criptografia </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae7d2fc45e187233afe0782a2d6feea4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7d2fc45e187233afe0782a2d6feea4b">&#9670;&nbsp;</a></span>encrypt_decrypt_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void encrypt_decrypt_string </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>password</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Encripta/Decripta a string recebida atraves de uma senha, utilizando a cifra de XOR Para desfazer um XOR basta realiza-lo novamente. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Dado que se quer criptografar </td></tr>
+    <tr><td class="paramname">password</td><td>Sehna, Chave de criptografia </td></tr>
   </table>
   </dd>
 </dl>

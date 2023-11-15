@@ -8,6 +8,8 @@ void export_produto(struct Produto *cab_produto) {
     struct Produto *p = cab_produto->prox;
     FILE *file_produto;
 
+    
+
     file_produto = fopen("produto.csv", "w");
     if (file_produto == NULL) {
         printf("Erro ao criar arquivo de produtos\n");

@@ -97,9 +97,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a2a0c802f8b70b9be5915786e8035cbb3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="carrinho_8h.html#a2a0c802f8b70b9be5915786e8035cbb3">imprime_carrinho</a> (struct <a class="el" href="structProduto.html">Produto</a> *cab_carrinho)</td></tr>
 <tr class="memdesc:a2a0c802f8b70b9be5915786e8035cbb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imprime os itens do carrinho.  <a href="carrinho_8h.html#a2a0c802f8b70b9be5915786e8035cbb3">More...</a><br /></td></tr>
 <tr class="separator:a2a0c802f8b70b9be5915786e8035cbb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6c0087953bb33ddb293064da89f8e30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="carrinho_8h.html#ab6c0087953bb33ddb293064da89f8e30">fechar_carrinho</a> (struct <a class="el" href="structCliente.html">Cliente</a> *cab_cliente, struct <a class="el" href="structProduto.html">Produto</a> *cab_carrinho, float total)</td></tr>
-<tr class="memdesc:ab6c0087953bb33ddb293064da89f8e30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fecha o pedido com os itens no carrinho.  <a href="carrinho_8h.html#ab6c0087953bb33ddb293064da89f8e30">More...</a><br /></td></tr>
-<tr class="separator:ab6c0087953bb33ddb293064da89f8e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae4fcf630e3d60854f786a13c9e2b778"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="carrinho_8h.html#aae4fcf630e3d60854f786a13c9e2b778">fechar_carrinho</a> (struct <a class="el" href="structCliente.html">Cliente</a> *cab_cliente, struct <a class="el" href="structProduto.html">Produto</a> *cab_carrinho, float total, float *valor_caixa)</td></tr>
+<tr class="memdesc:aae4fcf630e3d60854f786a13c9e2b778"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fecha o pedido com os itens no carrinho.  <a href="carrinho_8h.html#aae4fcf630e3d60854f786a13c9e2b778">More...</a><br /></td></tr>
+<tr class="separator:aae4fcf630e3d60854f786a13c9e2b778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Definições de funções relacioadas ao gerenciamento do carrinho. </p>
@@ -108,8 +108,8 @@ Functions</h2></td></tr>
 <dl class="section date"><dt>Date</dt><dd>2023-11-13</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2023 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="ab6c0087953bb33ddb293064da89f8e30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6c0087953bb33ddb293064da89f8e30">&#9670;&nbsp;</a></span>fechar_carrinho()</h2>
+<a id="aae4fcf630e3d60854f786a13c9e2b778"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae4fcf630e3d60854f786a13c9e2b778">&#9670;&nbsp;</a></span>fechar_carrinho()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -130,7 +130,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>total</em>&#160;</td>
+          <td class="paramname"><em>total</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>valor_caixa</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -146,6 +152,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">cab_cliente</td><td>Ponteiro para o inicio da lista de cliente </td></tr>
     <tr><td class="paramname">cab_carrinho</td><td>Ponteiro para o inicio da lista do carrinho </td></tr>
     <tr><td class="paramname">total</td><td>Valor total do carrinho </td></tr>
+    <tr><td class="paramname">valor_caixa</td><td>Ponteiro para o valor total guardado no caixa </td></tr>
   </table>
   </dd>
 </dl>
