@@ -104,6 +104,7 @@ void fechar_carrinho(struct Cliente *cab_cliente, struct Produto *cab_carrinho,
         read_string(cpf, sizeof(cpf));
 
         struct Cliente *c = busca_cliente_cpf(cab_cliente, cpf);
+        c = c->prox;
         if (c == NULL) {
             printf("Cliente não encontdado!\n");
             wait_keypress();

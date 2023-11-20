@@ -23,8 +23,9 @@
  *
  * @param data Dado que se quer criptografar
  * @param password Sehna, Chave de criptografia
+ * @param output Variavel onde os dado criptografado sera salvo
  */
-void encrypt_decrypt_string(char *data, char *password);
+void encrypt_decrypt_string(char *data, char *password, char *output);
 
 /**
  * @brief Encripta/Decripta o inteiro recebido atraves de uma senha, utilizando

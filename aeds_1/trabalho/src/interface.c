@@ -288,7 +288,7 @@ void menu_caixa(float *valor_caixa) {
 
         printf("------ Exportação/Importação dos Dados ------\n\n");
 
-        printf("Total do Caixa: %f\n", *valor_caixa);
+        printf("Total do Caixa: %.2f\n", *valor_caixa);
         printf("1 - Remover quantia\n");
         printf("0 - Voltar\n\n");
 

@@ -23,8 +23,8 @@ struct Produto {
     int id;
     float preco;
     struct Produto *prox;
-    char categoria[32];
-    char nome[64];
+    char categoria[255];
+    char nome[255];
     char descricao[256];
 };
 
