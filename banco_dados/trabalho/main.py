@@ -8,7 +8,7 @@ from src.interface import (
     vizualicacao,
     wait_key,
 )
-from src.create_tables import create_database
+from src.create_tables import create_if_not_exists
 
 
 def main():
@@ -18,16 +18,31 @@ def main():
     usuario = input("Digite o usuario do banco de dados: ")
     senha = input("Digite a senha do banco de dados: ")
 
-    create_database(host, usuario, senha)
-
     config = {
         "host": host,
         "user": usuario,
         "password": senha,
+        # "raise_on_warnings": True,
     }
-
     conexao = connection.MySQLConnection(**config)
     cursor = conexao.cursor()
+
+    create_if_not_exists(conexao, cursor)
+
+    while True:
+        print("\nDeseja logar como atendente:")
+        print("1 - Sim")
+        print("2 - Não")
+        opcao = input("Digite o número da opção desejada: ")
+
+        if opcao == "1":
+            is_atendente = True
+            break
+        elif opcao == "2":
+            is_atendente = False
+            break
+        else:
+            print("Escolha invalida.")
 
     while True:
         clear_terminal()
@@ -41,11 +56,11 @@ def main():
             print("Fechando programa")
             break
         if opcao == "1":
-            adicionar(conexao, cursor)
+            adicionar(conexao, cursor, is_atendente)
         elif opcao == "2":
-            editar(conexao, cursor)
+            editar(conexao, cursor, is_atendente)
         elif opcao == "3":
-            remover(conexao, cursor)
+            remover(conexao, cursor, is_atendente)
         elif opcao == "4":
             vizualicacao(cursor)
         else:

@@ -34,7 +34,11 @@ def get_status_pedido():
 
 
 def buscar_pedido_por_id(cursor):
-    id_pedido = int(input("Digite o ID do pedido que deseja buscar: "))
+    try:
+        id_pedido = int(input("Digite o ID do pedido que deseja buscar: "))
+    except ValueError:
+        print("Por favor, digite um número inteiro para o ID do pedido.")
+        return None
 
     cursor.execute("SELECT * FROM Pedido WHERE id = %s", (id_pedido,))
     pedido = cursor.fetchone()
@@ -49,7 +53,7 @@ def buscar_pedido_por_id(cursor):
 def atualizar_id_pedido_em_items(cursor, id_pedido, itens_carrinho):
     # Atualizar o ID do pedido nos itens
     for item in itens_carrinho:
-        query_atualizar_item = "UPDATE Item SET id_pedido = %s WHERE id = %s"
+        query_atualizar_item = "UPDATE Item SET id_pedido = %s, id_carrinho = NULL WHERE id = %s"
         values_atualizar_item = (id_pedido, item[0])
         cursor.execute(query_atualizar_item, values_atualizar_item)
 
@@ -69,7 +73,21 @@ def atualizar_total_pedido(cursor, id_pedido):
 
 def realizar_pagamento(cursor, id_pedido):
     forma_pagamento = input("Informe a forma de pagamento: ")
-    vezes_pagamento = int(input("Informe a quantidade de vezes para o pagamento: "))
+
+    while True:
+        try:
+            vezes_pagamento = int(input("Informe a quantidade de vezes para o pagamento: "))
+            if vezes_pagamento < 1:
+                print("Quantidade de vezes para o pagamento inválida.")
+            else:
+                break
+        except ValueError:
+            print("Valor invalido. Digite um número.")
+
+    if forma_pagamento == "":
+        print("Por favor, preencha todas as informações.")
+        return None
+
 
     # Criar a entidade de pagamento
     query_pagamento = "INSERT INTO Pagamento (id_pedido, forma) VALUES (%s, %s)"
@@ -85,7 +103,11 @@ def realizar_pedido(connection, cursor):
     # Obter a data atual
     data_pedido = datetime.now()
 
-    id_conta = input("Digite o id da conta para realizar o pedido: ")
+    try:
+        id_conta = int(input("Digite o ID da conta para realizar o pedido: "))
+    except ValueError:
+        print("Por favor, digite um número inteiro para o ID da conta.")
+        return None
 
     # Criar o pedido
     query_pedido = "INSERT INTO Pedido (data_pedido, status_pedido, total, id_conta) VALUES (%s, %s, %s, %s)"

@@ -71,10 +71,11 @@ void menu_carrinho(struct Produto *cab_produto, struct Cliente *cab_cliente,
  *
  * @param cab_produto Ponteiro para o inicio da lista de produtos
  * @param cab_cliente Ponteiro para o inicio da lista de clientes
- * @param ultimo_id Ponteiro para a variavel contendo o dado do ultimo id lido
+ * @param ultimo_id Ponteiro para a variavel contendo o dado do ultimo id lido 
+ * @param valor_caixa Ponteiro para o valor total guardado no caixa
  */
 void menu_arquivo(struct Produto *cab_produto, struct Cliente *cab_cliente,
-                  int *ultimo_id);
+                  int *ultimo_id, float *valor_caixa);
 
 /**
  * @brief Menu de seleção das opções do caixa e vizualização do valor guardado

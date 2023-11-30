@@ -1,5 +1,9 @@
 def buscar_produto_por_id(cursor):
-    id_produto = int(input("Digite o ID do produto que deseja buscar: "))
+    try:
+        id_produto = int(input("Digite o ID do produto que deseja buscar: "))
+    except ValueError:
+        print("Por favor, digite um número inteiro para o ID do produto.")
+        return None
 
     cursor.execute("SELECT * FROM Produto WHERE id = %s", (id_produto,))
     produto = cursor.fetchone()

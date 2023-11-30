@@ -1,5 +1,12 @@
+from datetime import datetime
+
+
 def pedidos_por_conta(cursor):
     id_conta = input("Digite o ID da conta: ")
+
+    if id_conta == "":
+       print("Por favor, preencha as informações.")
+       return None
 
     # Consulta para obter todos os pedidos associados a uma conta
     cursor.execute(
@@ -26,6 +33,10 @@ def pedidos_por_conta(cursor):
 
 def produtos_em_carrinho(cursor):
     id_carrinho = input("Digite o ID do carrinho desejado: ")
+
+    if id_carrinho == "":
+       print("Por favor, preencha as informações.")
+       return None
 
     # Obter todos os produtos no carrinho
     cursor.execute(
@@ -187,6 +198,10 @@ def mes_ano_com_maior_vendas(cursor):
 def usuarios_compras_todos_meses(cursor):
     ano = input("Digite o ano desejado: ")
 
+    if ano == "":
+        print("Por favor, preencha as informações.")
+        return None
+
     # Obter todos os usuários que realizaram compras em cada mês do ano
     cursor.execute(
         """
@@ -207,3 +222,55 @@ def usuarios_compras_todos_meses(cursor):
 
     for usuario in usuarios:
         print(f"ID da Conta: {usuario[0]}")
+
+
+def obter_pedidos_por_periodo(cursor):
+    data_inicio_str = input("Digite a data de início (no formato DD/MM/YYYY): ")
+    data_fim_str = input("Digite a data de fim (no formato DD/MM/YYYY): ")
+
+    # Converta as strings para objetos de data
+    try:
+        data_inicio = datetime.strptime(data_inicio_str, "%d/%m/%Y")
+        data_fim = datetime.strptime(data_fim_str, "%d/%m/%Y")
+    except ValueError:
+        print("Data escrita no formato incorreto.")
+
+
+    query = "SELECT * FROM Pedido WHERE data_pedido BETWEEN %s AND %s"
+    values = (data_inicio, data_fim)
+    cursor.execute(query, values)
+
+    resultados = cursor.fetchall()
+    
+    if not resultados:
+        print("Não foram encontrados pedidos.")
+        return None
+    
+    for resultado in resultados:
+        print(
+            f"ID: {resultado[0]}, Data: {resultado[1].strftime('%d/%m/%y')}, Status: {resultado[2]}, Valor total: {resultado[3]:.2f}, ID Conta: {resultado[4]}"
+        )
+
+
+def obter_pedidos_maior_que_valor(cursor):
+    valor_minimo = input("Digite o valor mínimo do pedido: ")
+
+    try:
+        valor_minimo = float(valor_minimo)
+    except:
+        print("Valor invalido invalido")
+        return None
+
+    query = "SELECT * FROM Pedido WHERE total > %s"
+    cursor.execute(query, (valor_minimo,))
+    resultados = cursor.fetchall()
+
+    if not resultados:
+        print("Não foram encontrados pedidos.")
+        return None
+    
+    for resultado in resultados:
+        print(
+            f"ID: {resultado[0]}, Data: {resultado[1].strftime('%d/%m/%y')}, Status: {resultado[2]}, Valor total: {resultado[3]:.2f}, ID Conta: {resultado[4]}"
+        )
+

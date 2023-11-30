@@ -57,7 +57,13 @@ def adicionar_produto_carrinho(connection, cursor):
         print("Produto não encontrado.")
         return None
 
-    quantidade = int(input("Digite a quantidade que deseja adicionar ao carrinho: "))
+    try:
+        quantidade = int(
+            input("Digite a quantidade que deseja adicionar ao carrinho: ")
+        )
+    except ValueError:
+        print("Por favor, digite um número inteiro para a quantidade.")
+        return None
 
     id_carrinho = criar_carrinho(connection, cursor, id_conta)
 
@@ -91,9 +97,13 @@ def editar_carrinho(connection, cursor):
         print("Produto não encontrado.")
         return None
 
-    nova_quantidade = int(
-        input("Digite a nova quantidade para o produto no carrinho: ")
-    )
+    try:
+        nova_quantidade = int(
+            input("Digite a nova quantidade para o produto no carrinho: ")
+        )
+    except ValueError:
+        print("Por favor, digite um número inteiro para a nova quantidade.")
+        return None
 
     id_carrinho = criar_carrinho(connection, cursor, id_conta)
 

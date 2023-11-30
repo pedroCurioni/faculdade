@@ -13,7 +13,7 @@ UTILS = ./src/utils.c
 all: loja
 
 loja: $(MAIN) $(ARQUIVO) $(CAIXA) $(CARRINHO) $(CLIENTE) $(CRIPTOGRAFIA) $(INTERFACE) $(PRODUTO) $(UTILS)
-	$(CC) $(CFLAGS) -o loja.out $^
+	$(CC) $(CFLAGS) -o loja.exe $^
 
 clean:
 	rm -f loja

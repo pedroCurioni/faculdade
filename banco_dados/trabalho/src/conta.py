@@ -27,7 +27,11 @@ def get_status_usuario_web():
 
 
 def buscar_conta_por_id(cursor):
-    id_conta = int(input("Digite o ID da conta: "))
+    try:
+        id_conta = int(input("Digite o ID da conta: "))
+    except ValueError:
+        print("O ID da conta deve ser um número inteiro.")
+        return None
 
     # Buscar detalhes da conta na tabela Conta
     cursor.execute("SELECT * FROM Conta WHERE id = %s", (id_conta,))
@@ -42,12 +46,18 @@ def buscar_conta_por_id(cursor):
 
 
 def adicionar_conta(conexao, cursor):
-    tipo_conta = input("Digite 'web' para usuário web ou 'cliente' para cliente: ")
+    tipo_conta = input(
+        "Digite 'web' para usuário web ou 'telefone' para usuário telefone: "
+    )
 
     nome = input("Digite o nome do cliente: ")
     cidade = input("Digite a cidade do cliente: ")
     estado = input("Digite o estado do cliente: ")
     bairro = input("Digite o bairro do cliente: ")
+
+    if nome is None or cidade is None or estado is None or bairro is None:
+        print("Por favor, preencha todas as informações do cliente.")
+        return None
 
     # Inserir uma nova conta no banco de dados
     cursor.execute(
@@ -68,7 +78,7 @@ def adicionar_conta(conexao, cursor):
             "INSERT INTO Usuario_Web (id_conta, login, senha, status) VALUES (%s, %s, %s, %s)",
             (id_conta_inserido, login_web, senha_hash, status_web),
         )
-    elif tipo_conta == "cliente":
+    elif tipo_conta == "telefone":
         # Inserir um novo usuario telefone
         cursor.execute(
             "INSERT INTO Usuario_Telefone (id) VALUES (%s)", (id_conta_inserido,)
@@ -97,6 +107,11 @@ def atualizar_detalhes_conta(cursor, id_conta):
     nova_cidade = input("Nova cidade (ou pressione Enter para manter a atual): ")
     novo_estado = input("Novo estado (ou pressione Enter para manter o atual): ")
     novo_bairro = input("Novo bairro (ou pressione Enter para manter o atual): ")
+
+    # Check if any input is empty
+    if novo_nome == "" or nova_cidade == "" or novo_estado == "" or novo_bairro == "":
+        print("Por favor, preencha todas as informações.")
+        return None
 
     query_conta = "UPDATE Conta SET "
     params_conta = []

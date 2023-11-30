@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python GUI with Eel</title>
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body>
+
+<h1>Welcome to the Python GUI</h1>
+
+<div>
+    <label for="host">Host:</label>
+    <input type="text" id="host" placeholder="Enter host">
+</div>
+
+<div>
+    <label for="usuario">Usuario:</label>
+    <input type="text" id="usuario" placeholder="Enter usuario">
+</div>
+
+<div>
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" placeholder="Enter senha">
+</div>
+
+<button onclick="conectar()">Conectar ao Banco</button>
+
+<script>
+    async function conectar() {
+        const host = document.getElementById('host').value;
+        const usuario = document.getElementById('usuario').value;
+        const senha = document.getElementById('senha').value;
+
+        try {
+            const [conexao, cursor] = await eel.conectar_banco(host, usuario, senha)();
+            const is_atendente = await eel.escolher_tipo_usuario()();
+            await eel.menu_principal(conexao, cursor, is_atendente)();
+            await eel.fechar_conexao(conexao, cursor)();
+        } catch (error) {
+            console.error(error);
+            alert('Erro ao conectar ao banco de dados. Verifique as credenciais.');
+        }
+    }
+</script>
+
+</body>
+</html>

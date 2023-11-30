@@ -17,6 +17,8 @@ from src.queries import (
     calcular_media_anual_vendas,
     mes_ano_com_maior_vendas,
     usuarios_compras_todos_meses,
+    obter_pedidos_por_periodo,
+    obter_pedidos_maior_que_valor
 )
 
 
@@ -33,7 +35,7 @@ def clear_terminal():
         os.system("clear")
 
 
-def adicionar(conexao, cursor):
+def adicionar(conexao, cursor, is_atendente):
     while True:
         clear_terminal()
 
@@ -48,8 +50,12 @@ def adicionar(conexao, cursor):
             adicionar_conta(conexao, cursor)
             wait_key()
         elif opcao == "2":
-            adicionar_produto(conexao, cursor)
-            wait_key()
+            if is_atendente:
+                print("Você não possui permissão para adicionar um produto.")
+                wait_key()
+            else:
+                adicionar_produto(conexao, cursor)
+                wait_key()
         elif opcao == "3":
             adicionar_produto_carrinho(conexao, cursor)
             wait_key()
@@ -61,7 +67,7 @@ def adicionar(conexao, cursor):
             wait_key()
 
 
-def editar(conexao, cursor):
+def editar(conexao, cursor, is_atendente):
     while True:
         clear_terminal()
 
@@ -76,8 +82,12 @@ def editar(conexao, cursor):
             editar_conta(conexao, cursor)
             wait_key()
         elif opcao == "2":
-            editar_produto(conexao, cursor)
-            wait_key()
+            if is_atendente:
+                print("Você não possui permissão para alterar dados de um produto.")
+                wait_key()
+            else:
+                editar_produto(conexao, cursor)
+                wait_key()
         elif opcao == "3":
             editar_carrinho(conexao, cursor)
             wait_key()
@@ -89,7 +99,7 @@ def editar(conexao, cursor):
             wait_key()
 
 
-def remover(conexao, cursor):
+def remover(conexao, cursor, is_atendente):
     while True:
         clear_terminal()
 
@@ -101,11 +111,19 @@ def remover(conexao, cursor):
         if opcao == "0":
             break
         elif opcao == "1":
-            remover_conta(conexao, cursor)
-            wait_key()
+            if is_atendente:
+                print("Você não possui permissão para remover uma conta.")
+                wait_key()
+            else:
+                remover_conta(conexao, cursor)
+                wait_key()
         elif opcao == "2":
-            remover_produto(conexao, cursor)
-            wait_key()
+            if is_atendente:
+                print("Você não possui permissão para remover um produto.")
+                wait_key()
+            else:
+                remover_produto(conexao, cursor)
+                wait_key()
         elif opcao == "3":
             remover_produto_carrinho(conexao, cursor)
             wait_key()
@@ -127,6 +145,12 @@ def vizualicacao(cursor):
         print("7 - Mês e ano com maior número de vendas")
         print(
             "8 - Usuarios que realizaram compras em todos os meses de um determinado ano"
+        )
+        print(
+            "9 - Obter vendas entre o periodo especificado"
+        )
+        print(
+            "10 - Obter vendas maiores que algum valor especificado"
         )
         print("0 - Sair")
 
@@ -157,6 +181,15 @@ def vizualicacao(cursor):
             wait_key()
         elif opcao == "8":
             usuarios_compras_todos_meses(cursor)
+            wait_key()
+        elif opcao == "8":
+            usuarios_compras_todos_meses(cursor)
+            wait_key()
+        elif opcao == "9":
+            obter_pedidos_por_periodo(cursor)
+            wait_key()
+        elif opcao == "10":
+            obter_pedidos_maior_que_valor(cursor)
             wait_key()
         else:
             print("Número invalido, escolha novamente.")

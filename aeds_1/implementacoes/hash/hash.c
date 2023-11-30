@@ -1,6 +1,7 @@
 #include "hash.h"
 
 int hash(int value) { return value % 10; }
+int hash2(int value) { return value % 2; }
 
 void busca_encadeamento_exterior(struct Node *v[], int k, int i,
                                  struct Node **p) {
@@ -22,6 +23,18 @@ void insercao_encadeamento_exterior(struct Node *v[], int k) {
         v[i] = p;
         free(p);
     } else {
+        p = NULL;
+    }
+}
+
+void busca_encadeamento_aberto(int **v, int M, int *ant, int *p, int k) {
+    (*p) = hash(k);
+    (*ant) = (*p);
+    while (v[(*p)] != NULL && *v[(*p)] != k) {
+        (*ant) = (*p);
+        (*p) = ((*p) % M) + 1;
+    }
+    if (v[(*p)] == NULL) {
         p = NULL;
     }
 }
