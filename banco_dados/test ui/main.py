@@ -5,7 +5,7 @@ from src.create_tables import create_if_not_exists
 
 
 def main():
-    sg.theme("DefaultNoMoreNagging")
+    sg.theme("DarkGray13")
 
     layout_db_config = [
         [sg.Text("Host do banco de dados:"), sg.InputText(key="host")],
@@ -17,18 +17,23 @@ def main():
         [sg.Button("Conectar")],
     ]
 
-    window_db_config = sg.Window("Configuração do Banco de Dados", layout_db_config)
+    window_db_config = sg.Window("Configuração do Banco de Dados", layout_db_config, margins=(50,50))
 
     while True:
         event_db_config, values_db_config = window_db_config.read()
 
         if event_db_config == sg.WINDOW_CLOSED:
-            break
+            sg.popup_error("Por favor preencha os campos")
+            return None
 
         if event_db_config == "Conectar":
             host = values_db_config["host"]
             usuario = values_db_config["usuario"]
             senha = values_db_config["senha"]
+
+            if not host and not senha and not usuario:
+                sg.popup_error("Por favor preencha os campos")
+                return None
 
             config = {
                 "host": host,
@@ -44,6 +49,7 @@ def main():
                 break
             except connection.Error as e:
                 sg.popup_error(f"Erro ao conectar ao banco de dados: {str(e)}")
+                return 1
 
     window_db_config.close()
 
@@ -55,12 +61,12 @@ def main():
             [sg.Button("Sim", key="sim"), sg.Button("Não", key="nao")],
         ]
 
-        window_menu = sg.Window("Login", layout_menu)
+        window_menu = sg.Window("Login", layout_menu, margins=(50,50))
 
         event_menu, values_menu = window_menu.read()
 
         if event_menu == sg.WINDOW_CLOSED:
-            break
+            is_atendente = True
 
         if event_menu == "sim":
             is_atendente = True

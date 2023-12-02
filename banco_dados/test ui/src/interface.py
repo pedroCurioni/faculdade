@@ -37,7 +37,7 @@ def adicionar(conexao, cursor, is_atendente):
             [sg.Button("Sair")],
         ]
 
-        window = sg.Window("Adicionar Dados", layout)
+        window = sg.Window("Adicionar Dados", layout, margins=(50,50))
 
         event, values = window.read()
 
@@ -77,7 +77,7 @@ def editar(conexao, cursor, is_atendente):
             [sg.Button("Sair")],
         ]
 
-        window = sg.Window("Alterar Dados", layout)
+        window = sg.Window("Alterar Dados", layout, margins=(50,50))
 
         event, values = window.read()
 
@@ -118,7 +118,7 @@ def remover(conexao, cursor, is_atendente):
             [sg.Button("Sair")],
         ]
 
-        window = sg.Window("Remover Dados", layout)
+        window = sg.Window("Remover Dados", layout, margins=(50,50))
 
         event, values = window.read()
 
@@ -163,7 +163,7 @@ def visualizacao(cursor):
             [sg.Button("Sair")],
         ]
 
-        window = sg.Window("Vizualizações", layout)
+        window = sg.Window("Vizualizações", layout, margins=(50,50))
 
         event, values = window.read()
 

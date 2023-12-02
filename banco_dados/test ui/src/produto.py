@@ -10,7 +10,7 @@ def buscar_produto_por_id(cursor):
         [sg.Button("Buscar")],
     ]
 
-    window = sg.Window("Buscar Produto por ID", layout)
+    window = sg.Window("Buscar Produto por ID", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -43,7 +43,7 @@ def adicionar_produto(conexao, cursor):
         [sg.Button("Adicionar")],
     ]
 
-    window = sg.Window("Adicionar Produto", layout)
+    window = sg.Window("Adicionar Produto", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -101,7 +101,7 @@ def editar_produto(conexao, cursor):
         [sg.Button("Editar")],
     ]
 
-    window = sg.Window("Editar Produto", layout)
+    window = sg.Window("Editar Produto", layout, margins=(50,50))
 
     while True:
         event, values = window.read()

@@ -15,7 +15,7 @@ def get_status_usuario_web():
         [sg.Button("OK")],
     ]
 
-    window = sg.Window("Escolha o Status do Usuário", layout)
+    window = sg.Window("Escolha o Status do Usuário", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -41,7 +41,7 @@ def buscar_conta_por_id(cursor):
         [sg.Button("Buscar")],
     ]
 
-    window = sg.Window("Buscar Conta por ID", layout)
+    window = sg.Window("Buscar Conta por ID", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -77,7 +77,7 @@ def adicionar_conta(conexao, cursor):
         [sg.Button("Adicionar")],
     ]
 
-    window = sg.Window("Adicionar Conta", layout)
+    window = sg.Window("Adicionar Conta", layout, margins=(50,50))
 
     event, values = window.read()
 
@@ -108,7 +108,7 @@ def adicionar_conta(conexao, cursor):
             [sg.Button("OK")],
         ]
 
-        window_web = sg.Window("Adicionar Usuário Web", layout_web)
+        window_web = sg.Window("Adicionar Usuário Web", layout_web, margins=(50,50))
 
         event_web, values_web = window_web.read()
 
@@ -140,10 +140,12 @@ def editar_conta(conexao, cursor):
         sg.popup("Conta não encontrada.")
         return None
 
-    atualizar_detalhes_conta(cursor, id_conta)
-    atualizar_detalhes_usuario_web(cursor, id_conta)
+    conta_att = atualizar_detalhes_conta(cursor, id_conta)
+    user_web_att = atualizar_detalhes_usuario_web(cursor, id_conta)
+
     conexao.commit()
-    sg.popup(f"Dados da conta com ID {id_conta} atualizados com sucesso.")
+    if conta_att == 0 or user_web_att == 0:
+        sg.popup(f"Dados da conta com ID {id_conta} atualizados com sucesso.")
 
 
 def atualizar_detalhes_conta(cursor, id_conta):
@@ -167,7 +169,7 @@ def atualizar_detalhes_conta(cursor, id_conta):
         [sg.Button("Atualizar")],
     ]
 
-    window = sg.Window("Atualizar Detalhes da Conta", layout)
+    window = sg.Window("Atualizar Detalhes da Conta", layout, margins=(50,50))
 
     event, values = window.read()
 
@@ -175,11 +177,6 @@ def atualizar_detalhes_conta(cursor, id_conta):
     nova_cidade = values.get("nova_cidade")
     novo_estado = values.get("novo_estado")
     novo_bairro = values.get("novo_bairro")
-
-    if not any([novo_nome, nova_cidade, novo_estado, novo_bairro]):
-        sg.popup("Por favor, preencha pelo menos um campo para atualizar.")
-        window.close()
-        return None
 
     query_conta = "UPDATE Conta SET "
     params_conta = []
@@ -202,11 +199,12 @@ def atualizar_detalhes_conta(cursor, id_conta):
 
     if len(params_conta) > 1:
         cursor.execute(query_conta, tuple(params_conta))
-        sg.popup("Detalhes da conta atualizados com sucesso.")
+        window.close()
+        return 0
     else:
-        sg.popup("Nenhum campo foi preenchido para atualizar.")
+        window.close()
+        return None
 
-    window.close()
 
 
 def atualizar_detalhes_usuario_web(cursor, id_conta):
@@ -228,18 +226,13 @@ def atualizar_detalhes_usuario_web(cursor, id_conta):
         [sg.Button("Atualizar")],
     ]
 
-    window = sg.Window("Atualizar Detalhes do Usuário Web", layout)
+    window = sg.Window("Atualizar Detalhes do Usuário Web", layout, margins=(50,50))
 
     event, values = window.read()
 
     novo_login = values.get("novo_login")
     nova_senha = values.get("nova_senha")
     status = get_status_usuario_web()
-
-    if not any([novo_login, nova_senha]):
-        sg.popup("Por favor, preencha pelo menos um campo para atualizar.")
-        window.close()
-        return None
 
     query_usuario_web = "UPDATE Usuario_Web SET "
     params_usuario_web = []
@@ -269,11 +262,12 @@ def atualizar_detalhes_usuario_web(cursor, id_conta):
 
     if len(params_usuario_web) > 1:
         cursor.execute(query_usuario_web, tuple(params_usuario_web))
-        sg.popup("Detalhes do usuário web atualizados com sucesso.")
+        window.close()
+        return None
     else:
-        sg.popup("Nenhum campo foi preenchido para atualizar.")
+        window.close()
+        return 0
 
-    window.close()
 
 
 def remover_conta(conexao, cursor):

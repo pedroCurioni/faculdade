@@ -42,7 +42,7 @@ def criar_carrinho(connection, cursor, id_conta):
 
 def adicionar_produto_carrinho(connection, cursor):
     id_conta = buscar_conta_por_id(cursor)
-    if not id_conta:
+    if id_conta == 1:
         sg.popup("Conta não encontrada.")
         return None
 
@@ -57,7 +57,7 @@ def adicionar_produto_carrinho(connection, cursor):
         [sg.Button("Adicionar"), sg.Button("Cancelar")],
     ]
 
-    window = sg.Window("Adicionar Produto ao Carrinho", layout)
+    window = sg.Window("Adicionar Produto ao Carrinho", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -111,7 +111,7 @@ def editar_carrinho(connection, cursor):
         [sg.Button("Editar"), sg.Button("Cancelar")],
     ]
 
-    window = sg.Window("Editar Quantidade no Carrinho", layout)
+    window = sg.Window("Editar Quantidade no Carrinho", layout, margins=(50,50))
 
     while True:
         event, values = window.read()

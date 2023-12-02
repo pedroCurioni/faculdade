@@ -18,7 +18,7 @@ def get_status_pedido():
         [sg.Button("OK")],
     ]
 
-    window = sg.Window("Escolha o Status do Pedido", layout)
+    window = sg.Window("Escolha o Status do Pedido", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -46,7 +46,7 @@ def buscar_pedido_por_id(cursor):
         [sg.Button("Buscar")],
     ]
 
-    window = sg.Window("Buscar Pedido por ID", layout)
+    window = sg.Window("Buscar Pedido por ID", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -100,7 +100,7 @@ def realizar_pagamento(cursor, id_pedido):
         [sg.Button("OK")],
     ]
 
-    window = sg.Window("Realizar Pagamento", layout)
+    window = sg.Window("Realizar Pagamento", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -144,7 +144,7 @@ def realizar_pedido(connection, cursor):
         [sg.Button("Realizar Pedido")],
     ]
 
-    window = sg.Window("Realizar Pedido", layout)
+    window = sg.Window("Realizar Pedido", layout, margins=(50,50))
 
     while True:
         event, values = window.read()

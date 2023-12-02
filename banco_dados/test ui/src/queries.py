@@ -8,7 +8,7 @@ def pedidos_por_conta(cursor):
         [sg.Button("Buscar Pedidos")],
     ]
 
-    window = sg.Window("Pedidos por Conta", layout)
+    window = sg.Window("Pedidos por Conta", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -51,7 +51,7 @@ def produtos_em_carrinho(cursor):
         [sg.Button("Buscar Produtos")],
     ]
 
-    window = sg.Window("Produtos em Carrinho", layout)
+    window = sg.Window("Produtos em Carrinho", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -154,7 +154,7 @@ def filtrar_usuarios_por_localizacao(cursor):
         [sg.Button("Filtrar")],
     ]
 
-    window = sg.Window("Filtrar Usuários por Localização", layout)
+    window = sg.Window("Filtrar Usuários por Localização", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
@@ -276,7 +276,7 @@ def obter_pedidos_por_periodo(cursor):
         [sg.Button("Buscar Pedidos")],
     ]
 
-    window = sg.Window("Obter Pedidos por Período", layout)
+    window = sg.Window("Obter Pedidos por Período", layout, margins=(50,50))
 
     while True:
         event, values = window.read()
