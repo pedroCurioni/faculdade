@@ -9,6 +9,8 @@ TABLES["Conta"] = """
     CREATE TABLE IF NOT EXISTS Conta (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         nome VARCHAR(255),
+        email VARCHAR(255),
+        telefone VARCHAR(255),
         cidade VARCHAR(255),
         estado VARCHAR(255),
         bairro VARCHAR(255)
@@ -76,38 +78,30 @@ TABLES["Item"] = """
     );"""
 
 TRIGGER = """
-    -- Create the trigger if it does not exist
     CREATE TRIGGER IF NOT EXISTS after_update_pedido_status
     AFTER UPDATE ON Pedido FOR EACH ROW
     BEGIN
         DECLARE id_pedido INT;
         DECLARE novo_status VARCHAR(255);
 
-        -- Obtain the ID and the new status of the order
         SET id_pedido = NEW.id;
         SET novo_status = NEW.status_pedido;
 
-        -- Check if the new status is 'confirmado'
         IF novo_status = 'confirmado' THEN
-            -- Update the inventory for the items in the order
             UPDATE Item
             SET quantidade = quantidade * -1
             WHERE id_pedido = id_pedido;
 
-            -- Update the product inventory
             UPDATE Produto p
             JOIN Item i ON p.id = i.id_produto
             SET p.estoque = p.estoque + i.quantidade
             WHERE i.id_pedido = id_pedido;
 
-        -- Check if the new status is 'cancelado'
         ELSEIF novo_status = 'cancelado' THEN
-            -- Update the inventory for the items in the order
             UPDATE Item
             SET quantidade = quantidade * -1
             WHERE id_pedido = id_pedido;
 
-            -- Update the product inventory
             UPDATE Produto p
             JOIN Item i ON p.id = i.id_produto
             SET p.estoque = p.estoque + i.quantidade

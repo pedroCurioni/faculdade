@@ -29,7 +29,7 @@ def get_status_pedido():
 
         if event == "OK":
             selected_option = None
-            for key in ["Em Processamento", "Cancelado", "Confirmado", "Pago", "Enviado", "Em Trânsito", "Não alterar"]:
+            for key in ["Em Processamento", "Cancelado", "Confirmado", "Pago", "Enviado", "Em Trânsito"]:
                 if values[key]:
                     selected_option = key
                     break

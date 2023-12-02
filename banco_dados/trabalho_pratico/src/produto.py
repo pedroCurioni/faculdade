@@ -62,7 +62,12 @@ def adicionar_produto(conexao, cursor):
                 continue
 
             query = "INSERT INTO Produto (preco, nome, estoque) VALUES (%s, %s, %s)"
-            values = (float(preco), nome, int(estoque))
+            try:
+                values = (float(preco), nome, int(estoque))
+            except:
+                sg.popup("Valores invalidos\n")
+                window.close()
+                return None
 
             cursor.execute(query, values)
             conexao.commit()
@@ -118,15 +123,20 @@ def editar_produto(conexao, cursor):
             query_produto = "UPDATE Produto SET "
             params_produto = []
 
-            if novo_nome:
-                query_produto += "nome = %s, "
-                params_produto.append(novo_nome)
-            if novo_preco:
-                query_produto += "preco = %s, "
-                params_produto.append(float(novo_preco))
-            if novo_estoque:
-                query_produto += "estoque = %s, "
-                params_produto.append(int(novo_estoque))
+            try:
+                if novo_nome:
+                    query_produto += "nome = %s, "
+                    params_produto.append(novo_nome)
+                if novo_preco:
+                    query_produto += "preco = %s, "
+                    params_produto.append(float(novo_preco))
+                if novo_estoque:
+                    query_produto += "estoque = %s, "
+                    params_produto.append(int(novo_estoque))
+            except:
+                sg.popup("Valores invalidos")
+                window.close()
+                return None
 
             query_produto = query_produto.rstrip(", ") + " WHERE id = %s"
             params_produto.append(id_produto)

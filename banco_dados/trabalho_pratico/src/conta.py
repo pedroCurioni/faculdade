@@ -15,7 +15,7 @@ def get_status_usuario_web():
         [sg.Button("OK")],
     ]
 
-    window = sg.Window("Escolha o Status do Usuário", layout, margins=(50,50))
+    window = sg.Window("Escolha o Status do Usuário", layout, margins=(50, 50))
 
     while True:
         event, values = window.read()
@@ -24,13 +24,11 @@ def get_status_usuario_web():
             window.close()
             return None
         if event == "OK":
-            selected_option = (
-                values.get("Novo")
-                or values.get("Ativo")
-                or values.get("Bloqueado")
-                or values.get("Banido Temporariamente")
-                or values.get("Não alterar")
-            )
+            selected_option = None
+            for key in ["Novo", "Ativo", "Bloqueado", "Banido Temporariamente"]:
+                if values[key]:
+                    selected_option = key
+                    break
             window.close()
             return selected_option
 
@@ -41,7 +39,7 @@ def buscar_conta_por_id(cursor):
         [sg.Button("Buscar")],
     ]
 
-    window = sg.Window("Buscar Conta por ID", layout, margins=(50,50))
+    window = sg.Window("Buscar Conta por ID", layout, margins=(50, 50))
 
     while True:
         event, values = window.read()
@@ -56,7 +54,8 @@ def buscar_conta_por_id(cursor):
                 cursor.execute("SELECT * FROM Conta WHERE id = %s", (id_conta,))
                 detalhes_conta = cursor.fetchone()
                 window.close()
-                
+                print(id_conta)
+                print(detalhes_conta)
                 if detalhes_conta:
                     # Se a conta for encontrada, retorna o id
                     return id_conta
@@ -67,6 +66,33 @@ def buscar_conta_por_id(cursor):
                 sg.popup("O ID da conta deve ser um número inteiro.")
 
 
+def adicionar_usuario_web(cursor, id_conta):
+    layout_web = [
+        [sg.Text("Login do Usuário Web: "), sg.Input(key="login_web")],
+        [
+            sg.Text("Senha do Usuário Web: "),
+            sg.Input(key="senha_web", password_char="*"),
+        ],
+        [sg.Button("OK")],
+    ]
+
+    window_web = sg.Window("Adicionar Usuário Web", layout_web, margins=(50, 50))
+
+    event_web, values_web = window_web.read()
+
+    login_web = values_web.get("login_web")
+    senha_web = values_web.get("senha_web")
+
+    senha_hash = hashlib.sha256(senha_web.encode()).hexdigest()
+
+    status_web = "Novo"
+    cursor.execute(
+        "INSERT INTO Usuario_Web (id_conta, login, senha, status) VALUES (%s, %s, %s, %s)",
+        (id_conta, login_web, senha_hash, status_web),
+    )
+    window_web.close()
+
+
 def adicionar_conta(conexao, cursor):
     layout = [
         [sg.Text("E um usuario web (S ou N): "), sg.Input(key="tipo_conta")],
@@ -74,10 +100,18 @@ def adicionar_conta(conexao, cursor):
         [sg.Text("Cidade do Cliente: "), sg.Input(key="cidade")],
         [sg.Text("Estado do Cliente: "), sg.Input(key="estado")],
         [sg.Text("Bairro do Cliente: "), sg.Input(key="bairro")],
+        [
+            sg.Text("Telefone do Cliente: "),
+            sg.Input(key="telefone"),
+        ],  # Adicionado campo para telefone
+        [
+            sg.Text("Email do Cliente: "),
+            sg.Input(key="email"),
+        ],  # Adicionado campo para email
         [sg.Button("Adicionar")],
     ]
 
-    window = sg.Window("Adicionar Conta", layout, margins=(50,50))
+    window = sg.Window("Adicionar Conta", layout, margins=(50, 50))
 
     event, values = window.read()
 
@@ -86,43 +120,22 @@ def adicionar_conta(conexao, cursor):
     cidade = values.get("cidade")
     estado = values.get("estado")
     bairro = values.get("bairro")
+    telefone = values.get("telefone")
+    email = values.get("email")
 
-    if not all([tipo_conta, nome, cidade, estado, bairro]):
+    if not all([tipo_conta, nome, cidade, estado, bairro, telefone, email]):
         sg.popup("Por favor, preencha todas as informações do cliente.")
         window.close()
         return None
 
     cursor.execute(
-        "INSERT INTO Conta (nome, cidade, estado, bairro) VALUES (%s, %s, %s, %s)",
-        (nome, cidade, estado, bairro),
+        "INSERT INTO Conta (nome, cidade, estado, bairro, telefone, email) VALUES (%s, %s, %s, %s, %s, %s)",
+        (nome, cidade, estado, bairro, telefone, email),
     )
     id_conta_inserido = cursor.lastrowid
 
     if tipo_conta.lower() == "s":
-        layout_web = [
-            [sg.Text("Login do Usuário Web: "), sg.Input(key="login_web")],
-            [
-                sg.Text("Senha do Usuário Web: "),
-                sg.Input(key="senha_web", password_char="*"),
-            ],
-            [sg.Button("OK")],
-        ]
-
-        window_web = sg.Window("Adicionar Usuário Web", layout_web, margins=(50,50))
-
-        event_web, values_web = window_web.read()
-
-        login_web = values_web.get("login_web")
-        senha_web = values_web.get("senha_web")
-
-        senha_hash = hashlib.sha256(senha_web.encode()).hexdigest()
-
-        status_web = "Novo"
-        cursor.execute(
-            "INSERT INTO Usuario_Web (id_conta, login, senha, status) VALUES (%s, %s, %s, %s)",
-            (id_conta_inserido, login_web, senha_hash, status_web),
-        )
-        window_web.close()
+        adicionar_usuario_web(cursor, id_conta_inserido)
     else:
         cursor.execute(
             "INSERT INTO Usuario_Telefone (id) VALUES (%s)", (id_conta_inserido,)
@@ -166,10 +179,18 @@ def atualizar_detalhes_conta(cursor, id_conta):
             sg.Text("Novo bairro (ou deixe em branco para manter o atual): "),
             sg.Input(key="novo_bairro"),
         ],
+        [
+            sg.Text("Novo email (ou deixe em branco para manter o atual): "),
+            sg.Input(key="novo_email"),
+        ],
+        [
+            sg.Text("Novo telefone (ou deixe em branco para manter o atual): "),
+            sg.Input(key="novo_telefone"),
+        ],
         [sg.Button("Atualizar")],
     ]
 
-    window = sg.Window("Atualizar Detalhes da Conta", layout, margins=(50,50))
+    window = sg.Window("Atualizar Detalhes da Conta", layout, margins=(50, 50))
 
     event, values = window.read()
 
@@ -177,6 +198,8 @@ def atualizar_detalhes_conta(cursor, id_conta):
     nova_cidade = values.get("nova_cidade")
     novo_estado = values.get("novo_estado")
     novo_bairro = values.get("novo_bairro")
+    novo_email = values.get("novo_email")
+    novo_telefone = values.get("novo_telefone")
 
     query_conta = "UPDATE Conta SET "
     params_conta = []
@@ -193,6 +216,12 @@ def atualizar_detalhes_conta(cursor, id_conta):
     if novo_bairro:
         query_conta += "bairro = %s, "
         params_conta.append(novo_bairro)
+    if novo_email:
+        query_conta += "email = %s, "
+        params_conta.append(novo_email)
+    if novo_telefone:
+        query_conta += "telefone = %s, "
+        params_conta.append(novo_telefone)
 
     query_conta = query_conta.rstrip(", ") + " WHERE id = %s"
     params_conta.append(id_conta)
@@ -204,7 +233,6 @@ def atualizar_detalhes_conta(cursor, id_conta):
     else:
         window.close()
         return None
-
 
 
 def atualizar_detalhes_usuario_web(cursor, id_conta):
@@ -226,7 +254,7 @@ def atualizar_detalhes_usuario_web(cursor, id_conta):
         [sg.Button("Atualizar")],
     ]
 
-    window = sg.Window("Atualizar Detalhes do Usuário Web", layout, margins=(50,50))
+    window = sg.Window("Atualizar Detalhes do Usuário Web", layout, margins=(50, 50))
 
     event, values = window.read()
 
@@ -240,9 +268,6 @@ def atualizar_detalhes_usuario_web(cursor, id_conta):
     if novo_login:
         query_usuario_web += f"login = %s, "
         params_usuario_web.append(novo_login)
-    if status:
-        query_usuario_web += f"status = %s, "
-        params_usuario_web.append(status)
     if nova_senha:
         senha_antiga = sg.popup_get_text(
             "Para alterar a senha é necessário digitar a senha anterior:",
@@ -255,7 +280,10 @@ def atualizar_detalhes_usuario_web(cursor, id_conta):
             return None
         else:
             query_usuario_web += f"senha = %s, "
-            params_usuario_web.append(nova_senha)
+            params_usuario_web.append(hashlib.sha256(nova_senha.encode()).hexdigest())
+    if status:
+        query_usuario_web += f"status = %s, "
+        params_usuario_web.append(status)
 
     query_usuario_web = query_usuario_web.rstrip(", ") + " WHERE id_conta = %s"
     params_usuario_web.append(id_conta)
@@ -263,11 +291,10 @@ def atualizar_detalhes_usuario_web(cursor, id_conta):
     if len(params_usuario_web) > 1:
         cursor.execute(query_usuario_web, tuple(params_usuario_web))
         window.close()
-        return None
+        return 0
     else:
         window.close()
-        return 0
-
+        return 1
 
 
 def remover_conta(conexao, cursor):
