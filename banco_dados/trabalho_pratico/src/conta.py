@@ -54,8 +54,6 @@ def buscar_conta_por_id(cursor):
                 cursor.execute("SELECT * FROM Conta WHERE id = %s", (id_conta,))
                 detalhes_conta = cursor.fetchone()
                 window.close()
-                print(id_conta)
-                print(detalhes_conta)
                 if detalhes_conta:
                     # Se a conta for encontrada, retorna o id
                     return id_conta
