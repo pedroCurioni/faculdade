@@ -1,0 +1,47 @@
+
+	            G L O B A L   R E F E R E N C E S
+
+	             Name               Value        Type
+	==============================|=======|===============
+	CR                               000A         CONSTANT
+	FIM_TEXTO                        0040         CONSTANT
+	IO_READ                          FFFF         CONSTANT
+	IO_WRITE                         FFFE         CONSTANT
+	IO_STATUS                        FFFD         CONSTANT
+	INITIAL_SP                       FDFF         CONSTANT
+	CURSOR                           FFFC         CONSTANT
+	CURSOR_INIT                      FFFF         CONSTANT
+	ROW_POSITION                     0000         CONSTANT
+	COL_POSITION                     0000         CONSTANT
+	ROW_SHIFT                        0008         CONSTANT
+	COLUMN_SHIFT                     0008         CONSTANT
+	BorderLine                       8000           STRING
+	InformationLine                  8051           STRING
+	EnemySpaceShipLine               80A2           STRING
+	PlayerShipLine                   80F3           STRING
+	GenericLine                      8144           STRING
+	ShipPosition                     8195         VARIABLE
+	ShipLeftBorder                   8196         VARIABLE
+	ShipRightBorder                  8197         VARIABLE
+	RowIndex                         8198         VARIABLE
+	ColumnIndex                      8199         VARIABLE
+	TextIndex                        819A         VARIABLE
+	INT0                             FE00         VARIABLE
+	INT1                             FE01         VARIABLE
+	Esqueleto                        0002            LABEL
+	PringString                      0009            LABEL
+	CyclePrintString                 000C            LABEL
+	EndPrintString                   0020            LABEL
+	PrintScreen                      0030            LABEL
+	CyclePrintEnemy                  003C            LABEL
+	CycleEndPrintEnemy               0047            LABEL
+	CyclePrintScreen                 0049            LABEL
+	CycleEndPrintScreen              0054            LABEL
+	PrintShip                        005F            LABEL
+	MoveLeft                         0078            LABEL
+	EndMoveLeft                      0090            LABEL
+	MoveRight                        0093            LABEL
+	EndMoveRight                     00AB            LABEL
+	Main                             00AE            LABEL
+	Cycle                            00B8            LABEL
+	Halt                             00B9            LABEL
