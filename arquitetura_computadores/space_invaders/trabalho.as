@@ -10,6 +10,9 @@ IO_STATUS       EQU     FFFDh
 INITIAL_SP      EQU     FDFFh
 CURSOR		    EQU     FFFCh
 CURSOR_INIT		EQU		FFFFh
+TIMER_INTERVAL	EQU		FFF6h
+TIMER_CONTROL	EQU		FFF7h
+INTERRUPT_MASK	EQU		FFFAh
 ROW_POSITION	EQU		0d
 COL_POSITION	EQU		0d
 ROW_SHIFT		EQU		8d
@@ -29,9 +32,15 @@ EnemySpaceShipLine	STR		'#                   \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/
 PlayerShipLine		STR		'#                                     /-\                                      #', FIM_TEXTO
 GenericLine      	STR    	'#                                                                              #', FIM_TEXTO
 
+Ship				STR		'|'
+Enemy				STR		'\W/'
+
 ShipPosition	WORD	1627h	; Posição atual da nave
 ShipLeftBorder	WORD	1601h 	; Borda esquerda da linha da nave
 ShipRightBorder	WORD	164Fh	; Borda direita da linha da nave
+
+ShipBulletExists	WORD	0h	; Guarda a informação se o tiro está ou não na tela
+ShipBulletPosition	WORD	0h	; Posição do tiro da nave
 
 RowIndex		WORD	0d
 ColumnIndex		WORD	0d
@@ -44,6 +53,20 @@ TextIndex		WORD	0d
                 ORIG    FE00h
 INT0            WORD    MoveLeft
 INT1            WORD    MoveRight
+INT2            WORD    StartShipBullet
+INT3            WORD    Main
+INT4            WORD    Main
+INT5            WORD    Main
+INT6            WORD    Main
+INT7            WORD    Main
+INT8            WORD    Main
+INT9            WORD    Main
+INT10           WORD    Main
+INT11           WORD    Main
+INT12           WORD    Main
+INT13           WORD    Main
+INT14           WORD    Main
+INT15           WORD    TimerRoutine
 
 ;------------------------------------------------------------------------------
 ; ZONA IV: codigo
@@ -117,6 +140,9 @@ PrintScreen:	PUSH R1
 				MOV R1, InformationLine
 				CALL PringString
 
+				MOV R1, GenericLine
+				CALL PringString
+
 				MOV R2, 0
 				CyclePrintEnemy: 	CMP R2, 5
 									JMP.Z CycleEndPrintEnemy
@@ -127,7 +153,7 @@ PrintScreen:	PUSH R1
 				
 				CycleEndPrintEnemy:	MOV R2, 0
 					
-				CyclePrintScreen: 	CMP R2, 15
+				CyclePrintScreen: 	CMP R2, 14
 									JMP.Z CycleEndPrintScreen
 									INC R2
 									MOV R1, GenericLine
@@ -227,6 +253,92 @@ MoveRight:	PUSH R1
 							RTI
 
 ;------------------------------------------------------------------------------
+; Rotina MoveBulletUp
+;------------------------------------------------------------------------------
+MoveBulletUp:	PUSH 	R1							; Contem a posição da linha anterior
+				PUSH 	R2
+				PUSH 	R3
+
+				MOV R2, M [ ShipBulletExists ]			; Verifica se o tiro ja esta na tela
+				CMP R2, 0
+
+				JMP.Z EndMoveBulletUp
+
+				MOV 	R2, R1
+				MOV		R3, R1
+
+				AND		R1, 255						; Zera os 8 bits da dirita de R1 que representam a linha
+				SHR 	R2, ROW_SHIFT				; Coloca os valors da coluna na esquerda para decrementar
+				DEC 	R2
+
+				CMP		R2, 1						; Verifica se o tiro esta na posição mais alta possivel
+				JMP.Z 	BulletInLastRow
+
+				SHL		R2, ROW_SHIFT
+				OR		R1, R2
+
+				MOV		M[ CURSOR ], R1
+				MOV		M[ ShipBulletPosition ], R1
+
+				MOV		R1, M [ Ship ]
+				MOV		M[ IO_WRITE ], R1
+
+				CMP R3, M [ ShipPosition ]			; Verifica se a posição anterior e referente a nave
+				JMP.Z	EndMoveBulletUp
+				
+				JMP		ErasePreviousShipBullet
+
+				BulletInLastRow:			MOV		R1, 0
+											MOV		M [ ShipBulletExists ], R1
+
+				ErasePreviousShipBullet:	MOV		M [ CURSOR ], R3
+											MOV 	R3,	' '
+											MOV 	M[ IO_WRITE ], R3
+
+				EndMoveBulletUp:	POP R3
+									POP R2
+									POP R1
+
+									RET
+
+;------------------------------------------------------------------------------
+; Interrupção StartShipBullet
+;------------------------------------------------------------------------------
+StartShipBullet:	PUSH R1
+					PUSH R2
+					PUSH R3
+
+					MOV R1, M [ ShipBulletExists ]			; Verifica se o tiro ja esta na tela
+					CMP R1, 1
+					JMP.Z EndStartShipBullet
+
+					MOV R1, 1
+					MOV M [ ShipBulletExists ], R1
+
+					MOV R1, M [ ShipPosition ]
+					CALL MoveBulletUp
+
+					EndStartShipBullet: POP R3
+										POP R2
+										POP R1
+
+										RTI
+
+;------------------------------------------------------------------------------
+; Interrupção Timer
+;------------------------------------------------------------------------------
+TimerRoutine:	PUSH R1
+				PUSH R2
+
+				MOV R1, M [ ShipBulletPosition ]
+				CALL MoveBulletUp
+
+				POP R2
+				POP	R1
+
+				RTI
+
+;------------------------------------------------------------------------------
 ; Função Main
 ;------------------------------------------------------------------------------
 Main:	ENI
@@ -235,11 +347,26 @@ Main:	ENI
 		MOV		SP, R1		 		; We need to initialize the stack
 		MOV		R1, CURSOR_INIT		; We need to initialize the cursor 
 		MOV		M[ CURSOR ], R1		; with value CURSOR_INIT
-
+		
+		
 		CALL PrintScreen
 
+;------------------------------------------------------------------------------
+; Função Ciclo
+;------------------------------------------------------------------------------
+Cycle:	MOV 		R1, M [ TIMER_CONTROL ]
+		CMP 		R1, 1
 
+		JMP.Z		Cycle						; Verifica se o timer ainda esta ativo
 
+		MOV			R1, 1
+		MOV			M [ TIMER_INTERVAL ], R1
+		MOV 		R1, 1
+		MOV			M [ TIMER_CONTROL ],  R1
 
-Cycle: 			BR		Cycle	
+		BR			Cycle
+
+;------------------------------------------------------------------------------
+; Função HALT
+;------------------------------------------------------------------------------
 Halt:           BR		Halt

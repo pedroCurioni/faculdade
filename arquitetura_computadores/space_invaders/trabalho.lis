@@ -11,6 +11,9 @@
 	INITIAL_SP                       FDFF         CONSTANT
 	CURSOR                           FFFC         CONSTANT
 	CURSOR_INIT                      FFFF         CONSTANT
+	TIMER_INTERVAL                   FFF6         CONSTANT
+	TIMER_CONTROL                    FFF7         CONSTANT
+	INTERRUPT_MASK                   FFFA         CONSTANT
 	ROW_POSITION                     0000         CONSTANT
 	COL_POSITION                     0000         CONSTANT
 	ROW_SHIFT                        0008         CONSTANT
@@ -20,28 +23,53 @@
 	EnemySpaceShipLine               80A2           STRING
 	PlayerShipLine                   80F3           STRING
 	GenericLine                      8144           STRING
-	ShipPosition                     8195         VARIABLE
-	ShipLeftBorder                   8196         VARIABLE
-	ShipRightBorder                  8197         VARIABLE
-	RowIndex                         8198         VARIABLE
-	ColumnIndex                      8199         VARIABLE
-	TextIndex                        819A         VARIABLE
+	Ship                             8195           STRING
+	Enemy                            8196           STRING
+	ShipPosition                     8199         VARIABLE
+	ShipLeftBorder                   819A         VARIABLE
+	ShipRightBorder                  819B         VARIABLE
+	ShipBulletExists                 819C         VARIABLE
+	ShipBulletPosition               819D         VARIABLE
+	RowIndex                         819E         VARIABLE
+	ColumnIndex                      819F         VARIABLE
+	TextIndex                        81A0         VARIABLE
 	INT0                             FE00         VARIABLE
 	INT1                             FE01         VARIABLE
+	INT2                             FE02         VARIABLE
+	INT3                             FE03         VARIABLE
+	INT4                             FE04         VARIABLE
+	INT5                             FE05         VARIABLE
+	INT6                             FE06         VARIABLE
+	INT7                             FE07         VARIABLE
+	INT8                             FE08         VARIABLE
+	INT9                             FE09         VARIABLE
+	INT10                            FE0A         VARIABLE
+	INT11                            FE0B         VARIABLE
+	INT12                            FE0C         VARIABLE
+	INT13                            FE0D         VARIABLE
+	INT14                            FE0E         VARIABLE
+	INT15                            FE0F         VARIABLE
 	Esqueleto                        0002            LABEL
 	PringString                      0009            LABEL
 	CyclePrintString                 000C            LABEL
 	EndPrintString                   0020            LABEL
 	PrintScreen                      0030            LABEL
-	CyclePrintEnemy                  003C            LABEL
-	CycleEndPrintEnemy               0047            LABEL
-	CyclePrintScreen                 0049            LABEL
-	CycleEndPrintScreen              0054            LABEL
-	PrintShip                        005F            LABEL
-	MoveLeft                         0078            LABEL
-	EndMoveLeft                      0090            LABEL
-	MoveRight                        0093            LABEL
-	EndMoveRight                     00AB            LABEL
-	Main                             00AE            LABEL
-	Cycle                            00B8            LABEL
-	Halt                             00B9            LABEL
+	CyclePrintEnemy                  0040            LABEL
+	CycleEndPrintEnemy               004B            LABEL
+	CyclePrintScreen                 004D            LABEL
+	CycleEndPrintScreen              0058            LABEL
+	PrintShip                        0063            LABEL
+	MoveLeft                         007C            LABEL
+	EndMoveLeft                      0094            LABEL
+	MoveRight                        0097            LABEL
+	EndMoveRight                     00AF            LABEL
+	MoveBulletUp                     00B2            LABEL
+	BulletInLastRow                  00D5            LABEL
+	ErasePreviousShipBullet          00D9            LABEL
+	EndMoveBulletUp                  00DF            LABEL
+	StartShipBullet                  00E3            LABEL
+	EndStartShipBullet               00F4            LABEL
+	TimerRoutine                     00F8            LABEL
+	Main                             0101            LABEL
+	Cycle                            010B            LABEL
+	Halt                             011A            LABEL
