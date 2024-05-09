@@ -46,16 +46,19 @@
 	Line23                           8747           STRING
 	Bullet                           8798           STRING
 	Enemy                            8799           STRING
-	ScreenPointsPosition             879C         VARIABLE
-	ShipLine                         879D         VARIABLE
-	ShipColumn                       879E         VARIABLE
-	ShipBulletExists                 879F         VARIABLE
-	ShipBulletPosition               87A0         VARIABLE
-	MapColumnLeftBorder              87A1         VARIABLE
-	MapColumnRightBorder             87A2         VARIABLE
-	RowIndex                         87A3         VARIABLE
-	ColumnIndex                      87A4         VARIABLE
-	TextIndex                        87A5         VARIABLE
+	ScreenCentenaPointsPosition      879C         VARIABLE
+	ScreenDezenaPointsPosition       879D         VARIABLE
+	PointsDezena                     879E         VARIABLE
+	PointsCentena                    879F         VARIABLE
+	ShipLine                         87A0         VARIABLE
+	ShipColumn                       87A1         VARIABLE
+	ShipBulletExists                 87A2         VARIABLE
+	ShipBulletPosition               87A3         VARIABLE
+	MapColumnLeftBorder              87A4         VARIABLE
+	MapColumnRightBorder             87A5         VARIABLE
+	RowIndex                         87A6         VARIABLE
+	ColumnIndex                      87A7         VARIABLE
+	TextIndex                        87A8         VARIABLE
 	INT0                             FE00         VARIABLE
 	INT1                             FE01         VARIABLE
 	INT2                             FE02         VARIABLE
@@ -93,15 +96,17 @@
 	EndSecondEnemyPosition           00E8            LABEL
 	EndEraseEnemy                    00F0            LABEL
 	IncreasePoints                   00F4            LABEL
-	MoveBulletUp                     0101            LABEL
-	EndColisionCheck                 0133            LABEL
-	BulletInLastRow                  0142            LABEL
-	ErasePreviousShipBullet          0146            LABEL
-	EndMoveBulletUp                  014C            LABEL
-	StartShipBullet                  0151            LABEL
-	EndStartShipBullet               0166            LABEL
-	StartTimer                       016A            LABEL
-	TimerRoutine                     0175            LABEL
-	Main                             0180            LABEL
-	Cycle                            018C            LABEL
-	Halt                             018D            LABEL
+	IncreaseCentena                  00FE            LABEL
+	PrintDezena                      010B            LABEL
+	MoveBulletUp                     0117            LABEL
+	EndColisionCheck                 014B            LABEL
+	BulletInLastRow                  015A            LABEL
+	ErasePreviousShipBullet          015E            LABEL
+	EndMoveBulletUp                  0164            LABEL
+	StartShipBullet                  0169            LABEL
+	EndStartShipBullet               017E            LABEL
+	StartTimer                       0182            LABEL
+	TimerRoutine                     018D            LABEL
+	Main                             0198            LABEL
+	Cycle                            01A4            LABEL
+	Halt                             01A5            LABEL

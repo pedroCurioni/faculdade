@@ -57,7 +57,10 @@ Line23      	STR    	'##########################################################
 Bullet				STR		'|'
 Enemy				STR		'\W/'
 
-ScreenPointsPosition		WORD	014Ch		; Posição do ultimo caracter da pontuação na tela
+ScreenCentenaPointsPosition		WORD	014Bh		; Posição do ultimo caracter da pontuação na tela
+ScreenDezenaPointsPosition		WORD	014Ch		; Posição do ultimo caracter da pontuação na tela
+PointsDezena				WORD	0030h		; Numero decimal de pontos
+PointsCentena				WORD	0030h		; Numero das centenas de pontos
 
 ShipLine			WORD	21d			; Linha da nave
 ShipColumn			WORD	39d			; Coluna atual da nave
@@ -369,13 +372,33 @@ EraseEnemyHandler:	PUSH R1				; Posição na RAM
 ;------------------------------------------------------------------------------
 IncreasePoints:		PUSH R1
 					PUSH R2
+					PUSH R3
 
-					MOV R1, M [ ScreenPointsPosition ]
-					MOV M [ CURSOR ], R1
+					
 
-					MOV R1, '2'
-					MOV M [ IO_WRITE ], R1
+					MOV R1, M [ PointsDezena ]
+					INC R1
+					CMP R1, ':'									; Valor da tabela ascii que fica depois do 9
 
+					JMP.NZ PrintDezena
+
+					IncreaseCentena:	MOV R1, '0'
+										MOV R2, M [ PointsCentena ]
+										INC R2
+										
+										MOV R3, M [ScreenCentenaPointsPosition]
+										MOV M [ CURSOR ], R3
+
+										MOV M [ IO_WRITE ], R2
+										MOV M [ PointsCentena ], R2
+
+					PrintDezena:		MOV R3, M [ ScreenDezenaPointsPosition ]
+										MOV M [ CURSOR ], R3
+
+										MOV M [ IO_WRITE ], R1
+										MOV M [ PointsDezena ], R1
+
+					POP R3
 					POP R2
 					POP R1
 
@@ -431,7 +454,7 @@ MoveBulletUp:	PUSH 	R1							; Contem a posição da linha anterior
 				CMP R2, ' '
 				JMP.Z EndColisionCheck
 
-				;CALL IncreasePoints
+				CALL IncreasePoints
 
 				MOV R3, M [ ShipBulletPosition ]
 				CALL EraseEnemyHandler
