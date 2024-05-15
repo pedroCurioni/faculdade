@@ -59,17 +59,22 @@ Enemy				STR		'\W/'
 
 ScreenCentenaPointsPosition		WORD	014Bh		; Posição do ultimo caracter da pontuação na tela
 ScreenDezenaPointsPosition		WORD	014Ch		; Posição do ultimo caracter da pontuação na tela
-PointsDezena				WORD	0030h		; Numero decimal de pontos
-PointsCentena				WORD	0030h		; Numero das centenas de pontos
+PointsDezena					WORD	0030h		; Numero decimal de pontos
+PointsCentena					WORD	0030h		; Numero das centenas de pontos
 
-ShipLine			WORD	21d			; Linha da nave
-ShipColumn			WORD	39d			; Coluna atual da nave
+ShipLine						WORD	21d			; Linha da nave
+ShipColumn						WORD	39d			; Coluna atual da nave
 
-ShipBulletExists		WORD	0h		; Guarda a informação se o tiro está ou não na tela
-ShipBulletPosition		WORD	0h		; Posição do tiro da nave
+ShipBulletExists				WORD	0h			; Guarda a informação se o tiro está ou não na tela
+ShipBulletPosition				WORD	0h			; Posição do tiro da nave
 
-MapColumnLeftBorder		WORD	1d 		; Borda esquerda da linha da nave
-MapColumnRightBorder	WORD	80d		; Borda direita da linha da nave
+MapColumnLeftBorder				WORD	1d 			; Borda esquerda da linha da nave
+MapColumnRightBorder			WORD	80d			; Borda direita da linha da nave
+
+EnemyStartRam					WORD	8106h		; Posição na ram onde os inimigos começam
+EnemyEndRam						WORD	8272h		; Posição na ram onde os inimigos terminam
+EnemyLowerLine					WORD	7d			; Inicio da linha da ultima fileira de inimigos
+EnemyMoveCounter				WORD	0000h
 
 RowIndex		WORD	0d
 ColumnIndex		WORD	0d
@@ -125,6 +130,14 @@ Esqueleto: 	PUSH R1
 PringString:	PUSH R1
 				PUSH R2
 				PUSH R3
+	
+	MOV R3, R1												; Posiciona o cursor na linha correta
+	SHL R3, ROW_SHIFT
+	MOV M [ CURSOR ], R3
+	
+	MOV R2, 81												; Posiciona o R1 no inicio da linha recebida
+	MUL R2, R1
+	ADD R1, 8000h
 
 	CyclePrintString:	MOV	R2, M [ R1 ]					; Passa para R2 o caracter na posição de R1
 
@@ -135,21 +148,15 @@ PringString:	PUSH R1
 						INC 	R1							; Anda a string uma posição para frente
 
 						INC		M[ ColumnIndex ]			; Anda uma linha para frente
-						MOV		R2, M[ RowIndex ]			; R2 = Linha atual
-						MOV		R3, M[ ColumnIndex ]; 		; R3 = Coluna atual
-						SHL		R2, ROW_SHIFT				; R2 = Linha atual movida para os bites da esquerda
-						OR		R2, R3						; Concatena R2 e R3
+						MOV		R2, M[ ColumnIndex ]; 		; R3 = Coluna atual
+						OR		R2, R3						; Concatena R2 e R3, R3 = Linha atual movida para os bites da esquerda
 						MOV		M[ CURSOR ], R2				; Move o cursor para a posição de R2
 
 						JMP CyclePrintString
 
-	EndPrintString:	INC M[ RowIndex ]
-					MOV R1, COL_POSITION
+	EndPrintString:	MOV R1, 0
 					MOV M[ ColumnIndex ], R1
-					MOV R2, M[ RowIndex ]
-					SHL	R2, ROW_SHIFT						; R2 = Linha atual movida para os bites da esquerda
-					OR	R2, R1								; Concatena R2 e R3
-					MOV	M[ CURSOR ], R2						; Move o cursor para a posição de R2
+					MOV M [RowIndex ], R1
 
 					POP R3
 					POP R2
@@ -161,23 +168,19 @@ PringString:	PUSH R1
 ; Rotina PrintScreen
 ;------------------------------------------------------------------------------
 PrintScreen:	PUSH R1
-				PUSH R2
 
-				MOV R1, RAM_POSITION
-				MOV R2, 0
+				MOV R1, 0
 
-				PrintScreenCycle:	CMP R2, 24
+				PrintScreenCycle:	CMP R1, 24
 									JMP.Z	EndprintScreen
 
 									CALL PringString
 
-									ADD R1, 81
-									INC R2
-
+									INC R1
+				
 									JMP PrintScreenCycle
 
-				EndprintScreen:	POP R2
-								POP R1
+				EndprintScreen:	POP R1
 
 								RET
 
@@ -438,7 +441,6 @@ MoveBulletUp:	PUSH 	R1							; Contem a posição da linha anterior
 				; ---------------------------
 				MOV R2, R1
 				AND R1, FFh				; Coluna
-				AND R2, FF00h			; Linha
 				SHR R2, ROW_SHIFT
 
 				MOV R3, LINE_MEMMORY
@@ -516,6 +518,63 @@ StartShipBullet:	PUSH R1
 										RTI
 
 ;------------------------------------------------------------------------------
+; Rotina Move Enemy
+;------------------------------------------------------------------------------
+MoveEnemy:		PUSH R1			; Posição da ram para o printstring
+				PUSH R2			; Posição de fim na ram
+				PUSH R3			; Posição de inicio na RAM
+				PUSH R4			; Contador do Loop da linha
+				PUSH R5			; Aux
+
+				MOV R1, M [ EnemyLowerLine ]
+				MOV R2, M [ EnemyEndRam ]
+				MOV R3, M [ EnemyStartRam ]
+				MOV R4, 0
+
+				StartEnemyLoop:	CMP R2, R3
+								JMP.Z EndEnemyLoop
+
+								CMP R4, 40
+								JMP.NZ MoveCharacterRight
+
+								CALL PringString
+								SUB R2, 41			; Anda uma linha para cima na RAM
+								DEC R1				; Anda a linha de print uma pra cima		
+								MOV R4, 0
+								
+
+								MoveCharacterRight: MOV R5, M [ R2 ]
+													CMP R5, ' '
+													JMP.Z EndMoveCharacterRight
+
+													INC R2
+													MOV M [ R2 ], R5
+													DEC R2
+										
+													CMP R5, '\'
+													JMP.NZ EndMoveCharacterRight
+
+													MOV R5, ' '
+													MOV M[ R2 ], R5
+
+
+								EndMoveCharacterRight: 	INC R4
+														DEC R2
+														JMP StartEnemyLoop
+
+				EndEnemyLoop:	CALL PringString
+								INC M [ EnemyEndRam ]
+								INC M [ EnemyStartRam ]
+
+				POP R5
+				POP R4
+				POP R3
+				POP R1
+				POP R2
+
+				RET
+
+;------------------------------------------------------------------------------
 ; Rotina Start Timer
 ;------------------------------------------------------------------------------
 StartTimer:		PUSH R1
@@ -538,6 +597,16 @@ TimerRoutine:	PUSH R1
 				MOV R1, M [ ShipBulletPosition ]
 				CALL MoveBulletUp
 
+				MOV R2, M [ EnemyMoveCounter ]	
+				CMP R2, 10
+				JMP.NZ EndMove
+
+				CALL MoveEnemy
+				MOV R2, 0
+				MOV M [ EnemyMoveCounter ], R2
+
+				EndMove: INC M[ EnemyMoveCounter ]
+				
 				CALL StartTimer
 
 				POP R2
