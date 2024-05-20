@@ -543,6 +543,7 @@ MoveEnemy:		PUSH R1			; Posição da ram para o printstring
 								MOV R4, 0
 								
 
+
 								MoveCharacterRight: MOV R5, M [ R2 ]
 													CMP R5, ' '
 													JMP.Z EndMoveCharacterRight
