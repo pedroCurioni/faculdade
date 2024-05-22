@@ -71,8 +71,8 @@ ShipBulletPosition				WORD	0h			; Posição do tiro da nave
 MapColumnLeftBorder				WORD	1d 			; Borda esquerda da linha da nave
 MapColumnRightBorder			WORD	80d			; Borda direita da linha da nave
 
-EnemyStartRam					WORD	8106h		; Posição na ram onde os inimigos começam
-EnemyEndRam						WORD	8272h		; Posição na ram onde os inimigos terminam
+EnemyStartRam					WORD	8107h		; Posição na ram onde os inimigos começam
+EnemyEndRam						WORD	8271h		; Posição na ram onde os inimigos terminam
 EnemyLowerLine					WORD	7d			; Inicio da linha da ultima fileira de inimigos
 EnemyMoveCounter				WORD	0000h
 
@@ -518,60 +518,124 @@ StartShipBullet:	PUSH R1
 										RTI
 
 ;------------------------------------------------------------------------------
+; Rotina Move Enemy Down
+;------------------------------------------------------------------------------
+MoveEnemyDown:	PUSH R1			; Posição da ram para o printstring
+				PUSH R3			; Posição de inicio na RAM
+				PUSH R2			; Posição de fim na ram
+				PUSH R4			; Contador da Coluna
+				PUSH R5			; aux
+
+				INC M [ EnemyLowerLine ]
+				MOV R1, M [ EnemyLowerLine ]
+
+				MOV R2, M [ EnemyEndRam ]
+
+				MOV R3, M [ EnemyStartRam ]
+				DEC R3
+
+				MOV R5, 42
+				ADD M [ EnemyEndRam ], R5
+				ADD M [ EnemyStartRam ], R5
+
+				MOV R4, 0
+
+				StartEnemyMoveDownLoop:	CMP R2, R3
+										JMP.N EndMoveEnemyDown
+										
+										CMP R4, 39					; Se tiver terminado a linha de inigos printe a linha
+										JMP.NZ MoveCharacterDown
+
+										CALL PringString
+										SUB R2, 42					; Anda uma linha para cima na RAM
+										DEC R1						; Anda a linha de print uma pra cima		
+										MOV R4, 0
+
+				MoveCharacterDown: 	MOV R5, M [ R2 ]
+
+									ADD R2, 42						; Anda para a proxima posição que o caracter deve estar
+									MOV M [ R2 ], R5				; Move o caracter
+
+									SUB R2, 42
+									MOV R5, ' '
+									MOV M [ R2 ], R5				; Limpa a posição anterior
+
+									DEC R2
+									INC R4
+
+									JMP StartEnemyMoveDownLoop
+
+				EndMoveEnemyDown: 	CALL PringString
+									DEC R1
+									CALL PringString
+
+				POP R5
+				POP R4
+				POP R3
+				POP R2
+				POP R1
+
+				RET
+
+;------------------------------------------------------------------------------
 ; Rotina Move Enemy
 ;------------------------------------------------------------------------------
 MoveEnemy:		PUSH R1			; Posição da ram para o printstring
 				PUSH R2			; Posição de fim na ram
 				PUSH R3			; Posição de inicio na RAM
-				PUSH R4			; Contador do Loop da linha
+				PUSH R4			; Contador do Loop da Coluna
 				PUSH R5			; Aux
+				PUSH R6			; Aux 2
 
 				MOV R1, M [ EnemyLowerLine ]
 				MOV R2, M [ EnemyEndRam ]
 				MOV R3, M [ EnemyStartRam ]
 				MOV R4, 0
 
-				StartEnemyLoop:	CMP R2, R3
-								JMP.Z EndEnemyLoop
+				MOV R5, R2				; Anda para a proxima posição da memoria
+				INC R5
+				MOV R6, M [ R5 ]
+				CMP R6, '#'
+				JMP.NZ StartEnemyLoop
 
-								CMP R4, 40
-								JMP.NZ MoveCharacterRight
+				CALL MoveEnemyDown
+				JMP	EndMoveEnemy
 
-								CALL PringString
-								SUB R2, 41			; Anda uma linha para cima na RAM
-								DEC R1				; Anda a linha de print uma pra cima		
-								MOV R4, 0
+				StartEnemyLoop:		CMP R2, R3
+									JMP.N EndEnemyLoop
 								
+									CMP R4, 39					; Se tiver terminado a linha de inigos printe a linha
+									JMP.N MoveCharacterRight
 
+									CALL PringString
+									SUB R2, 42			; Anda uma linha para cima na RAM
+									DEC R1				; Anda a linha de print uma para Cima		
+									MOV R4, 0
 
-								MoveCharacterRight: MOV R5, M [ R2 ]
-													CMP R5, ' '
-													JMP.Z EndMoveCharacterRight
+				MoveCharacterRight: MOV R5, M [ R2 ]
+									
+									INC R2
+									
+									DEC R2
+									MOV R6, ' '			; Limpa a memoria
+									MOV M [ R2 ], R6
+									INC R2
 
-													INC R2
-													MOV M [ R2 ], R5
-													DEC R2
-										
-													CMP R5, '\'
-													JMP.NZ EndMoveCharacterRight
-
-													MOV R5, ' '
-													MOV M[ R2 ], R5
-
-
-								EndMoveCharacterRight: 	INC R4
-														DEC R2
-														JMP StartEnemyLoop
+									MOV M [ R2 ], R5
+									INC R4
+									SUB R2, 2
+									JMP StartEnemyLoop
 
 				EndEnemyLoop:	CALL PringString
 								INC M [ EnemyEndRam ]
 								INC M [ EnemyStartRam ]
 
-				POP R5
-				POP R4
-				POP R3
-				POP R1
-				POP R2
+				EndMoveEnemy:	POP R6
+								POP R5
+								POP R4
+								POP R3
+								POP R1
+								POP R2
 
 				RET
 
@@ -599,7 +663,7 @@ TimerRoutine:	PUSH R1
 				CALL MoveBulletUp
 
 				MOV R2, M [ EnemyMoveCounter ]	
-				CMP R2, 10
+				CMP R2, 5
 				JMP.NZ EndMove
 
 				CALL MoveEnemy

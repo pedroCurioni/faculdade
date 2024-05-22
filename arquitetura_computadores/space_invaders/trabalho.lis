@@ -109,14 +109,18 @@
 	EndMoveBulletUp                  015C            LABEL
 	StartShipBullet                  0161            LABEL
 	EndStartShipBullet               0176            LABEL
-	MoveEnemy                        017A            LABEL
-	StartEnemyLoop                   0187            LABEL
-	MoveCharacterRight               0195            LABEL
-	EndMoveCharacterRight            01A4            LABEL
-	EndEnemyLoop                     01A8            LABEL
-	StartTimer                       01B4            LABEL
-	TimerRoutine                     01BF            LABEL
-	EndMove                          01D1            LABEL
-	Main                             01D8            LABEL
-	Cycle                            01E4            LABEL
-	Halt                             01E5            LABEL
+	MoveEnemyDown                    017A            LABEL
+	StartEnemyMoveDownLoop           0190            LABEL
+	MoveCharacterDown                019E            LABEL
+	EndMoveEnemyDown                 01AB            LABEL
+	MoveEnemy                        01B6            LABEL
+	StartEnemyLoop                   01CF            LABEL
+	MoveCharacterRight               01DD            LABEL
+	EndEnemyLoop                     01EA            LABEL
+	EndMoveEnemy                     01F0            LABEL
+	StartTimer                       01F7            LABEL
+	TimerRoutine                     0202            LABEL
+	EndMove                          0214            LABEL
+	Main                             021B            LABEL
+	Cycle                            0227            LABEL
+	Halt                             0228            LABEL

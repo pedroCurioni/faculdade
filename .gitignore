@@ -1,5 +1,3 @@
-
-*.exe
 *.out
 .vscode/
 __pycache__/
