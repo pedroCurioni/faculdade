@@ -54,6 +54,9 @@ Line21			STR		'#                                     /-\                        
 Line22      	STR    	'#                                                                              #', FIM_TEXTO
 Line23      	STR    	'################################################################################', FIM_TEXTO
 
+EnemyLine		STR		'#                   \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/                    #', FIM_TEXTO
+EmptyLine		STR		'#                                                                              #', FIM_TEXTO
+
 Bullet				STR		'|'
 Enemy				STR		'\W/'
 
@@ -61,6 +64,9 @@ ScreenCentenaPointsPosition		WORD	014Bh		; Posição do ultimo caracter da pontu
 ScreenDezenaPointsPosition		WORD	014Ch		; Posição do ultimo caracter da pontuação na tela
 PointsDezena					WORD	0030h		; Numero decimal de pontos
 PointsCentena					WORD	0030h		; Numero das centenas de pontos
+
+ScreenLivesPosition				WORD	010Bh		; Numero das centenas de pontos
+LivesCounter					WORD	0033h		; Numero das centenas de pontos
 
 ShipLine						WORD	21d			; Linha da nave
 ShipColumn						WORD	39d			; Coluna atual da nave
@@ -377,8 +383,6 @@ IncreasePoints:		PUSH R1
 					PUSH R2
 					PUSH R3
 
-					
-
 					MOV R1, M [ PointsDezena ]
 					INC R1
 					CMP R1, ':'									; Valor da tabela ascii que fica depois do 9
@@ -518,6 +522,136 @@ StartShipBullet:	PUSH R1
 										RTI
 
 ;------------------------------------------------------------------------------
+; Rotina Printar Inimigos
+;------------------------------------------------------------------------------
+PrintEnemyLine:		PUSH R1									; Contem a linha que sera printada
+					PUSH R2									; Linha de inimigos na ram
+					PUSH R3									; Posição da linha na RAM
+					PUSH R4
+
+					MOV R2, EnemyLine
+
+					MOV R3, 81
+					MOV R4, R1
+					MUL R4, R3
+					ADD R3, 8000h							; Guarda a posição da linha na RAM
+
+					CopyEnemyMemmoryLoop:	MOV R4, M [R3]
+					CMP R4, FIM_TEXTO
+					JMP.Z EndCopyEnemyMemmory
+					MOV R4, M [ R2 ]
+					MOV M [ R3 ], R4
+
+					INC R2
+					INC R3
+					JMP CopyEnemyMemmoryLoop
+
+					EndCopyEnemyMemmory: CALL PringString
+
+					POP R4
+					POP R3
+					POP R2
+					POP R1
+
+					RET
+
+;------------------------------------------------------------------------------
+; Rotina Printar Linhas Vazias
+;------------------------------------------------------------------------------
+PrintEmptyLine:		PUSH R1									; Contem a linha que sera printada
+					PUSH R2									; Linha de inimigos na ram
+					PUSH R3									; Posição da linha na RAM
+					PUSH R4
+
+					MOV R2, EmptyLine
+
+					MOV R3, 81
+					MOV R4, R1
+					MUL R4, R3
+					ADD R3, 8000h							; Guarda a posição da linha na RAM
+
+					CopyEmptyMemmoryLoop:	MOV R4, M [R3]
+					CMP R4, FIM_TEXTO
+					JMP.Z EndCopyEmptyMemmory
+					MOV R4, M [ R2 ]
+					MOV M [ R3 ], R4
+
+					INC R2
+					INC R3
+					JMP CopyEmptyMemmoryLoop
+
+					EndCopyEmptyMemmory: CALL PringString
+
+					POP R4
+					POP R3
+					POP R2
+					POP R1
+
+					RET
+
+;------------------------------------------------------------------------------
+; Rotina Diminuir Vida
+;------------------------------------------------------------------------------
+DecreaseLives:	PUSH R1
+				PUSH R2
+				PUSH R3
+
+				DEC M [LivesCounter]
+				MOV R1, M [ LivesCounter ]
+
+				MOV R2, M [ ScreenLivesPosition ]
+				MOV M [ CURSOR ], R2
+
+				MOV M [IO_WRITE], R1
+
+				POP R3
+				POP R2
+				POP R1
+
+				RET
+
+;------------------------------------------------------------------------------
+; Rotina Dano do inimigo
+;------------------------------------------------------------------------------
+EnemyDamageHandler:	PUSH R1
+					PUSH R2
+					PUSH R3
+					PUSH R4
+
+					MOV R1, 3								 ; Inicio das linhas de inimigos
+					StartPrintEnemyLoop: CMP R1, 8
+										JMP.Z StartCleanMapLoop
+
+										CALL PrintEnemyLine
+
+										INC R1
+										JMP StartPrintEnemyLoop
+
+					StartCleanMapLoop:	CMP R1, 21
+										JMP.Z EndEnemyDamageHandler
+
+										CALL PrintEmptyLine
+
+										INC R1
+										JMP StartCleanMapLoop
+
+					EndEnemyDamageHandler:	CALL DecreaseLives
+											MOV R4, 8107h						; Reseta os valores
+											MOV M [ EnemyStartRam ], R4
+											MOV R4, 8271h
+											MOV M [ EnemyEndRam ], R4
+											MOV R4, 7d
+											MOV M [ EnemyLowerLine ], R4
+
+
+					POP R4
+					POP R3
+					POP R2
+					POP R1
+
+					RET
+
+;------------------------------------------------------------------------------
 ; Rotina Move Enemy Down
 ;------------------------------------------------------------------------------
 MoveEnemyDown:	PUSH R1			; Posição da ram para o printstring
@@ -529,19 +663,24 @@ MoveEnemyDown:	PUSH R1			; Posição da ram para o printstring
 				INC M [ EnemyLowerLine ]
 				MOV R1, M [ EnemyLowerLine ]
 
-				MOV R2, M [ EnemyEndRam ]
+				CMP R1, 21
+				JMP.NZ EndDamageCheck
+				CALL EnemyDamageHandler
+				JMP EndMoveEnemyDown
 
-				MOV R3, M [ EnemyStartRam ]
-				DEC R3
+				EndDamageCheck:	MOV R2, M [ EnemyEndRam ]
 
-				MOV R5, 42
-				ADD M [ EnemyEndRam ], R5
-				ADD M [ EnemyStartRam ], R5
+								MOV R3, M [ EnemyStartRam ]
+								DEC R3
 
-				MOV R4, 0
+								MOV R5, 42
+								ADD M [ EnemyEndRam ], R5
+								ADD M [ EnemyStartRam ], R5
+
+								MOV R4, 0
 
 				StartEnemyMoveDownLoop:	CMP R2, R3
-										JMP.N EndMoveEnemyDown
+										JMP.N EndMoveEnemyDownLoop
 										
 										CMP R4, 39					; Se tiver terminado a linha de inigos printe a linha
 										JMP.NZ MoveCharacterDown
@@ -565,17 +704,17 @@ MoveEnemyDown:	PUSH R1			; Posição da ram para o printstring
 
 									JMP StartEnemyMoveDownLoop
 
-				EndMoveEnemyDown: 	CALL PringString
-									DEC R1
-									CALL PringString
+				EndMoveEnemyDownLoop: 	CALL PringString
+										DEC R1
+										CALL PringString
 
-				POP R5
-				POP R4
-				POP R3
-				POP R2
-				POP R1
+				EndMoveEnemyDown: 	POP R5
+									POP R4
+									POP R3
+									POP R2
+									POP R1
 
-				RET
+									RET
 
 ;------------------------------------------------------------------------------
 ; Rotina Move Enemy
@@ -663,7 +802,7 @@ TimerRoutine:	PUSH R1
 				CALL MoveBulletUp
 
 				MOV R2, M [ EnemyMoveCounter ]	
-				CMP R2, 5
+				CMP R2, 1
 				JMP.NZ EndMove
 
 				CALL MoveEnemy

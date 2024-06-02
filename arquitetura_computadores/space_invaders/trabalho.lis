@@ -44,25 +44,29 @@
 	Line21                           86A5           STRING
 	Line22                           86F6           STRING
 	Line23                           8747           STRING
-	Bullet                           8798           STRING
-	Enemy                            8799           STRING
-	ScreenCentenaPointsPosition      879C         VARIABLE
-	ScreenDezenaPointsPosition       879D         VARIABLE
-	PointsDezena                     879E         VARIABLE
-	PointsCentena                    879F         VARIABLE
-	ShipLine                         87A0         VARIABLE
-	ShipColumn                       87A1         VARIABLE
-	ShipBulletExists                 87A2         VARIABLE
-	ShipBulletPosition               87A3         VARIABLE
-	MapColumnLeftBorder              87A4         VARIABLE
-	MapColumnRightBorder             87A5         VARIABLE
-	EnemyStartRam                    87A6         VARIABLE
-	EnemyEndRam                      87A7         VARIABLE
-	EnemyLowerLine                   87A8         VARIABLE
-	EnemyMoveCounter                 87A9         VARIABLE
-	RowIndex                         87AA         VARIABLE
-	ColumnIndex                      87AB         VARIABLE
-	TextIndex                        87AC         VARIABLE
+	EnemyLine                        8798           STRING
+	EmptyLine                        87E9           STRING
+	Bullet                           883A           STRING
+	Enemy                            883B           STRING
+	ScreenCentenaPointsPosition      883E         VARIABLE
+	ScreenDezenaPointsPosition       883F         VARIABLE
+	PointsDezena                     8840         VARIABLE
+	PointsCentena                    8841         VARIABLE
+	ScreenLivesPosition              8842         VARIABLE
+	LivesCounter                     8843         VARIABLE
+	ShipLine                         8844         VARIABLE
+	ShipColumn                       8845         VARIABLE
+	ShipBulletExists                 8846         VARIABLE
+	ShipBulletPosition               8847         VARIABLE
+	MapColumnLeftBorder              8848         VARIABLE
+	MapColumnRightBorder             8849         VARIABLE
+	EnemyStartRam                    884A         VARIABLE
+	EnemyEndRam                      884B         VARIABLE
+	EnemyLowerLine                   884C         VARIABLE
+	EnemyMoveCounter                 884D         VARIABLE
+	RowIndex                         884E         VARIABLE
+	ColumnIndex                      884F         VARIABLE
+	TextIndex                        8850         VARIABLE
 	INT0                             FE00         VARIABLE
 	INT1                             FE01         VARIABLE
 	INT2                             FE02         VARIABLE
@@ -109,18 +113,31 @@
 	EndMoveBulletUp                  015C            LABEL
 	StartShipBullet                  0161            LABEL
 	EndStartShipBullet               0176            LABEL
-	MoveEnemyDown                    017A            LABEL
-	StartEnemyMoveDownLoop           0190            LABEL
-	MoveCharacterDown                019E            LABEL
-	EndMoveEnemyDown                 01AB            LABEL
-	MoveEnemy                        01B6            LABEL
-	StartEnemyLoop                   01CF            LABEL
-	MoveCharacterRight               01DD            LABEL
-	EndEnemyLoop                     01EA            LABEL
-	EndMoveEnemy                     01F0            LABEL
-	StartTimer                       01F7            LABEL
-	TimerRoutine                     0202            LABEL
-	EndMove                          0214            LABEL
-	Main                             021B            LABEL
-	Cycle                            0227            LABEL
-	Halt                             0228            LABEL
+	PrintEnemyLine                   017A            LABEL
+	CopyEnemyMemmoryLoop             0186            LABEL
+	EndCopyEnemyMemmory              0191            LABEL
+	PrintEmptyLine                   0198            LABEL
+	CopyEmptyMemmoryLoop             01A4            LABEL
+	EndCopyEmptyMemmory              01AF            LABEL
+	DecreaseLives                    01B6            LABEL
+	EnemyDamageHandler               01C7            LABEL
+	StartPrintEnemyLoop              01CD            LABEL
+	StartCleanMapLoop                01D6            LABEL
+	EndEnemyDamageHandler            01DF            LABEL
+	MoveEnemyDown                    01F2            LABEL
+	EndDamageCheck                   0203            LABEL
+	StartEnemyMoveDownLoop           0210            LABEL
+	MoveCharacterDown                021E            LABEL
+	EndMoveEnemyDownLoop             022B            LABEL
+	EndMoveEnemyDown                 0230            LABEL
+	MoveEnemy                        0236            LABEL
+	StartEnemyLoop                   024F            LABEL
+	MoveCharacterRight               025D            LABEL
+	EndEnemyLoop                     026A            LABEL
+	EndMoveEnemy                     0270            LABEL
+	StartTimer                       0277            LABEL
+	TimerRoutine                     0282            LABEL
+	EndMove                          0294            LABEL
+	Main                             029B            LABEL
+	Cycle                            02A7            LABEL
+	Halt                             02A8            LABEL
