@@ -65,8 +65,8 @@ ScreenDezenaPointsPosition		WORD	014Ch		; Posição do ultimo caracter da pontua
 PointsDezena					WORD	0030h		; Numero decimal de pontos
 PointsCentena					WORD	0030h		; Numero das centenas de pontos
 
-ScreenLivesPosition				WORD	010Bh		; Numero das centenas de pontos
-LivesCounter					WORD	0033h		; Numero das centenas de pontos
+ScreenLivesPosition				WORD	010Bh		; Posição dos vidas na tela
+LivesCounter					WORD	0033h		; Contador de vidas
 
 ShipLine						WORD	21d			; Linha da nave
 ShipColumn						WORD	39d			; Coluna atual da nave
@@ -594,7 +594,6 @@ PrintEmptyLine:		PUSH R1									; Contem a linha que sera printada
 ;------------------------------------------------------------------------------
 DecreaseLives:	PUSH R1
 				PUSH R2
-				PUSH R3
 
 				DEC M [LivesCounter]
 				MOV R1, M [ LivesCounter ]
@@ -604,7 +603,29 @@ DecreaseLives:	PUSH R1
 
 				MOV M [IO_WRITE], R1
 
-				POP R3
+				POP R2
+				POP R1
+
+				RET
+
+;------------------------------------------------------------------------------
+; Rotina Resetar Pontos
+;------------------------------------------------------------------------------
+ResetPoints:	PUSH R1
+				PUSH R2
+
+				MOV R1, 0030h
+				MOV M [ PointsCentena ], R1
+				MOV M [ PointsDezena ], R1
+
+				MOV R2, M [ ScreenCentenaPointsPosition ]
+				MOV M [ CURSOR ], R2
+				MOV M [IO_WRITE], R1
+	
+				MOV R2, M [ ScreenDezenaPointsPosition ]
+				MOV M [ CURSOR ], R2
+				MOV M [IO_WRITE], R1
+
 				POP R2
 				POP R1
 
@@ -636,6 +657,7 @@ EnemyDamageHandler:	PUSH R1
 										JMP StartCleanMapLoop
 
 					EndEnemyDamageHandler:	CALL DecreaseLives
+											CALL ResetPoints
 											MOV R4, 8107h						; Reseta os valores
 											MOV M [ EnemyStartRam ], R4
 											MOV R4, 8271h
