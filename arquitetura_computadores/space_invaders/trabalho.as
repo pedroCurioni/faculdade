@@ -72,6 +72,7 @@ ShipLine						WORD	21d			; Linha da nave
 ShipColumn						WORD	39d			; Coluna atual da nave
 
 ShipBulletExists				WORD	0h			; Guarda a informação se o tiro está ou não na tela
+ShipBulletLine					WORD	0h			; Linha do tiro da nave
 ShipBulletPosition				WORD	0h			; Posição do tiro da nave
 
 MapColumnLeftBorder				WORD	1d 			; Borda esquerda da linha da nave
@@ -131,9 +132,9 @@ Esqueleto: 	PUSH R1
 
 
 ;------------------------------------------------------------------------------
-; Rotina PringString
+; Rotina PrintString
 ;------------------------------------------------------------------------------
-PringString:	PUSH R1
+PrintString:	PUSH R1
 				PUSH R2
 				PUSH R3
 	
@@ -180,7 +181,7 @@ PrintScreen:	PUSH R1
 				PrintScreenCycle:	CMP R1, 24
 									JMP.Z	EndprintScreen
 
-									CALL PringString
+									CALL PrintString
 
 									INC R1
 				
@@ -322,25 +323,20 @@ MoveRight:	PUSH R1
 ;------------------------------------------------------------------------------
 EraseEnemy:	PUSH R1 ; Posição na RAM
 			PUSH R2	; Contador
-			PUSH R3	; Posição da nave na tela
-			PUSH R4
+			PUSH R3
 
 			MOV R2, 0
-			MOV R4, ' '
+			MOV R3, ' '
 
 			EraseEnemyLoop:	CMP R2, 3
 							JMP.Z EnemyEraseEnd
-							MOV M[ CURSOR ], R3
-							MOV M[ IO_WRITE ], R4
-							MOV M [ R1 ], R4
+							MOV M [ R1 ], R3
 							
-							INC R3					; Anda uma posição na tela
 							INC R1					; Anda uma posição na RAM
 							INC R2
 							JMP EraseEnemyLoop
 
-			EnemyEraseEnd:  POP R4
-							POP R3
+			EnemyEraseEnd:	POP R3
 							POP R2
 							POP R1
 
@@ -349,29 +345,27 @@ EraseEnemy:	PUSH R1 ; Posição na RAM
 ;------------------------------------------------------------------------------
 ; Rotina Handler Erase Enemy
 ;------------------------------------------------------------------------------
-EraseEnemyHandler:	PUSH R1				; Posição na RAM
-					PUSH R2				; Caracter da posição
-					PUSH R3				; Posição da nave na tela
+EraseEnemyHandler:	PUSH R1				; Parametro: Posição na RAM
+					PUSH R2				
+
+					MOV		R2, M [ R1 ]	; Caracter da posição
 		
-					CMP R2, '\'
-					JMP.NZ EndFirstEnemyPosition
-					CALL EraseEnemy
-					JMP EndEraseEnemy
+					CMP 	R2, '\'
+					JMP.NZ 	EndFirstEnemyPosition
+					CALL 	EraseEnemy
+					JMP 	EndEraseEnemy
 
-					EndFirstEnemyPosition:  CMP R2, 'W'
-											JMP.NZ EndSecondEnemyPosition
-											DEC R1
-											DEC R3
-											CALL EraseEnemy
-											JMP EndEraseEnemy
+					EndFirstEnemyPosition:  CMP 	R2, 'W'
+											JMP.NZ 	EndSecondEnemyPosition
+											DEC 	R1
+											CALL 	EraseEnemy
+											JMP 	EndEraseEnemy
 
-					EndSecondEnemyPosition: 	CMP R2, '/'
-												SUB R1, 2
-												SUB R3, 2
-												CALL EraseEnemy
+					EndSecondEnemyPosition: 	CMP	 	R2, '/'
+												SUB 	R1, 2
+												CALL 	EraseEnemy
 
-					EndEraseEnemy:	POP R3
-									POP R2
+					EndEraseEnemy:	POP R2
 									POP R1
 
 									RET
@@ -414,86 +408,62 @@ IncreasePoints:		PUSH R1
 ;------------------------------------------------------------------------------
 ; Rotina MoveBulletUp
 ;------------------------------------------------------------------------------
-MoveBulletUp:	PUSH 	R1							; Contem a posição da linha anterior
-				PUSH 	R2
+MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
+				PUSH 	R2								; Calculado, Contem a posição da proxima linha
 				PUSH 	R3
 				PUSH	R4
 
-				MOV R2, M [ ShipBulletExists ]		; Verifica se o tiro ja esta na tela
-				CMP R2, 0
+				MOV 	R3, M [ ShipBulletExists ]		; Verifica se o tiro ja esta na tela
+				CMP 	R3, 0
+				JMP.Z 	EndMoveBulletUp
 
-				JMP.Z EndMoveBulletUp
-
-				MOV 	R2, R1
-				MOV		R4, R1
-
-				AND		R1, 255						; Zera os 8 bits da dirita de R1 que representam a linha
-				SHR 	R2, ROW_SHIFT				; Coloca os valors da coluna na esquerda para decrementar
-				DEC 	R2
-
-				CMP		R2, 1						; Verifica se o tiro esta na posição mais alta possivel
-				JMP.Z 	BulletInLastRow
-
-				SHL		R2, ROW_SHIFT
-				OR		R1, R2
-
-				MOV		M[ ShipBulletPosition ], R1
-				MOV		M[ CURSOR ], R1
+				MOV 	R3, M [ ShipBulletLine ]
+				DEC 	R3
+				CMP		R3, 1
+				JMP.Z	BulletInLastRow
 				
-				; ---------------------------
-				; Colisão
-				; ---------------------------
-				MOV R2, R1
-				AND R1, FFh				; Coluna
-				SHR R2, ROW_SHIFT
+				MOV 	R2, R1
+				SUB 	R2, 81
 
-				MOV R3, LINE_MEMMORY
-				MUL R2, R3				; Move uma linha inteira na memoria
+				; Inicio colisão
+				MOV 	R3, M [ R2 ]
+				CMP 	R3, ' '
 
-				ADD R1, R3
+				JMP.Z	EndColisionCheck
+				CALL 	IncreasePoints
+				MOV		R4, R1
+				MOV		R1, R2
+				CALL 	EraseEnemyHandler
+				MOV		R1, R4
+				JMP		BulletInLastRow
 
-				MOV R2, RAM_POSITION
-				ADD R1, R2
+				EndColisionCheck:		MOV 	R3, M [ Bullet ]				; Coloca o tiro na linha seguinte
+										MOV		M [ R2 ], R3
 
-				MOV R2, M [ R1 ]		; Recupera o dado da RAM
+										CMP 	R1, 86A5h						; Se o valor de R1 for menor que o especifica significa que a posição anterior não corresponde a linha da nave
+										JMP.N	ErasePreviousBullet
+										JMP		EndMoveBulletUp
 
-				CMP R2, ' '
-				JMP.Z EndColisionCheck
+				BulletInLastRow:		MOV 	R4, 0
+										MOV 	M [ ShipBulletExists ], R4
 
-				CALL IncreasePoints
+				ErasePreviousBullet:	MOV 	R3, ' '
+										MOV		M [ R1 ], R3
 
-				MOV R3, M [ ShipBulletPosition ]
-				CALL EraseEnemyHandler
+										MOV		R1, M [ShipBulletLine]
+										CALL 	PrintString
 
-				JMP BulletInLastRow
-				; ---------------------------
+				EndMoveBulletUp: 		DEC 	M [ ShipBulletLine ]
+										MOV		R1, M [ ShipBulletLine ]
+										CALL 	PrintString
+				
+										MOV 	M [ ShipBulletPosition ], R2
+										POP	 	R4
+										POP 	R3
+										POP 	R2
+										POP 	R1
 
-				EndColisionCheck:	MOV		R1, M [ Bullet ]
-									MOV		M[ IO_WRITE ], R1
-
-									MOV R1, M [ ShipLine ]
-									SHl	R1, ROW_SHIFT
-									MOV R2, M [ ShipColumn ]
-									OR R1, R2
-
-									CMP R4, R1							; Verifica se a posição anterior e referente a nave
-									JMP.Z	EndMoveBulletUp
-									
-									JMP		ErasePreviousShipBullet
-
-				BulletInLastRow:			MOV		R1, 0
-											MOV		M [ ShipBulletExists ], R1
-
-				ErasePreviousShipBullet:	MOV		M [ CURSOR ], R4
-											MOV 	R4,	' '
-											MOV 	M[ IO_WRITE ], R4
-
-				EndMoveBulletUp:	POP R4
-									POP R3
-									POP R2
-									POP R1
-
-									RET
+				RET
 
 ;------------------------------------------------------------------------------
 ; Interrupção StartShipBullet
@@ -510,9 +480,19 @@ StartShipBullet:	PUSH R1
 					MOV M [ ShipBulletExists ], R1
 
 					MOV R1, M [ ShipLine ]
-					SHl	R1, ROW_SHIFT
 					MOV R2, M [ ShipColumn ]
-					OR R1, R2
+
+					MOV R3, 81
+
+					MUL R3, R1
+					ADD R1, R2
+					ADD R1, 8000h
+
+					MOV R3, 21
+					MOV M [ ShipBulletLine ], R3
+
+					MOV M [ ShipBulletPosition ], R1
+
 					CALL MoveBulletUp
 
 					EndStartShipBullet: POP R3
@@ -546,7 +526,7 @@ PrintEnemyLine:		PUSH R1									; Contem a linha que sera printada
 					INC R3
 					JMP CopyEnemyMemmoryLoop
 
-					EndCopyEnemyMemmory: CALL PringString
+					EndCopyEnemyMemmory: CALL PrintString
 
 					POP R4
 					POP R3
@@ -580,7 +560,7 @@ PrintEmptyLine:		PUSH R1									; Contem a linha que sera printada
 					INC R3
 					JMP CopyEmptyMemmoryLoop
 
-					EndCopyEmptyMemmory: CALL PringString
+					EndCopyEmptyMemmory: CALL PrintString
 
 					POP R4
 					POP R3
@@ -707,7 +687,7 @@ MoveEnemyDown:	PUSH R1			; Posição da ram para o printstring
 										CMP R4, 39					; Se tiver terminado a linha de inigos printe a linha
 										JMP.NZ MoveCharacterDown
 
-										CALL PringString
+										CALL PrintString
 										SUB R2, 42					; Anda uma linha para cima na RAM
 										DEC R1						; Anda a linha de print uma pra cima		
 										MOV R4, 0
@@ -726,9 +706,9 @@ MoveEnemyDown:	PUSH R1			; Posição da ram para o printstring
 
 									JMP StartEnemyMoveDownLoop
 
-				EndMoveEnemyDownLoop: 	CALL PringString
+				EndMoveEnemyDownLoop: 	CALL PrintString
 										DEC R1
-										CALL PringString
+										CALL PrintString
 
 				EndMoveEnemyDown: 	POP R5
 									POP R4
@@ -768,7 +748,7 @@ MoveEnemy:		PUSH R1			; Posição da ram para o printstring
 									CMP R4, 39					; Se tiver terminado a linha de inigos printe a linha
 									JMP.N MoveCharacterRight
 
-									CALL PringString
+									CALL PrintString
 									SUB R2, 42			; Anda uma linha para cima na RAM
 									DEC R1				; Anda a linha de print uma para Cima		
 									MOV R4, 0
@@ -787,7 +767,7 @@ MoveEnemy:		PUSH R1			; Posição da ram para o printstring
 									SUB R2, 2
 									JMP StartEnemyLoop
 
-				EndEnemyLoop:	CALL PringString
+				EndEnemyLoop:	CALL PrintString
 								INC M [ EnemyEndRam ]
 								INC M [ EnemyStartRam ]
 
@@ -824,7 +804,7 @@ TimerRoutine:	PUSH R1
 				CALL MoveBulletUp
 
 				MOV R2, M [ EnemyMoveCounter ]	
-				CMP R2, 1
+				CMP R2, 50
 				JMP.NZ EndMove
 
 				CALL MoveEnemy
