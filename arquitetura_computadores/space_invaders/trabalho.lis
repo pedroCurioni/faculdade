@@ -61,13 +61,12 @@
 	ShipBulletPosition               8848         VARIABLE
 	MapColumnLeftBorder              8849         VARIABLE
 	MapColumnRightBorder             884A         VARIABLE
-	EnemyStartRam                    884B         VARIABLE
-	EnemyEndRam                      884C         VARIABLE
-	EnemyLowerLine                   884D         VARIABLE
-	EnemyMoveCounter                 884E         VARIABLE
-	RowIndex                         884F         VARIABLE
-	ColumnIndex                      8850         VARIABLE
-	TextIndex                        8851         VARIABLE
+	EnemyLastLineStart               884B         VARIABLE
+	EnemyLowerLine                   884C         VARIABLE
+	EnemyMoveCounter                 884D         VARIABLE
+	RowIndex                         884E         VARIABLE
+	ColumnIndex                      884F         VARIABLE
+	TextIndex                        8850         VARIABLE
 	INT0                             FE00         VARIABLE
 	INT1                             FE01         VARIABLE
 	INT2                             FE02         VARIABLE
@@ -112,6 +111,7 @@
 	BulletInLastRow                  0131            LABEL
 	ErasePreviousBullet              0135            LABEL
 	EndMoveBulletUp                  013C            LABEL
+	BulletNotExists                  0144            LABEL
 	StartShipBullet                  0149            LABEL
 	EndStartShipBullet               0168            LABEL
 	PrintEnemyLine                   016C            LABEL
@@ -126,20 +126,21 @@
 	StartPrintEnemyLoop              01D4            LABEL
 	StartCleanMapLoop                01DD            LABEL
 	EndEnemyDamageHandler            01E6            LABEL
-	MoveEnemyDown                    01FB            LABEL
-	EndDamageCheck                   020C            LABEL
-	StartEnemyMoveDownLoop           0219            LABEL
-	MoveCharacterDown                0227            LABEL
-	EndMoveEnemyDownLoop             0234            LABEL
-	EndMoveEnemyDown                 0239            LABEL
-	MoveEnemy                        023F            LABEL
-	StartEnemyLoop                   0258            LABEL
-	MoveCharacterRight               0266            LABEL
-	EndEnemyLoop                     0273            LABEL
-	EndMoveEnemy                     0279            LABEL
-	StartTimer                       0280            LABEL
-	TimerRoutine                     028B            LABEL
-	EndMove                          029D            LABEL
-	Main                             02A4            LABEL
-	Cycle                            02B0            LABEL
-	Halt                             02B1            LABEL
+	MoveEnemyDown                    01F7            LABEL
+	DownLoopEnemyLine                0207            LABEL
+	DownLoopEnemyColumn              020B            LABEL
+	DownGotoNextLine                 0219            LABEL
+	DownEndMoveEnemy                 0223            LABEL
+	MoveEnemy                        0231            LABEL
+	LoopEnemyLine                    024C            LABEL
+	LoopEnemyColumn                  0250            LABEL
+	MoveCharacterRight               026A            LABEL
+	EndBulletCheck                   026F            LABEL
+	GotoNextLine                     0274            LABEL
+	EndMoveEnemy                     0280            LABEL
+	StartTimer                       0287            LABEL
+	TimerRoutine                     0292            LABEL
+	EndMove                          02A4            LABEL
+	Main                             02AB            LABEL
+	Cycle                            02B7            LABEL
+	Halt                             02B8            LABEL
