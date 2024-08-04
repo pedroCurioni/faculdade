@@ -414,57 +414,87 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 				PUSH 	R2								; Calculado, Contem a posição da proxima linha
 				PUSH 	R3
 				PUSH	R4
+				PUSH 	R5
 
-				MOV 	R3, M [ ShipBulletExists ]		; Verifica se o tiro ja esta na tela
-				CMP 	R3, 0
-				JMP.Z 	BulletNotExists
+				MOV	R5, M [ ShipBulletExists ]		; Verifica se o tiro ja esta na tela
+				CMP	R5, 0
+				JMP.Z EndMoveBulletUp
 
-				MOV 	R3, M [ ShipBulletLine ]
-				DEC 	R3
-				CMP		R3, 1
-				JMP.Z	BulletInLastRow
+				MOV	R1, M [ ShipBulletLine ]
+				MOV	R2, M [ ShipBulletPosition ]
+
+				MOV R4, R2
+				SUB R4, 81							; Posição do tiro na linha acima da RAM
+
+				CMP R1, 3								; Verifica colisão do tiro com O teto
+				JMP.NZ EndCelingColision
+				MOV R5, 0
+				MOV M [ ShipBulletExists ], R5
+				JMP EraseBullet
+
+				EndCelingColision: 	MOV R5, M [ R4 ]
+									CMP R5, ' '                       		; Verifica colisão do tiro com inimigo
+									JMP.Z EndEnemyUpColision
+
+									CALL IncreasePoints
+									MOV R5, R1
+									MOV R1, R4
+									CALL EraseEnemyHandler
+									MOV R1, R5
+
+									MOV R5, 0
+									MOV M [ ShipBulletExists ], R5
+									JMP EraseBullet
 				
-				MOV 	R2, R1
-				SUB 	R2, 81
 
-				; Inicio colisão
-				MOV 	R3, M [ R2 ]
-				CMP 	R3, ' '
+				EndEnemyUpColision:	CMP R1, 21
+									JMP.Z EndEnemyMoveCondition
+									MOV R5, M [ R2 ]						; Verifica se o inimigo não se moveu para o tiro
+									CMP R5, '|'
+									JMP.Z EndEnemyMoveCondition
+									CMP R5, ' '
+									JMP.Z EndEnemyMoveCondition
 
-				JMP.Z	EndColisionCheck
-				CALL 	IncreasePoints
-				MOV		R4, R1
-				MOV		R1, R2
-				CALL 	EraseEnemyHandler
-				MOV		R1, R4
-				JMP		BulletInLastRow
+									CALL IncreasePoints
+									MOV R5, R1
+									MOV R1, R2
+									CALL EraseEnemyHandler
+									MOV R1, R5
 
-				EndColisionCheck:		MOV 	R3, M [ Bullet ]				; Coloca o tiro na linha seguinte
-										MOV		M [ R2 ], R3
-
-										CMP 	R1, 86A5h						; Se o valor de R1 for menor que o especifica significa que a posição anterior não corresponde a linha da nave
-										JMP.N	ErasePreviousBullet
-										JMP		EndMoveBulletUp
-
-				BulletInLastRow:		MOV 	R4, 0
-										MOV 	M [ ShipBulletExists ], R4
-
-				ErasePreviousBullet:	MOV 	R3, ' '
-										MOV		M [ R1 ], R3
-
-										MOV		R1, M [ShipBulletLine]
-										CALL 	PrintString
-
-				EndMoveBulletUp: 		DEC 	M [ ShipBulletLine ]
-										MOV		R1, M [ ShipBulletLine ]
-										CALL 	PrintString
+									MOV R5, 0
+									MOV M [ ShipBulletExists ], R5
+									JMP EraseBullet
 				
-										MOV 	M [ ShipBulletPosition ], R2
 				
-				BulletNotExists:		POP	 	R4
-										POP 	R3
-										POP 	R2
-										POP 	R1
+				EndEnemyMoveCondition:	MOV R5, '|'			; Escreve o tiro na linha de cima
+										MOV M [ R4 ], R5		
+
+				EraseBullet:	DEC R1
+								CALL PrintString
+								INC R1
+								CMP R1, 21
+								JMP.Z EndEraseBullet
+								
+								MOV R5, M [ R2 ]
+								CMP R5, '^'
+								JMP.Z EndEraseBullet
+								CMP R5, '/'
+								JMP.Z EndEraseBullet
+								CMP R5, '\'
+								JMP.Z EndEraseBullet
+
+								MOV R5, ' '
+								MOV M [ R2 ], R5
+								CALL PrintString
+
+				EndEraseBullet:	DEC M [ ShipBulletLine ]
+								MOV M [ ShipBulletPosition ], R4
+				
+				EndMoveBulletUp:	POP	R5	
+									POP	R4
+									POP	R3
+									POP	R2
+									POP	R1
 
 				RET
 
@@ -493,7 +523,6 @@ StartShipBullet:	PUSH R1
 
 					MOV R3, 21
 					MOV M [ ShipBulletLine ], R3
-
 					MOV M [ ShipBulletPosition ], R1
 
 					CALL MoveBulletUp
@@ -700,11 +729,14 @@ MoveEnemyRight:	PUSH R1
 										JMP EndMoveEnemyRight
 
 				MoveEnemyRightStart:	MOV R4, M [ R2 ]
+										CMP R4, '|'
+										JMP.Z DoNotMoveBulletRight
 										MOV M [ R3 ], R4
+
 										MOV R4, ' '
 										MOV M[ R2 ], R4
 										
-										DEC R2
+				DoNotMoveBulletRight:	DEC R2
 										DEC R3
 										JMP LoopMoveEnemyRightLine
 
@@ -760,11 +792,14 @@ MoveEnemyLeft:	PUSH R1
 										JMP EndMoveEnemyLeft
 
 				MoveEnemyLeftStart:	 	MOV R4, M [ R2 ]
+										CMP R4, '|'
+										JMP.Z DoNotMoveBulletLeft
+
 										MOV M [ R3 ], R4
 										MOV R4, ' '
 										MOV M[ R2 ], R4
 										
-										INC R2
+				DoNotMoveBulletLeft:	INC R2
 										INC R3
 										JMP LoopMoveEnemyLeftLine
 
@@ -861,7 +896,6 @@ StartTimer:		PUSH R1
 TimerRoutine:	PUSH R1
 				PUSH R2
 
-				MOV R1, M [ ShipBulletPosition ]
 				CALL MoveBulletUp
 
 				MOV R2, M [ EnemyMoveCounter ]	
