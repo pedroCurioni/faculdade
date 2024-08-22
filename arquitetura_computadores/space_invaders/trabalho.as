@@ -20,6 +20,7 @@ COLUMN_SHIFT	EQU		8d
 
 RAM_POSITION	EQU		8000h
 LINE_MEMMORY	EQU		81d
+LOWEST_ENEMY_LINE EQU 21d
 
 ;------------------------------------------------------------------------------
 ; ZONA II: definicao de variaveis
@@ -151,9 +152,9 @@ PrintString:	PUSH R1
 	SHL R3, ROW_SHIFT
 	MOV M [ CURSOR ], R3
 	
-	MOV R2, 81												; Posiciona o R1 no inicio da linha recebida
+	MOV R2, LINE_MEMMORY												; Posiciona o R1 no inicio da linha recebida
 	MUL R2, R1
-	ADD R1, 8000h
+	ADD R1, RAM_POSITION
 
 	CyclePrintString:	MOV	R2, M [ R1 ]					; Passa para R2 o caracter na posição de R1
 
@@ -433,7 +434,7 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 				MOV	R2, M [ ShipBulletPosition ]
 
 				MOV R4, R2
-				SUB R4, 81							; Posição do tiro na linha acima da RAM
+				SUB R4, LINE_MEMMORY							; Posição do tiro na linha acima da RAM
 
 				CMP R1, 3								; Verifica colisão do tiro com O teto
 				JMP.NZ EndCelingColision
@@ -456,7 +457,7 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 									JMP EraseBullet
 				
 
-				EndEnemyUpColision:	CMP R1, 21
+				EndEnemyUpColision:	CMP R1, LOWEST_ENEMY_LINE
 									JMP.Z EndEnemyMoveCondition
 									MOV R5, M [ R2 ]						; Verifica se o inimigo não se moveu para o tiro
 									CMP R5, '|'
@@ -481,7 +482,7 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 				EraseBullet:	DEC R1
 								CALL PrintString
 								INC R1
-								CMP R1, 21
+								CMP R1, LOWEST_ENEMY_LINE
 								JMP.Z EndEraseBullet
 								
 								MOV R5, M [ R2 ]
@@ -528,13 +529,13 @@ StartShipBullet:	PUSH R1
 					MOV R1, M [ ShipLine ]
 					MOV R2, M [ ShipColumn ]
 
-					MOV R3, 81
+					MOV R3, LINE_MEMMORY
 
 					MUL R3, R1
 					ADD R1, R2
-					ADD R1, 8000h
+					ADD R1, RAM_POSITION
 
-					MOV R3, 21
+					MOV R3, LOWEST_ENEMY_LINE
 					MOV M [ ShipBulletLine ], R3
 					MOV M [ ShipBulletPosition ], R1
 
@@ -556,10 +557,10 @@ PrintEnemyLine:		PUSH R1									; Contem a linha que sera printada
 
 					MOV R2, EnemyLine
 
-					MOV R3, 81
+					MOV R3, LINE_MEMMORY
 					MOV R4, R1
 					MUL R4, R3
-					ADD R3, 8000h							; Guarda a posição da linha na RAM
+					ADD R3, RAM_POSITION							; Guarda a posição da linha na RAM
 
 					CopyEnemyMemmoryLoop:	MOV R4, M [R3]
 					CMP R4, FIM_TEXTO
@@ -590,10 +591,10 @@ PrintEmptyLine:		PUSH R1									; Contem a linha que sera printada
 
 					MOV R2, EmptyLine
 
-					MOV R3, 81
+					MOV R3, LINE_MEMMORY
 					MOV R4, R1
 					MUL R4, R3
-					ADD R3, 8000h							; Guarda a posição da linha na RAM
+					ADD R3, RAM_POSITION							; Guarda a posição da linha na RAM
 
 					CopyEmptyMemmoryLoop:	MOV R4, M [R3]
 					CMP R4, FIM_TEXTO
@@ -678,7 +679,7 @@ EnemyDamageHandler:	PUSH R1
 										INC R1
 										JMP StartPrintEnemyLoop
 
-					StartCleanMapLoop:	CMP R1, 21
+					StartCleanMapLoop:	CMP R1, LOWEST_ENEMY_LINE
 										JMP.Z EndEnemyDamageHandler
 
 										CALL PrintEmptyLine
@@ -712,10 +713,10 @@ MoveEnemyRight:	PUSH R1
 				PUSH R4
 
 				MOV R3, M [ EnemyLowerLine ]
-				MOV R2, 81
+				MOV R2, LINE_MEMMORY
 				MUL R2, R3
 				ADD R3, 78													; Final da ultima linha de inimigos
-				ADD R3, 8000h												; Ínicio da RAM
+				ADD R3, RAM_POSITION												; Ínicio da RAM
 
 				MOV R2, R3			
 				DEC R2														; Posição anterior ao R3
@@ -775,9 +776,9 @@ MoveEnemyLeft:	PUSH R1
 				PUSH R4
 
 				MOV R3, M [ EnemyLowerLine ]
-				MOV R2, 81
+				MOV R2, LINE_MEMMORY
 				MUL R2, R3
-				ADD R3, 8000h												; Ínicio da RAM
+				ADD R3, RAM_POSITION												; Ínicio da RAM
 				INC R3
 
 				MOV R2, R3			
@@ -839,19 +840,19 @@ MoveEnemyDown:	PUSH R1
 				PUSH R5
 
 				MOV R3, M [ EnemyLowerLine ]
-				MOV R2, 81
+				MOV R2, LINE_MEMMORY
 				MUL R2, R3
-				ADD R3, 8000h												; Ínicio da RAM
+				ADD R3, RAM_POSITION												; Ínicio da RAM
 				INC R3
 
 				MOV R2, R3			
-				ADD R2, 81													; Posição posterior na linha de baixo do R3
+				ADD R2, LINE_MEMMORY													; Posição posterior na linha de baixo do R3
 
 				MOV R1, M [ EnemyLowerLine ]
 				MOV R5, R1
 				INC R1														; Posição da linha para o print
 
-				CMP R1, 21
+				CMP R1, LOWEST_ENEMY_LINE
 				JMP.NZ LoopMoveEnemyDown
 				CALL EnemyDamageHandler
 				JMP EndMoveEnemyDownNoAction
@@ -900,7 +901,7 @@ MoveEnemyDown:	PUSH R1
 ClearScreen:	PUSH R1
 
 				MOV R1, 3								 				; Inicio das linhas de inimigos
-				StartCleanScreenLoop:	CMP R1, 21						; Limpa a tela
+				StartCleanScreenLoop:	CMP R1, LOWEST_ENEMY_LINE						; Limpa a tela
 										JMP.Z EndClearScreen
 
 										CALL PrintEmptyLine
@@ -925,7 +926,7 @@ GameLoss:		PUSH R1
 				MOV	M [ TIMER_CONTROL ],  R1
 
 				MOV R1, 197d											; 2 linhas para baixo e centraliza
-				MOV R3, 8000h
+				MOV R3, RAM_POSITION
 				ADD R3, R1
 				
 				MOV R1, GameOver
@@ -966,7 +967,7 @@ GameWon:		PUSH R1
 				MOV	M [ TIMER_CONTROL ],  R1
 
 				MOV R1, 197d											; 2 linhas para baixo e centraliza
-				MOV R3, 8000h
+				MOV R3, RAM_POSITION
 				ADD R3, R1
 				
 				MOV R1, YouWin
