@@ -60,6 +60,11 @@ EmptyLine		STR		'#                                                              
 Bullet				STR		'|'
 Enemy				STR		'\W/'
 
+GameEnded				WORD	0d
+
+YouWin					STR		'YOU WIN', FIM_TEXTO
+GameOver				STR		'GAME OVER', FIM_TEXTO
+
 ScreenCentenaPointsPosition		WORD	014Bh		; Posição do ultimo caracter da pontuação na tela
 ScreenDezenaPointsPosition		WORD	014Ch		; Posição do ultimo caracter da pontuação na tela
 PointsDezena					WORD	0030h		; Numero decimal de pontos
@@ -67,6 +72,7 @@ PointsCentena					WORD	0030h		; Numero das centenas de pontos
 
 ScreenLivesPosition				WORD	010Bh		; Posição dos vidas na tela
 LivesCounter					WORD	0033h		; Contador de vidas
+LivesAmout						WORD	3d			; Qnt de vidas do jogador
 
 ShipLine						WORD	21d			; Linha da nave
 ShipColumn						WORD	39d			; Coluna atual da nave
@@ -82,6 +88,7 @@ EnemyUpperLine					WORD	2h			; Número da linha acima da ultima linha de inimigo
 EnemyLowerLine					WORD	7d			; Número da linha da ultima fileira de inimigos
 
 EnemyDirectonFlag				WORD	0d			; Sé for 0 para direita se for 1 para a esquerda, alterado por um XOR com 1
+EnemyDefeated					WORD	0d			; Qnt inimigos derrotados
 
 EnemyMoveCounter				WORD	0000h		; Timer para mover o inimigo
 
@@ -401,6 +408,8 @@ IncreasePoints:		PUSH R1
 										MOV M [ IO_WRITE ], R1
 										MOV M [ PointsDezena ], R1
 
+					INC M [ EnemyDefeated ]
+
 					POP R3
 					POP R2
 					POP R1
@@ -504,6 +513,10 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 StartShipBullet:	PUSH R1
 					PUSH R2
 					PUSH R3
+
+					MOV R1, M [ GameEnded ]				; Verifica se o jogo ja acabou
+					CMP R1, 1
+					JMP.Z EndStartShipBullet
 
 					MOV R1, M [ ShipBulletExists ]			; Verifica se o tiro ja esta na tela
 					CMP R1, 1
@@ -615,6 +628,8 @@ DecreaseLives:	PUSH R1
 
 				MOV M [IO_WRITE], R1
 
+				DEC M [ LivesAmout ]
+
 				POP R2
 				POP R1
 
@@ -637,6 +652,9 @@ ResetPoints:	PUSH R1
 				MOV R2, M [ ScreenDezenaPointsPosition ]
 				MOV M [ CURSOR ], R2
 				MOV M [IO_WRITE], R1
+
+				MOV R1, 0
+				MOV M [ EnemyDefeated ], R1
 
 				POP R2
 				POP R1
@@ -877,6 +895,105 @@ MoveEnemyDown:	PUSH R1
 				RET
 
 ;------------------------------------------------------------------------------
+; Rotina ClearScreen
+;------------------------------------------------------------------------------
+ClearScreen:	PUSH R1
+
+				MOV R1, 3								 				; Inicio das linhas de inimigos
+				StartCleanScreenLoop:	CMP R1, 21						; Limpa a tela
+										JMP.Z EndClearScreen
+
+										CALL PrintEmptyLine
+
+										INC R1
+										JMP StartCleanScreenLoop
+
+				EndClearScreen:			POP R1
+										RET
+
+;------------------------------------------------------------------------------
+; Rotina GameLoss
+;------------------------------------------------------------------------------
+GameLoss:		PUSH R1
+				PUSH R2
+				PUSH R3
+				PUSH R4
+
+				CALL ClearScreen
+
+				MOV R1, 1												; Desativa o timer
+				MOV	M [ TIMER_CONTROL ],  R1
+
+				MOV R1, 197d											; 2 linhas para baixo e centraliza
+				MOV R3, 8000h
+				ADD R3, R1
+				
+				MOV R1, GameOver
+				MOV R2, FIM_TEXTO
+
+				StarMoveGameOver: 	CMP M[ R1 ], R2
+								 	JMP.Z EndMoveGameOver
+
+									MOV R4, M [R1]
+									MOV M [ R3 ], R4
+									INC R1
+									INC R3
+									JMP StarMoveGameOver
+
+				EndMoveGameOver:	MOV R1, 2
+									CALL PrintString
+
+				MOV R1, 1
+				MOV M [ GameEnded ], R1
+
+				POP R4
+				POP R3
+				POP R2
+				POP R1
+				RET
+
+;------------------------------------------------------------------------------
+; Rotina Game Won
+;------------------------------------------------------------------------------
+GameWon:		PUSH R1
+				PUSH R2
+				PUSH R3
+				PUSH R4
+
+				CALL ClearScreen
+
+				MOV R1, 1												; Desativa o timer
+				MOV	M [ TIMER_CONTROL ],  R1
+
+				MOV R1, 197d											; 2 linhas para baixo e centraliza
+				MOV R3, 8000h
+				ADD R3, R1
+				
+				MOV R1, YouWin
+				MOV R2, FIM_TEXTO
+
+				StarMoveGameWon: 	CMP M[ R1 ], R2
+								 	JMP.Z EndMoveGameWon
+
+									MOV R4, M [R1]
+									MOV M [ R3 ], R4
+									INC R1
+									INC R3
+									JMP StarMoveGameWon
+
+				EndMoveGameWon:		MOV R1, 2
+									CALL PrintString
+
+				MOV R1, 1
+				MOV M [ GameEnded ], R1
+
+				POP R4
+				POP R3
+				POP R2
+				POP R1
+				RET
+
+;------------------------------------------------------------------------------
 ; Rotina Start Timer
 ;------------------------------------------------------------------------------
 StartTimer:		PUSH R1
@@ -895,6 +1012,18 @@ StartTimer:		PUSH R1
 ;------------------------------------------------------------------------------
 TimerRoutine:	PUSH R1
 				PUSH R2
+
+				MOV R1, M [ LivesAmout ]				; Se acabaram as vidas
+				CMP R1, 0
+				CALL.Z GameLoss
+				CMP R1, 0
+				JMP.Z EndTimer
+
+				MOV R1, M [ EnemyDefeated ]				; Se todos os inimigos foram derrotados
+				CMP R1, 50
+				CALL.Z GameWon
+				CMP R1, 50
+				JMP.Z EndTimer
 
 				CALL MoveBulletUp
 
@@ -916,8 +1045,8 @@ TimerRoutine:	PUSH R1
 				
 				CALL StartTimer
 
-				POP R2
-				POP	R1
+				EndTimer:	POP R2
+							POP	R1
 
 				RTI
 
@@ -934,5 +1063,5 @@ Main:	ENI
 		CALL 	PrintScreen
 		CALL 	StartTimer
 
-Cycle:	BR			Cycle
+Cycle:			BR			Cycle
 Halt:           BR		Halt
