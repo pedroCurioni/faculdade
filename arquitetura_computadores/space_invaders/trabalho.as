@@ -93,6 +93,8 @@ EnemyDefeated					WORD	0d			; Qnt inimigos derrotados
 
 EnemyMoveCounter				WORD	0000h		; Timer para mover o inimigo
 
+DamageDealt						WORD	0d			; Marca se o dado foi causado no jogador ou não
+
 RowIndex		WORD	0d
 ColumnIndex		WORD	0d
 TextIndex		WORD	0d
@@ -831,6 +833,41 @@ MoveEnemyLeft:	PUSH R1
 				RET
 
 ;------------------------------------------------------------------------------
+; Rotina CheckEnemyDamage
+;------------------------------------------------------------------------------
+CheckEnemyDamage:	PUSH R1														; Contador de caracteres não vazios encontrados na linha, indicando que existem inimigos
+					PUSH R2														; Aux
+					PUSH R3														; Parametro: Linha que sera verificada no caso inicio da linha 20
+
+					MOV R1, 0
+
+					LoopEnemyDamgeCheck:	MOV R2, M [ R3 ]
+											CMP R2, '#'							; A linha inteira foi analisada
+											JMP.Z EndEnemyDamgeCheckLoop
+
+											CMP R2, ' '
+											JMP.Z EndEnemyDamgeCheck
+											INC R1
+
+											EndEnemyDamgeCheck:	INC R3
+																JMP LoopEnemyDamgeCheck
+
+					EndEnemyDamgeCheckLoop:	CMP R1, 0
+											JMP.Z SkipDamage
+											CALL EnemyDamageHandler			; Se foram encontrados inimigos na linha de o dano
+											MOV R2, 1
+											MOV M [ DamageDealt ], R1		; Indica que o dano foi dado
+											JMP EndDamageCheck
+
+					SkipDamage: DEC M [ EnemyLowerLine ] 
+					
+					EndDamageCheck:	POP R3
+									POP R2
+									POP R1
+
+					RET
+
+;------------------------------------------------------------------------------
 ; Rotina Mover Inigmo Baixo
 ;------------------------------------------------------------------------------
 MoveEnemyDown:	PUSH R1	
@@ -842,7 +879,7 @@ MoveEnemyDown:	PUSH R1
 				MOV R3, M [ EnemyLowerLine ]
 				MOV R2, LINE_MEMMORY
 				MUL R2, R3
-				ADD R3, RAM_POSITION												; Ínicio da RAM
+				ADD R3, RAM_POSITION													; Ínicio da RAM
 				INC R3
 
 				MOV R2, R3			
@@ -850,11 +887,15 @@ MoveEnemyDown:	PUSH R1
 
 				MOV R1, M [ EnemyLowerLine ]
 				MOV R5, R1
-				INC R1														; Posição da linha para o print
+				INC R1																	; Posição da linha para o print
 
 				CMP R1, LOWEST_ENEMY_LINE
 				JMP.NZ LoopMoveEnemyDown
-				CALL EnemyDamageHandler
+				CALL CheckEnemyDamage
+				MOV R4, M [ DamageDealt ]
+				CMP R4, 1
+				JMP.NZ EndMoveEnemyDownNoAction
+
 				JMP EndMoveEnemyDownNoAction
 
 				LoopMoveEnemyDown:		MOV R4, M [ EnemyUpperLine ]
@@ -887,7 +928,9 @@ MoveEnemyDown:	PUSH R1
 										MOV R4, 1
 										XOR M [ EnemyDirectonFlag ], R4
 
-				EndMoveEnemyDownNoAction:	POP R5
+				EndMoveEnemyDownNoAction:	MOV R4, 0
+											MOV M [ DamageDealt ], R4
+											POP R5
 											POP R4	
 											POP R3
 											POP R2
