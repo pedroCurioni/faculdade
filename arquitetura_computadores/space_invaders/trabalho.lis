@@ -116,7 +116,7 @@
 	PrintDezena                      00FA            LABEL
 	MoveBulletUp                     0108            LABEL
 	EndCelingColision                0124            LABEL
-	EndEnemyUpColision               0136            LABEL
+	EndEnemyInsideBulletColision     013E            LABEL
 	EndEnemyMoveCondition            0150            LABEL
 	EraseBullet                      0153            LABEL
 	EndEraseBullet                   016D            LABEL

@@ -444,28 +444,13 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 				MOV M [ ShipBulletExists ], R5
 				JMP EraseBullet
 
-				EndCelingColision: 	MOV R5, M [ R4 ]
-									CMP R5, ' '                       		; Verifica colisão do tiro com inimigo
-									JMP.Z EndEnemyUpColision
-
-									CALL IncreasePoints
-									MOV R5, R1
-									MOV R1, R4
-									CALL EraseEnemyHandler
-									MOV R1, R5
-
-									MOV R5, 0
-									MOV M [ ShipBulletExists ], R5
-									JMP EraseBullet
-				
-
-				EndEnemyUpColision:	CMP R1, LOWEST_ENEMY_LINE
-									JMP.Z EndEnemyMoveCondition
-									MOV R5, M [ R2 ]						; Verifica se o inimigo não se moveu para o tiro
+				EndCelingColision: 	CMP R1, LOWEST_ENEMY_LINE
+									JMP.Z EndEnemyInsideBulletColision
+									MOV R5, M [ R2 ]						; Verifica se o inimigo se moveu para o tiro
 									CMP R5, '|'
-									JMP.Z EndEnemyMoveCondition
+									JMP.Z EndEnemyInsideBulletColision
 									CMP R5, ' '
-									JMP.Z EndEnemyMoveCondition
+									JMP.Z EndEnemyInsideBulletColision
 
 									CALL IncreasePoints
 									MOV R5, R1
@@ -477,6 +462,20 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 									MOV M [ ShipBulletExists ], R5
 									JMP EraseBullet
 				
+
+				EndEnemyInsideBulletColision:	MOV R5, M [ R4 ]
+												CMP R5, ' '                       		; Verifica colisão do tiro com inimigo
+												JMP.Z EndEnemyMoveCondition
+
+												CALL IncreasePoints
+												MOV R5, R1
+												MOV R1, R4
+												CALL EraseEnemyHandler
+												MOV R1, R5
+
+												MOV R5, 0
+												MOV M [ ShipBulletExists ], R5
+												JMP EraseBullet
 				
 				EndEnemyMoveCondition:	MOV R5, '|'			; Escreve o tiro na linha de cima
 										MOV M [ R4 ], R5		
