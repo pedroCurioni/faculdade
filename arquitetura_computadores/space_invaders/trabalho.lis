@@ -19,7 +19,7 @@
 	ROW_SHIFT                        0008         CONSTANT
 	COLUMN_SHIFT                     0008         CONSTANT
 	RAM_POSITION                     8000         CONSTANT
-	LINE_MEMMORY                     0051         CONSTANT
+	LINE_MEMORY                      0051         CONSTANT
 	LOWEST_ENEMY_LINE                0015         CONSTANT
 	Line00                           8000           STRING
 	Line01                           8051           STRING
@@ -58,7 +58,7 @@
 	PointsCentena                    8854         VARIABLE
 	ScreenLivesPosition              8855         VARIABLE
 	LivesCounter                     8856         VARIABLE
-	LivesAmout                       8857         VARIABLE
+	LivesAmount                      8857         VARIABLE
 	ShipLine                         8858         VARIABLE
 	ShipColumn                       8859         VARIABLE
 	ShipBulletExists                 885A         VARIABLE
@@ -68,7 +68,7 @@
 	MapColumnRightBorder             885E         VARIABLE
 	EnemyUpperLine                   885F         VARIABLE
 	EnemyLowerLine                   8860         VARIABLE
-	EnemyDirectonFlag                8861         VARIABLE
+	EnemyDirectionFlag               8861         VARIABLE
 	EnemyDefeated                    8862         VARIABLE
 	EnemyMoveCounter                 8863         VARIABLE
 	DamageDealt                      8864         VARIABLE
@@ -97,7 +97,7 @@
 	EndPrintString                   0026            LABEL
 	PrintScreen                      0030            LABEL
 	PrintScreenCycle                 0033            LABEL
-	EndprintScreen                   003C            LABEL
+	EndPrintScreen                   003C            LABEL
 	AlterMemory                      003E            LABEL
 	PrintShip                        0055            LABEL
 	MoveLeft                         0072            LABEL
@@ -115,8 +115,8 @@
 	IncreaseCentena                  00ED            LABEL
 	PrintDezena                      00FA            LABEL
 	MoveBulletUp                     0108            LABEL
-	EndCelingColision                0124            LABEL
-	EndEnemyInsideBulletColision     013E            LABEL
+	EndCellingCollision              0124            LABEL
+	EndEnemyInsideBulletCollision    013E            LABEL
 	EndEnemyMoveCondition            0150            LABEL
 	EraseBullet                      0153            LABEL
 	EndEraseBullet                   016D            LABEL
@@ -124,11 +124,11 @@
 	StartShipBullet                  0177            LABEL
 	EndStartShipBullet               019C            LABEL
 	PrintEnemyLine                   01A0            LABEL
-	CopyEnemyMemmoryLoop             01AC            LABEL
-	EndCopyEnemyMemmory              01B7            LABEL
+	CopyEnemyMemoryLoop              01AC            LABEL
+	EndCopyEnemyMemory               01B7            LABEL
 	PrintEmptyLine                   01BE            LABEL
-	CopyEmptyMemmoryLoop             01CA            LABEL
-	EndCopyEmptyMemmory              01D5            LABEL
+	CopyEmptyMemoryLoop              01CA            LABEL
+	EndCopyEmptyMemory               01D5            LABEL
 	DecreaseLives                    01DC            LABEL
 	ResetPoints                      01ED            LABEL
 	EnemyDamageHandler               0208            LABEL
@@ -136,44 +136,48 @@
 	StartCleanMapLoop                0217            LABEL
 	EndEnemyDamageHandler            0220            LABEL
 	MoveEnemyRight                   0235            LABEL
-	LoopMoveEnemyRight               024F            LABEL
-	LoopMoveEnemyRightLine           0254            LABEL
-	MoveEnemyRightStart              0269            LABEL
-	DoNotMoveBulletRight             0272            LABEL
-	EndMoveEnemyRight                0276            LABEL
-	MoveEnemyLeft                    027B            LABEL
-	LoopMoveEnemyLeft                0294            LABEL
-	LoopMoveEnemyLeftLine            0299            LABEL
-	MoveEnemyLeftStart               02AE            LABEL
-	DoNotMoveBulletLeft              02B7            LABEL
-	EndMoveEnemyLeft                 02BB            LABEL
-	CheckEnemyDamage                 02C0            LABEL
-	LoopEnemyDamgeCheck              02C5            LABEL
-	EndEnemyDamgeCheck               02CF            LABEL
-	EndEnemyDamgeCheckLoop           02D2            LABEL
-	SkipDamage                       02DE            LABEL
-	EndDamageCheck                   02E0            LABEL
-	MoveEnemyDown                    02E4            LABEL
-	LoopMoveEnemyDown                0306            LABEL
-	LoopMoveEnemyDownLine            030B            LABEL
-	MoveEnemyDownStart               031A            LABEL
-	EndMoveEnemyDown                 0323            LABEL
-	EndMoveEnemyDownNoAction         032D            LABEL
-	ClearScreen                      0337            LABEL
-	StartCleanScreenLoop             033A            LABEL
-	EndClearScreen                   0343            LABEL
-	GameLoss                         0345            LABEL
-	StarMoveGameOver                 0358            LABEL
-	EndMoveGameOver                  0361            LABEL
-	GameWon                          036E            LABEL
-	StarMoveGameWon                  0381            LABEL
-	EndMoveGameWon                   038A            LABEL
-	StartTimer                       0397            LABEL
-	TimerRoutine                     03A2            LABEL
-	MoveRightFlagActivation          03CA            LABEL
-	EndMovement                      03CC            LABEL
-	EndMove                          03D0            LABEL
-	EndTimer                         03D4            LABEL
-	Main                             03D7            LABEL
-	Cycle                            03E3            LABEL
-	Halt                             03E4            LABEL
+	LoopMoveEnemyRight               0250            LABEL
+	LoopMoveEnemyRightLine           0255            LABEL
+	MoveEnemyRightStart              026A            LABEL
+	ContinueMoveRight                0278            LABEL
+	DoNotMoveBulletRight             027C            LABEL
+	EndMoveEnemyRight                0280            LABEL
+	MoveEnemyLeft                    0286            LABEL
+	LoopMoveEnemyLeft                02A0            LABEL
+	LoopMoveEnemyLeftLine            02A5            LABEL
+	MoveEnemyLeftStart               02BA            LABEL
+	ContinueMoveLeft                 02C8            LABEL
+	DoNotMoveBulletLeft              02CC            LABEL
+	EndMoveEnemyLeft                 02D0            LABEL
+	CheckEnemyDamage                 02D6            LABEL
+	LoopEnemyDamageCheck             02DB            LABEL
+	EndEnemyDamageCheck              02E5            LABEL
+	EndEnemyDamageCheckLoop          02E8            LABEL
+	SkipDamage                       02F4            LABEL
+	EndDamageCheck                   02F6            LABEL
+	MoveEnemyDown                    02FA            LABEL
+	LoopMoveEnemyDown                031D            LABEL
+	LoopMoveEnemyDownLine            0322            LABEL
+	MoveEnemyDownStart               0331            LABEL
+	ContinueMoveDown                 0347            LABEL
+	DoNotMoveBulletDown              034B            LABEL
+	EndMoveEnemyDown                 034F            LABEL
+	EndMoveEnemyDownNoAction         0359            LABEL
+	ClearScreen                      0364            LABEL
+	StartCleanScreenLoop             0367            LABEL
+	EndClearScreen                   0370            LABEL
+	GameLoss                         0372            LABEL
+	StarMoveGameOver                 0385            LABEL
+	EndMoveGameOver                  038E            LABEL
+	GameWon                          039B            LABEL
+	StarMoveGameWon                  03AE            LABEL
+	EndMoveGameWon                   03B7            LABEL
+	StartTimer                       03C4            LABEL
+	TimerRoutine                     03CF            LABEL
+	MoveRightFlagActivation          03F7            LABEL
+	EndMovement                      03F9            LABEL
+	EndMove                          03FD            LABEL
+	EndTimer                         0401            LABEL
+	Main                             0404            LABEL
+	Cycle                            0410            LABEL
+	Halt                             0411            LABEL

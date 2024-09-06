@@ -18,9 +18,9 @@ COL_POSITION	EQU		0d
 ROW_SHIFT		EQU		8d
 COLUMN_SHIFT	EQU		8d
 
-RAM_POSITION	EQU		8000h
-LINE_MEMMORY	EQU		81d
-LOWEST_ENEMY_LINE EQU 21d
+RAM_POSITION		EQU		8000h
+LINE_MEMORY			EQU		81d
+LOWEST_ENEMY_LINE 	EQU 21d
 
 ;------------------------------------------------------------------------------
 ; ZONA II: definicao de variaveis
@@ -73,7 +73,7 @@ PointsCentena					WORD	0030h		; Numero das centenas de pontos
 
 ScreenLivesPosition				WORD	010Bh		; Posição dos vidas na tela
 LivesCounter					WORD	0033h		; Contador de vidas
-LivesAmout						WORD	3d			; Qnt de vidas do jogador
+LivesAmount						WORD	3d			; Qnt de vidas do jogador
 
 ShipLine						WORD	21d			; Linha da nave
 ShipColumn						WORD	39d			; Coluna atual da nave
@@ -88,7 +88,7 @@ MapColumnRightBorder			WORD	80d			; Borda direita da linha da nave
 EnemyUpperLine					WORD	2h			; Número da linha acima da ultima linha de inimigos
 EnemyLowerLine					WORD	7d			; Número da linha da ultima fileira de inimigos
 
-EnemyDirectonFlag				WORD	0d			; Sé for 0 para direita se for 1 para a esquerda, alterado por um XOR com 1
+EnemyDirectionFlag				WORD	0d			; Sé for 0 para direita se for 1 para a esquerda, alterado por um XOR com 1
 EnemyDefeated					WORD	0d			; Qnt inimigos derrotados
 
 EnemyMoveCounter				WORD	0000h		; Timer para mover o inimigo
@@ -154,13 +154,13 @@ PrintString:	PUSH R1
 	SHL R3, ROW_SHIFT
 	MOV M [ CURSOR ], R3
 	
-	MOV R2, LINE_MEMMORY												; Posiciona o R1 no inicio da linha recebida
+	MOV R2, LINE_MEMORY												; Posiciona o R1 no inicio da linha recebida
 	MUL R2, R1
 	ADD R1, RAM_POSITION
 
 	CyclePrintString:	MOV	R2, M [ R1 ]					; Passa para R2 o caracter na posição de R1
 
-						CMP 	R2, FIM_TEXTO				; Verefica se R2 e o fim do texto
+						CMP 	R2, FIM_TEXTO				; Verifica se R2 e o fim do texto
 						JMP.Z 	EndPrintString
 
 						MOV		M[ IO_WRITE ], R2			; Escreve R2						
@@ -191,7 +191,7 @@ PrintScreen:	PUSH R1
 				MOV R1, 0
 
 				PrintScreenCycle:	CMP R1, 24
-									JMP.Z	EndprintScreen
+									JMP.Z	EndPrintScreen
 
 									CALL PrintString
 
@@ -199,7 +199,7 @@ PrintScreen:	PUSH R1
 				
 									JMP PrintScreenCycle
 
-				EndprintScreen:	POP R1
+				EndPrintScreen:	POP R1
 
 								RET
 
@@ -217,7 +217,7 @@ AlterMemory:	PUSH R1		; Posição do cursor
 				AND R3, FF00h			; Linha
 				SHR R3, ROW_SHIFT
 
-				MOV R4, LINE_MEMMORY
+				MOV R4, LINE_MEMORY
 				MUL R3, R4				; Move uma linha inteira na memoria
 
 				ADD R1, R4
@@ -436,21 +436,21 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 				MOV	R2, M [ ShipBulletPosition ]
 
 				MOV R4, R2
-				SUB R4, LINE_MEMMORY							; Posição do tiro na linha acima da RAM
+				SUB R4, LINE_MEMORY							; Posição do tiro na linha acima da RAM
 
 				CMP R1, 3								; Verifica colisão do tiro com O teto
-				JMP.NZ EndCelingColision
+				JMP.NZ EndCellingCollision
 				MOV R5, 0
 				MOV M [ ShipBulletExists ], R5
 				JMP EraseBullet
 
-				EndCelingColision: 	CMP R1, LOWEST_ENEMY_LINE
-									JMP.Z EndEnemyInsideBulletColision
+				EndCellingCollision: 	CMP R1, LOWEST_ENEMY_LINE
+									JMP.Z EndEnemyInsideBulletCollision
 									MOV R5, M [ R2 ]						; Verifica se o inimigo se moveu para o tiro
 									CMP R5, '|'
-									JMP.Z EndEnemyInsideBulletColision
+									JMP.Z EndEnemyInsideBulletCollision
 									CMP R5, ' '
-									JMP.Z EndEnemyInsideBulletColision
+									JMP.Z EndEnemyInsideBulletCollision
 
 									CALL IncreasePoints
 									MOV R5, R1
@@ -463,7 +463,7 @@ MoveBulletUp:	PUSH 	R1								; Contem a posição da linha anterior
 									JMP EraseBullet
 				
 
-				EndEnemyInsideBulletColision:	MOV R5, M [ R4 ]
+				EndEnemyInsideBulletCollision:	MOV R5, M [ R4 ]
 												CMP R5, ' '                       		; Verifica colisão do tiro com inimigo
 												JMP.Z EndEnemyMoveCondition
 
@@ -530,7 +530,7 @@ StartShipBullet:	PUSH R1
 					MOV R1, M [ ShipLine ]
 					MOV R2, M [ ShipColumn ]
 
-					MOV R3, LINE_MEMMORY
+					MOV R3, LINE_MEMORY
 
 					MUL R3, R1
 					ADD R1, R2
@@ -558,22 +558,22 @@ PrintEnemyLine:		PUSH R1									; Contem a linha que sera printada
 
 					MOV R2, EnemyLine
 
-					MOV R3, LINE_MEMMORY
+					MOV R3, LINE_MEMORY
 					MOV R4, R1
 					MUL R4, R3
 					ADD R3, RAM_POSITION							; Guarda a posição da linha na RAM
 
-					CopyEnemyMemmoryLoop:	MOV R4, M [R3]
+					CopyEnemyMemoryLoop:	MOV R4, M [R3]
 					CMP R4, FIM_TEXTO
-					JMP.Z EndCopyEnemyMemmory
+					JMP.Z EndCopyEnemyMemory
 					MOV R4, M [ R2 ]
 					MOV M [ R3 ], R4
 
 					INC R2
 					INC R3
-					JMP CopyEnemyMemmoryLoop
+					JMP CopyEnemyMemoryLoop
 
-					EndCopyEnemyMemmory: CALL PrintString
+					EndCopyEnemyMemory: CALL PrintString
 
 					POP R4
 					POP R3
@@ -592,22 +592,22 @@ PrintEmptyLine:		PUSH R1									; Contem a linha que sera printada
 
 					MOV R2, EmptyLine
 
-					MOV R3, LINE_MEMMORY
+					MOV R3, LINE_MEMORY
 					MOV R4, R1
 					MUL R4, R3
 					ADD R3, RAM_POSITION							; Guarda a posição da linha na RAM
 
-					CopyEmptyMemmoryLoop:	MOV R4, M [R3]
+					CopyEmptyMemoryLoop:	MOV R4, M [R3]
 					CMP R4, FIM_TEXTO
-					JMP.Z EndCopyEmptyMemmory
+					JMP.Z EndCopyEmptyMemory
 					MOV R4, M [ R2 ]
 					MOV M [ R3 ], R4
 
 					INC R2
 					INC R3
-					JMP CopyEmptyMemmoryLoop
+					JMP CopyEmptyMemoryLoop
 
-					EndCopyEmptyMemmory: CALL PrintString
+					EndCopyEmptyMemory: CALL PrintString
 
 					POP R4
 					POP R3
@@ -630,7 +630,7 @@ DecreaseLives:	PUSH R1
 
 				MOV M [IO_WRITE], R1
 
-				DEC M [ LivesAmout ]
+				DEC M [ LivesAmount ]
 
 				POP R2
 				POP R1
@@ -692,7 +692,7 @@ EnemyDamageHandler:	PUSH R1
 											CALL ResetPoints
 
 											MOV R4, 0
-											MOV M [ EnemyDirectonFlag ], R4
+											MOV M [ EnemyDirectionFlag ], R4
 											MOV R4, 2
 											MOV M [ EnemyUpperLine ], R4
 											MOV R4, 7
@@ -712,9 +712,10 @@ MoveEnemyRight:	PUSH R1
 				PUSH R2
 				PUSH R3
 				PUSH R4
+				PUSH R5
 
 				MOV R3, M [ EnemyLowerLine ]
-				MOV R2, LINE_MEMMORY
+				MOV R2, LINE_MEMORY
 				MUL R2, R3
 				ADD R3, 78													; Final da ultima linha de inimigos
 				ADD R3, RAM_POSITION												; Ínicio da RAM
@@ -750,18 +751,26 @@ MoveEnemyRight:	PUSH R1
 
 				MoveEnemyRightStart:	MOV R4, M [ R2 ]
 										CMP R4, '|'
-										JMP.Z DoNotMoveBulletRight
-										MOV M [ R3 ], R4
+										JMP.Z DoNotMoveBulletRight				; Se a posição atual for o tiro passe para proxima posição
 
-										MOV R4, ' '
-										MOV M[ R2 ], R4
+										MOV R5, M [ R3 ]
+										CMP R5, '|'
+										JMP.NZ ContinueMoveRight					; Sé a proxima posição não for o tiro prossiga
+
+										CMP R4, '/'								; Sé a posição anterior for a ponta de uma nave mova para cima do tiro
+										JMP.NZ DoNotMoveBulletRight
+										
+										ContinueMoveRight: 	MOV M [ R3 ], R4
+															MOV R4, ' '
+															MOV M[ R2 ], R4
 										
 				DoNotMoveBulletRight:	DEC R2
 										DEC R3
 										JMP LoopMoveEnemyRightLine
 
 
-				EndMoveEnemyRight:		POP R4	
+				EndMoveEnemyRight:		POP R5
+										POP R4	
 										POP R3
 										POP R2
 										POP R1
@@ -775,9 +784,10 @@ MoveEnemyLeft:	PUSH R1
 				PUSH R2
 				PUSH R3
 				PUSH R4
+				PUSH R5
 
 				MOV R3, M [ EnemyLowerLine ]
-				MOV R2, LINE_MEMMORY
+				MOV R2, LINE_MEMORY
 				MUL R2, R3
 				ADD R3, RAM_POSITION												; Ínicio da RAM
 				INC R3
@@ -813,18 +823,26 @@ MoveEnemyLeft:	PUSH R1
 
 				MoveEnemyLeftStart:	 	MOV R4, M [ R2 ]
 										CMP R4, '|'
-										JMP.Z DoNotMoveBulletLeft
+										JMP.Z DoNotMoveBulletLeft				; Se a posição atual for o tiro passe para proxima posição
 
-										MOV M [ R3 ], R4
-										MOV R4, ' '
-										MOV M[ R2 ], R4
+										MOV R5, M [ R3 ]
+										CMP R5, '|'
+										JMP.NZ ContinueMoveLeft					; Sé a proxima posição não for o tiro prossiga
+
+										CMP R4, '\'								; Sé a posição anterior for a ponta de uma nave mova para cima do tiro
+										JMP.NZ DoNotMoveBulletLeft
+
+										ContinueMoveLeft:	MOV M [ R3 ], R4
+															MOV R4, ' '
+															MOV M[ R2 ], R4
 										
 				DoNotMoveBulletLeft:	INC R2
 										INC R3
 										JMP LoopMoveEnemyLeftLine
 
 
-				EndMoveEnemyLeft:		POP R4	
+				EndMoveEnemyLeft:		POP R5
+										POP R4	
 										POP R3
 										POP R2
 										POP R1
@@ -840,23 +858,23 @@ CheckEnemyDamage:	PUSH R1														; Contador de caracteres não vazios enco
 
 					MOV R1, 0
 
-					LoopEnemyDamgeCheck:	MOV R2, M [ R3 ]
+					LoopEnemyDamageCheck:	MOV R2, M [ R3 ]
 											CMP R2, '#'							; A linha inteira foi analisada
-											JMP.Z EndEnemyDamgeCheckLoop
+											JMP.Z EndEnemyDamageCheckLoop
 
 											CMP R2, ' '
-											JMP.Z EndEnemyDamgeCheck
+											JMP.Z EndEnemyDamageCheck
 											INC R1
 
-											EndEnemyDamgeCheck:	INC R3
-																JMP LoopEnemyDamgeCheck
+											EndEnemyDamageCheck:	INC R3
+																	JMP LoopEnemyDamageCheck
 
-					EndEnemyDamgeCheckLoop:	CMP R1, 0
-											JMP.Z SkipDamage
-											CALL EnemyDamageHandler			; Se foram encontrados inimigos na linha de o dano
-											MOV R2, 1
-											MOV M [ DamageDealt ], R1		; Indica que o dano foi dado
-											JMP EndDamageCheck
+					EndEnemyDamageCheckLoop:	CMP R1, 0
+												JMP.Z SkipDamage
+												CALL EnemyDamageHandler			; Se foram encontrados inimigos na linha de o dano
+												MOV R2, 1
+												MOV M [ DamageDealt ], R1		; Indica que o dano foi dado
+												JMP EndDamageCheck
 
 					SkipDamage: DEC M [ EnemyLowerLine ] 
 					
@@ -874,15 +892,16 @@ MoveEnemyDown:	PUSH R1
 				PUSH R3
 				PUSH R4
 				PUSH R5
+				PUSH R6
 
 				MOV R3, M [ EnemyLowerLine ]
-				MOV R2, LINE_MEMMORY
+				MOV R2, LINE_MEMORY
 				MUL R2, R3
 				ADD R3, RAM_POSITION													; Ínicio da RAM
 				INC R3
 
 				MOV R2, R3			
-				ADD R2, LINE_MEMMORY													; Posição posterior na linha de baixo do R3
+				ADD R2, LINE_MEMORY													; Posição posterior na linha de baixo do R3
 
 				MOV R1, M [ EnemyLowerLine ]
 				MOV R5, R1
@@ -912,28 +931,45 @@ MoveEnemyDown:	PUSH R1
 										JMP LoopMoveEnemyDown
 
 				MoveEnemyDownStart:	 	MOV R4, M [ R3 ]
-										MOV M [ R2 ], R4
-										MOV R4, ' '
-										MOV M[ R3 ], R4
+										CMP R4, '|'						; Verfica para não mover o tiro para baixo
+										JMP.Z	DoNotMoveBulletDown
+
+										MOV R6, M [ R2 ]
+										CMP R6, '|'
+										JMP.NZ ContinueMoveDown					; Sé a proxima posição não for o tiro prossiga
 										
-										INC R2
-										INC R3
-										JMP LoopMoveEnemyDownLine
+										; Se a proxima posição for um tiro e a posição atual for vazia não mova o vazio para o tiro, não quebra o programa o tiro so pisca quando ocorre
+										CMP R4, '\'								; Sé a posição anterior for a ponta de uma nave mova para cima do tiro
+										JMP.NZ DoNotMoveBulletDown
+										CMP R4, 'W'								; Sé a posição anterior for o meio de uma nave mova para cima do tiro
+										JMP.NZ DoNotMoveBulletDown
+										CMP R4, '/'								; Sé a posição anterior for a ponta de uma nave mova para cima do tiro
+										JMP.NZ DoNotMoveBulletDown
+
+										ContinueMoveDown: 	MOV M [ R2 ], R4
+															MOV R4, ' '
+															MOV M[ R3 ], R4
+										
+										DoNotMoveBulletDown:	INC R2
+																INC R3
+																JMP LoopMoveEnemyDownLine
 
 				EndMoveEnemyDown:		CALL PrintString
 										INC M [ EnemyUpperLine ]
 										INC M [ EnemyLowerLine ]
 										
 										MOV R4, 1
-										XOR M [ EnemyDirectonFlag ], R4
+										XOR M [ EnemyDirectionFlag ], R4
 
 				EndMoveEnemyDownNoAction:	MOV R4, 0
 											MOV M [ DamageDealt ], R4
-											POP R5
-											POP R4	
-											POP R3
-											POP R2
-											POP R1
+											
+				POP R6
+				POP R5
+				POP R4	
+				POP R3
+				POP R2
+				POP R1
 
 				RET
 
@@ -1056,7 +1092,7 @@ StartTimer:		PUSH R1
 TimerRoutine:	PUSH R1
 				PUSH R2
 
-				MOV R1, M [ LivesAmout ]				; Se acabaram as vidas
+				MOV R1, M [ LivesAmount ]				; Se acabaram as vidas
 				CMP R1, 0
 				CALL.Z GameLoss
 				CMP R1, 0
@@ -1074,7 +1110,7 @@ TimerRoutine:	PUSH R1
 				CMP R2, 2
 				JMP.NZ EndMove
 
-				MOV R2, M [ EnemyDirectonFlag ]
+				MOV R2, M [ EnemyDirectionFlag ]
 				CMP R2, 0
 				JMP.Z MoveRightFlagActivation
 				CALL MoveEnemyLeft
