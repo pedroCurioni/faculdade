@@ -38,7 +38,7 @@ Line04			STR		'#                   \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/      
 Line05			STR		'#                   \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/                    #', FIM_TEXTO
 Line06			STR		'#                   \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/                    #', FIM_TEXTO
 Line07			STR		'#                   \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/ \W/                    #', FIM_TEXTO
-Line08      	STR    	'#                                                                             |#', FIM_TEXTO
+Line08      	STR    	'#                                                                              #', FIM_TEXTO
 Line09      	STR    	'#                                                                              #', FIM_TEXTO
 Line10      	STR    	'#                                                                              #', FIM_TEXTO
 Line11      	STR    	'#                                                                              #', FIM_TEXTO
