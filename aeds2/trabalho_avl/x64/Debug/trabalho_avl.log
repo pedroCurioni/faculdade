@@ -1,0 +1,8 @@
+﻿  main.c
+  trabalho_avl.c
+  Generating Code...
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\trabalho_avl.c(133,15): warning C4133: '=': incompatible types - from 'no *' to 'noAVL *'
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\trabalho_avl.c(131,13): warning C4133: 'initializing': incompatible types - from 'noAVL *' to 'no *'
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\trabalho_avl.c(142,14): warning C4133: '=': incompatible types - from 'no *' to 'noAVL *'
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\trabalho_avl.c(140,13): warning C4133: 'initializing': incompatible types - from 'noAVL *' to 'no *'
+  trabalho_avl.vcxproj -> C:\Users\pedro\Projects\Personal\faculdade\aeds2\x64\Debug\trabalho_avl.exe

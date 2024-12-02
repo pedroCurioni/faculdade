@@ -1,5 +1,0 @@
-C:/Users/pedro/Projects/Personal/faculdade/aeds_2/out/build/x64-debug/CMakeFiles/edit_cache.dir
-C:/Users/pedro/Projects/Personal/faculdade/aeds_2/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
-C:/Users/pedro/Projects/Personal/faculdade/aeds_2/out/build/x64-debug/arvore/CMakeFiles/arvore.dir
-C:/Users/pedro/Projects/Personal/faculdade/aeds_2/out/build/x64-debug/arvore/CMakeFiles/edit_cache.dir
-C:/Users/pedro/Projects/Personal/faculdade/aeds_2/out/build/x64-debug/arvore/CMakeFiles/rebuild_cache.dir
