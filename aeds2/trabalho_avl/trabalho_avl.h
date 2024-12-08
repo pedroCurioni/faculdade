@@ -2,18 +2,19 @@
 #define TRABALHO_AVL_H
 
 struct noAVL {
-	int valor;
+	char nome[256];
+	char descricao[1000];
 	int fb;	// Fator de balanceamento
 	struct noAVL* pai;
 	struct noAVL* esquerda;
 	struct noAVL* direita;
 };
 
-void busca(struct noAVL* raiz, struct noAVL** result, int v);
+struct noAVL* busca(struct noAVL* raiz, char nome[]);
 
-void insercao(struct noAVL** raiz, int v);
+void insercao(struct noAVL** raiz, char nome[], char descricao[]);
 
-void remocao(struct noAVL* raiz, int v);
+void remocao(struct noAVL** raiz, char nome[]);
 
 void imprimir(struct noAVL* raiz);
 
@@ -25,7 +26,7 @@ void rr(struct noAVL* no);
 
 void ll(struct noAVL* no);
 
-void balancear(struct noAVL* no);
+void balancear(struct noAVL** raiz, struct noAVL* no);
 
 void balancear_no(struct noAVL* no);
 
