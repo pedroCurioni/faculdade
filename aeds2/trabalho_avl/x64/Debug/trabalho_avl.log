@@ -1,3 +1,6 @@
 ﻿  main.c
-C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\main.c(25,9): warning C4013: 'strcspn' undefined; assuming extern returning int
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\main.c(24,9): warning C4013: 'strcspn' undefined; assuming extern returning int
+  trabalho_avl.c
+  Generating Code...
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\trabalho_avl.c(26,1): warning C4715: 'busca': not all control paths return a value
   trabalho_avl.vcxproj -> C:\Users\pedro\Projects\Personal\faculdade\aeds2\x64\Debug\trabalho_avl.exe

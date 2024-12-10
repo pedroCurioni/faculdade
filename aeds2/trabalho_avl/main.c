@@ -39,12 +39,28 @@ int main() {
 			nome[strcspn(nome, "\n")] = '\0';
 
 			struct noAVL* result = busca(raiz, nome);
-			if (result != NULL) {
+			if (result == NULL) {
 				printf("Palavra %s não encontrada\n", nome);
 			}
 			else {
-				printf("%s encontrado no dicionario fb=%d\n%s: %s", result->nome, result->fb, result->nome, result->descricao);
+				printf("%s encontrado no dicionario fb=%d\n%s: %s\n", result->nome, result->fb, result->nome, result->descricao);
 			}
+		}
+		else if (buffer[0] == '5') {
+			fgets(nome, sizeof(buffer), arquivo);
+			nome[strcspn(nome, "\n")] = '\0';
+
+			struct noAVL* result = busca(raiz, nome);
+			if (result == NULL) {
+				printf("Palavra %s não encontrada\n", nome);
+			}
+			else {
+				printf("%s encontrado no dicionario fb=%d\n%s: %s\n", result->nome, result->fb, result->nome, result->descricao);
+			}
+		}
+		else if (buffer[0] == '6') {
+			altura_arvore(raiz);
+			printf("\n");
 		}
 	}
 

@@ -45,6 +45,7 @@ void insercao(struct noAVL** raiz, char nome[], char descricao[]) {
 	// Se a raiz for nula a arvore está vazia inicialize ela
 	if (*raiz == NULL) {
 		*raiz = novo;
+		printf("Palavra %s adicionada com sucesso!\n", nome);
 		return;
 	}
 
@@ -100,7 +101,7 @@ void remocao(struct noAVL** raiz, char nome[]) {
 	struct noAVL* inicio_balanceamento = NULL;
 
 	if (no == NULL) {
-		printf("Operação de remoção da palavra %s inválida", nome);
+		printf("Operação de remoção da palavra %s inválida\n", nome);
 		return;
 	}
 	else if (no->esquerda == NULL && no->direita == NULL) { // Nó folha
@@ -147,12 +148,12 @@ void imprimir(struct noAVL* raiz) {
 	}
 }
 
-int altura(struct noAVL* no) {
+int profundidade_filho(struct noAVL* no) {
 	if (no == NULL) {
 		return -1;
 	}
-	int esq = altura(no->esquerda);
-	int dir = altura(no->direita);
+	int esq = profundidade_filho(no->esquerda);
+	int dir = profundidade_filho(no->direita);
 
 	// Ternário para retornar o maior valor, contando com o no atual
 	return (esq > dir ? esq : dir) + 1;
@@ -160,7 +161,7 @@ int altura(struct noAVL* no) {
 
 void atualiza_fb(struct noAVL* no) {
 	if (no != NULL) {
-		no->fb = altura(no->esquerda) - altura(no->direita);
+		no->fb = profundidade_filho(no->esquerda) - profundidade_filho(no->direita);
 	}
 }
 
@@ -244,5 +245,22 @@ void balancear(struct noAVL** raiz, struct noAVL* no) {
 	}
 	if (ultimo_no != NULL && ultimo_no->pai == NULL) {
 		*raiz = ultimo_no;
+	}
+}
+
+int altura_no(struct noAVL* no) {
+	int altura = 1;
+	while (no->pai != NULL) {
+		altura++;
+		no = no->pai;
+	}
+	return altura;
+}
+
+void altura_arvore(struct noAVL* no) {
+	if (no != NULL) {
+		altura_arvore(no->esquerda);
+		printf("%s h=%d\t", no->nome, altura_no(no));
+		altura_arvore(no->direita);
 	}
 }

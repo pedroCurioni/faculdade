@@ -18,7 +18,7 @@ void remocao(struct noAVL** raiz, char nome[]);
 
 void imprimir(struct noAVL* raiz);
 
-int altura(struct noAVL* no);
+int profundidade_filho(struct noAVL* no);
 
 void atualiza_fb(struct noAVL* no);
 
@@ -29,5 +29,7 @@ void ll(struct noAVL* no);
 void balancear(struct noAVL** raiz, struct noAVL* no);
 
 void balancear_no(struct noAVL* no);
+
+void altura_arvore(struct noAVL* no);
 
 #endif // TRABALHO_AVL_H

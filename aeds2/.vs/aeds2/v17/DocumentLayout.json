@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{029F0F18-258B-408A-B41A-6C383C1E2A81}|trabalho_avl\\trabalho_avl.vcxproj|solutionrelative:trabalho_avl\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{029F0F18-258B-408A-B41A-6C383C1E2A81}|trabalho_avl\\trabalho_avl.vcxproj|C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{029F0F18-258B-408A-B41A-6C383C1E2A81}|trabalho_avl\\trabalho_avl.vcxproj|solutionrelative:trabalho_avl\\trabalho_avl.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{029F0F18-258B-408A-B41A-6C383C1E2A81}|trabalho_avl\\trabalho_avl.vcxproj|C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{029F0F18-258B-408A-B41A-6C383C1E2A81}|trabalho_avl\\trabalho_avl.vcxproj|solutionrelative:trabalho_avl\\trabalho_avl.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{029F0F18-258B-408A-B41A-6C383C1E2A81}|trabalho_avl\\trabalho_avl.vcxproj|C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.h||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{029F0F18-258B-408A-B41A-6C383C1E2A81}|trabalho_avl\\trabalho_avl.vcxproj|solutionrelative:trabalho_avl\\trabalho_avl.h||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,27 +27,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "trabalho_avl.c",
-              "DocumentMoniker": "C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.c",
-              "RelativeDocumentMoniker": "trabalho_avl\\trabalho_avl.c",
-              "ToolTip": "C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.c",
-              "RelativeToolTip": "trabalho_avl\\trabalho_avl.c",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAkwJAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2024-12-08T19:41:44.277Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "trabalho_avl.h",
               "DocumentMoniker": "C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.h",
               "RelativeDocumentMoniker": "trabalho_avl\\trabalho_avl.h",
               "ToolTip": "C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.h",
               "RelativeToolTip": "trabalho_avl\\trabalho_avl.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAkwBAAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-12-08T19:34:50.552Z",
+              "WhenOpened": "2024-12-10T21:55:16.249Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "trabalho_avl.c",
+              "DocumentMoniker": "C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.c",
+              "RelativeDocumentMoniker": "trabalho_avl\\trabalho_avl.c",
+              "ToolTip": "C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\trabalho_avl.c",
+              "RelativeToolTip": "trabalho_avl\\trabalho_avl.c",
+              "ViewState": "AgIAAO4AAAAAAAAAAAAqwAgBAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-12-10T21:38:17.33Z",
               "EditorCaption": ""
             },
             {
@@ -58,9 +58,9 @@
               "RelativeDocumentMoniker": "trabalho_avl\\main.c",
               "ToolTip": "C:\\Users\\pedro\\Projects\\Personal\\faculdade\\aeds2\\trabalho_avl\\main.c",
               "RelativeToolTip": "trabalho_avl\\main.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2024-12-08T19:34:32.921Z",
+              "WhenOpened": "2024-12-10T21:37:58.077Z",
               "EditorCaption": ""
             }
           ]
