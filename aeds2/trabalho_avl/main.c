@@ -17,7 +17,7 @@ int main() {
 
 	while (fgets(buffer, sizeof(buffer), arquivo) != NULL) {
 		if (buffer[0] == '1') {
-			continue;
+			printf("Árvores criadas sucesso:\n");
 		}
 		else if (buffer[0] == '2') {
 			sscanf(buffer + 1, "%s", nome);
@@ -61,6 +61,9 @@ int main() {
 		else if (buffer[0] == '6') {
 			altura_arvore(raiz);
 			printf("\n");
+		}
+		else if (buffer[0] == '7') {
+			break;
 		}
 	}
 

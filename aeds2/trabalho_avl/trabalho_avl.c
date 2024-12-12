@@ -26,14 +26,15 @@ struct noAVL* busca(struct noAVL* raiz, char nome[]) {
 }
 
 void insercao(struct noAVL** raiz, char nome[], char descricao[]) {
-	struct noAVL* aux = *raiz;
-	struct noAVL* pai = NULL;
 	struct noAVL* novo = (struct noAVL*)malloc(sizeof(struct noAVL));
 
 	if (novo == NULL) {
 		printf("Ocorreu um erro ao alocar!\n");
 		return;
 	}
+
+	struct noAVL* aux = *raiz;
+	struct noAVL* pai = NULL;
 
 	strcpy(novo->nome, nome);
 	strcpy(novo->descricao, descricao);
@@ -57,11 +58,9 @@ void insercao(struct noAVL** raiz, char nome[], char descricao[]) {
 			return;
 		}
 		else if (strcmp(novo->nome, aux->nome) < 0) {
-			aux->fb++;
 			aux = aux->esquerda;
 		}
 		else {
-			aux->fb--;
 			aux = aux->direita;
 		}
 	}
@@ -156,7 +155,12 @@ int profundidade_filho(struct noAVL* no) {
 	int dir = profundidade_filho(no->direita);
 
 	// Ternário para retornar o maior valor, contando com o no atual
-	return (esq > dir ? esq : dir) + 1;
+	if (esq > dir) {
+		return esq + 1;
+	}
+	else {
+		return dir + 1;
+	}
 }
 
 void atualiza_fb(struct noAVL* no) {
@@ -186,6 +190,7 @@ void ll(struct noAVL* no) {
 
 	no->pai = filho_dir;
 
+	atualiza_fb(no);
 	atualiza_fb(filho_dir);
 }
 
@@ -216,12 +221,11 @@ void rr(struct noAVL* no) {
 
 void balancear_no(struct noAVL* no) {
 	struct noAVL* aux = NULL;
-	atualiza_fb(no);
+	atualiza_fb(no); // Pode ocorrer de uma inserção ser realizada, então atualiza o fator de balanceamento enquanto sobe na arvore
 	if (no->fb == 2) {
 		if (no->esquerda->fb == -1) {
 			aux = no->esquerda;
 			ll(aux);
-			atualiza_fb(aux);
 		}
 		rr(no);
 	}
@@ -229,7 +233,6 @@ void balancear_no(struct noAVL* no) {
 		if (no->direita->fb == 1) {
 			aux = no->direita;
 			rr(aux);
-			atualiza_fb(aux);
 		}
 		ll(no);
 	}
