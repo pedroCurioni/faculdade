@@ -14,6 +14,10 @@ struct noAVL *busca(struct noAVL *raiz, char nome[]);
 
 void insercao(struct noAVL **raiz, char nome[], char descricao[]);
 
+struct noAVL *sucessor(struct noAVL *no);
+
+void atualiza_pai(struct noAVL *no, struct noAVL *novo);
+
 void remocao(struct noAVL **raiz, char nome[]);
 
 void imprimir(struct noAVL *raiz);
