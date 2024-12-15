@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
             if (result == NULL) {
                 printf("Palavra %s não encontrada\n", nome);
             } else {
-                printf("%s encontrado no dicionario fb=%d\n%s: %s\n",
-                       result->nome, result->fb, result->nome,
+                printf("%s encontrado no dicionario h=%d\n%s: %s\n",
+                       result->nome, altura_no(result), result->nome,
                        result->descricao);
             }
         } else if (buffer[0] == '5') {

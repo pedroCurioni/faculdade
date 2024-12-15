@@ -32,4 +32,6 @@ void balancear_no(struct noAVL *no);
 
 void altura_arvore(struct noAVL *no);
 
+int altura_no(struct noAVL* no);
+
 #endif // TRABALHO_AVL_H
