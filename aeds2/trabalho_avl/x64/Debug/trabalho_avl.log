@@ -1,6 +1,4 @@
 ﻿  main.c
-  trabalho_avl.c
-  Generating Code...
-C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\main.c(6,10): warning C4101: 'nome_arquivo': unreferenced local variable
-C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\trabalho_avl.c(21,1): warning C4715: 'busca': not all control paths return a value
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\main.c(43,10): warning C4101: 'nome_arquivo': unreferenced local variable
+C:\Users\pedro\Projects\Personal\faculdade\aeds2\trabalho_avl\main.c(116,1): warning C4715: 'busca': not all control paths return a value
   trabalho_avl.vcxproj -> C:\Users\pedro\Projects\Personal\faculdade\aeds2\x64\Debug\trabalho_avl.exe
