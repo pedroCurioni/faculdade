@@ -210,8 +210,7 @@ void remocao(struct noAVL** raiz, char nome[]) {
 
         suc->esquerda = no->esquerda;
         if (no->direita != suc) {
-            suc->direita =
-                no->direita; // Sucessor aponta para o filho direito do nó
+            suc->direita = no->direita; // Sucessor aponta para o filho direito do nó
             suc->pai->esquerda =
                 NULL; // Tira a referencia do sucessor do pai dele
         }
@@ -272,14 +271,7 @@ void ll(struct noAVL* no) {
     filho_dir->esquerda = no;
 
     filho_dir->pai = no->pai;
-    if (no->pai != NULL) {
-        if (no->pai->esquerda == no) {
-            no->pai->esquerda = filho_dir;
-        }
-        else {
-            no->pai->direita = filho_dir;
-        }
-    }
+	atualiza_pai(no, filho_dir);
 
     no->pai = filho_dir;
 
@@ -297,14 +289,7 @@ void rr(struct noAVL* no) {
     filho_esq->direita = no;
 
     filho_esq->pai = no->pai;
-    if (no->pai != NULL) {
-        if (no->pai->esquerda == no) {
-            no->pai->esquerda = filho_esq;
-        }
-        else {
-            no->pai->direita = filho_esq;
-        }
-    }
+	atualiza_pai(no, filho_esq);
 
     no->pai = filho_esq;
 
