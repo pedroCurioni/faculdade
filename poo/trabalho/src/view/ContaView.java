@@ -43,14 +43,14 @@ public class ContaView extends JFrame {
         setLocationRelativeTo(null);
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Adicionar item a Conta", createAddPanel());
+        tabbedPane.addTab("Adicionar item a Conta", createAddPannel());
         tabbedPane.addTab("Remover item da conta", createRemovePanel());
         tabbedPane.addTab("Listar Todos", createListPanel());
 
         add(tabbedPane);
     }
 
-    private JPanel createAddPanel() {
+    private JPanel createAddPannel() {
         JPanel addPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         addPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

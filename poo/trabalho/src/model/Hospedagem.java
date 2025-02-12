@@ -1,18 +1,16 @@
 package model;
 
-import controllers.CatalogoController;
 import dto.HospedagemDto;
 import dto.HospedeDto;
-import dto.ItemContaDto;
 import dto.PagamentoDto;
 import enums.EEstadoOcupacao;
 import exception.AcomodacaoException;
 import exception.HospedagemException;
+import exception.PagamentoException;
 import exception.TipoAcomodacaoException;
+import utils.DateUtils;
 
-import javax.swing.*;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +29,7 @@ public class Hospedagem implements Serializable {
     private final IHospede hospede;
     private final ArrayList<IHospede> acompanhantes = new ArrayList<IHospede>();
     private final IAcomodacao acomodacao;
-    private IConta conta = new Conta();
+    private final IConta conta = new Conta();
     private final ArrayList<Pagamento> pagamento = new ArrayList<Pagamento>();
 
     public Hospedagem(IHospede hospede, IAcomodacao acomodacao) throws HospedagemException {
@@ -92,7 +90,11 @@ public class Hospedagem implements Serializable {
         return acompanhantes;
     }
 
-    public void addPagamento(Pagamento p) {
+    public void addPagamento(Pagamento p) throws PagamentoException {
+        if (p.getValor() + precoTotalPagamento() > precoTotal()) {
+            throw new PagamentoException("Pagamento excede o valor total");
+        }
+
         pagamento.add(p);
     }
 
@@ -120,13 +122,8 @@ public class Hospedagem implements Serializable {
         return (acomodacao.getTarifaDiaria() + acomodacao.getAdicionaAcompanhante()) * (Integer.max(quantidadeOcupantes() - 1, 1));
     }
 
-    public static long getIntervaloDias(Date dataInicial, Date dataFinal) {
-        long milisegundoPorDia = (24 * 60 * 60 * 1000);
-        return (dataFinal.getTime() - dataInicial.getTime()) / milisegundoPorDia;
-    }
-
     public double precoTotalHospedagem() {
-        int intervaloDias = (int) getIntervaloDias(checkin, Objects.requireNonNullElseGet(checkout, Date::new));
+        int intervaloDias = (int) DateUtils.getIntervaloDias(checkin, Objects.requireNonNullElseGet(checkout, Date::new));
 
         return Integer.max(intervaloDias, 1) * calculaTotalDiaria();
 
@@ -155,6 +152,7 @@ public class Hospedagem implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
         sb.append("Hospede: ").append(hospede.getNome());
+        sb.append("\nAcomodação: ").append(acomodacao.getNumero());
         sb.append("\nTipo: ").append(acomodacao.getTipo());
         sb.append("\nCheckin: ").append(sdf.format(getCheckin()));
 
@@ -165,7 +163,6 @@ public class Hospedagem implements Serializable {
         }
 
         sb.append("\n---\nConta: ").append(conta.listar()).append("\n---");
-
         sb.append("\nOcupantes: ").append(quantidadeOcupantes());
         sb.append("\nValor Total Diaria: ").append(calculaTotalDiaria());
         sb.append("\nTotal Pagamentos: ").append(precoTotalPagamento());

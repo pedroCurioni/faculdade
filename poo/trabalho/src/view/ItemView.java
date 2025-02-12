@@ -33,14 +33,14 @@ public class ItemView extends JFrame {
         setLocationRelativeTo(null);
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Criar Item", createCreatePanel());
+        tabbedPane.addTab("Criar Item", createAddPanel());
         tabbedPane.addTab("Listar", createListPanel());
-        tabbedPane.addTab("Obter Item", createGetPanel());
+        tabbedPane.addTab("Obter Item", createSearchPanel());
 
         add(tabbedPane);
     }
 
-    private JPanel createCreatePanel() {
+    private JPanel createAddPanel() {
         JPanel createPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         createPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -100,7 +100,7 @@ public class ItemView extends JFrame {
         return listPanel;
     }
 
-    private JPanel createGetPanel() {
+    private JPanel createSearchPanel() {
         JPanel getPanel = new JPanel(new BorderLayout());
         JPanel inputGetPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         inputGetPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

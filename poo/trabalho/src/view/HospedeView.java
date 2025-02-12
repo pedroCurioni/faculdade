@@ -17,12 +17,12 @@ public class HospedeView extends JFrame {
 
     private static final long serialVersionUID = -3843327249763458447L;
 
-    private HospedeController hospedeController;
+    private final HospedeController hospedeController;
     private JTextField cpfField;
     private JTextField nameField;
     private JTextField emailField;
     private JTextField phoneField;
-    private JList<String> hospedeList;
+    private JTextArea hospedeTextArea;
     private JTextField searchCpfField;
     private JTextArea hospedeDetailsArea;
 
@@ -34,14 +34,14 @@ public class HospedeView extends JFrame {
         setLocationRelativeTo(null);
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Create Hospede", createCreatePanel());
-        tabbedPane.addTab("Listar Hospedes", createViewPanel());
+        tabbedPane.addTab("Criar Hospede", createAddPanel());
+        tabbedPane.addTab("Listar Hospedes", createListPanel());
         tabbedPane.addTab("Buscar Hospede", createSearchPanel());
 
         add(tabbedPane);
     }
 
-    private JPanel createCreatePanel() {
+    private JPanel createAddPanel() {
         JPanel createPanel = new JPanel();
         createPanel.setLayout(new GridLayout(5, 2));
 
@@ -57,7 +57,7 @@ public class HospedeView extends JFrame {
         emailField = new JTextField();
         createPanel.add(emailField);
 
-        createPanel.add(new JLabel("Phone:"));
+        createPanel.add(new JLabel("Telefone (Somente números):"));
         phoneField = new JTextField();
         createPanel.add(phoneField);
 
@@ -73,25 +73,23 @@ public class HospedeView extends JFrame {
         return createPanel;
     }
 
-    private JPanel createViewPanel() {
-        JPanel viewPanel = new JPanel();
-        viewPanel.setLayout(new BorderLayout());
-
-        hospedeList = new JList<>();
-        viewPanel.add(new JScrollPane(hospedeList), BorderLayout.CENTER);
+    private JPanel createListPanel() {
+        JPanel viewPanel = new JPanel(new BorderLayout());
+        hospedeTextArea = new JTextArea();
+        hospedeTextArea.setEditable(false);
+        viewPanel.add(new JScrollPane(hospedeTextArea), BorderLayout.CENTER);
 
         JButton refreshButton = new JButton("Refresh");
         viewPanel.add(refreshButton, BorderLayout.SOUTH);
 
         refreshButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                refreshHospedes();
+                listHospedes();
             }
         });
 
         return viewPanel;
     }
-
     private JPanel createSearchPanel() {
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BorderLayout());
@@ -139,9 +137,12 @@ public class HospedeView extends JFrame {
         }
     }
 
-    private void refreshHospedes() {
+    private void listHospedes() {
+        hospedeTextArea.setText("");
         Set<String> hospedes = hospedeController.getHospedes();
-        hospedeList.setListData(hospedes.toArray(new String[0]));
+        for (String hospede : hospedes) {
+            hospedeTextArea.append(hospede + "\n");
+        }
     }
 
     private void searchHospede() {

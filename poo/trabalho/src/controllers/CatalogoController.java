@@ -63,6 +63,13 @@ public class CatalogoController implements Serializable {
         }
 
         Categoria categoria = getCategoria(nomeCategoria);
+
+        for (Item item : categoria.getItens()) {
+            if (item.getCodigo() == codigo) {
+                throw new ItemException("Já existe um item com o codigo " + codigo + " na categoria " + nomeCategoria);
+            }
+        }
+
         Item item = itemDto.toDomain();
 
         categoria.addItem(item);

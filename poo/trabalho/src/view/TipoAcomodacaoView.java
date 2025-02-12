@@ -21,7 +21,7 @@ public class TipoAcomodacaoView extends JFrame {
     private JTextField adicionalAcompanhanteField;
     private JTextField searchNomeField;
     private JTextArea tipoAcomodacaoDetailsArea;
-    private JList<String> tipoAcomodacaoList;
+    private JTextArea tipoAcomodacaoTextArea;
 
     public TipoAcomodacaoView() {
         setTitle("Tipo Acomodacao");
@@ -30,14 +30,14 @@ public class TipoAcomodacaoView extends JFrame {
         setLocationRelativeTo(null);
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        tabbedPane.addTab("Criar Tipo de Acomodação", createCreatePanel());
-        tabbedPane.addTab("Listar Tipo de Acomodações", createViewPanel());
+        tabbedPane.addTab("Criar Tipo de Acomodação", createAddPanel());
+        tabbedPane.addTab("Listar Tipo de Acomodações", createListPanel());
         tabbedPane.addTab("Buscar Tipo de Acomodações", createSearchPanel());
 
         add(tabbedPane);
     }
 
-    private JPanel createCreatePanel() {
+    private JPanel createAddPanel() {
         JPanel createPanel = new JPanel(new GridLayout(4, 2));
 
         createPanel.add(new JLabel("Nome:"));
@@ -52,19 +52,19 @@ public class TipoAcomodacaoView extends JFrame {
         adicionalAcompanhanteField = new JTextField();
         createPanel.add(adicionalAcompanhanteField);
 
-        JButton createButton = new JButton("Criar");
+        JButton createButton = new JButton("Criar Tipo Acomodação");
         createPanel.add(createButton);
 
         createButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                handleCreateButton();
+                createTipoAcomodacao();
             }
         });
 
         return createPanel;
     }
 
-    private void handleCreateButton() {
+    private void createTipoAcomodacao() {
         try {
             acomodacaoController.createTipoAcomodacao(
                     new TipoAcomodacaoDto(
@@ -84,27 +84,30 @@ public class TipoAcomodacaoView extends JFrame {
         }
     }
 
-    private JPanel createViewPanel() {
+    private JPanel createListPanel() {
         JPanel viewPanel = new JPanel(new BorderLayout());
-
-        tipoAcomodacaoList = new JList<>();
-        viewPanel.add(new JScrollPane(tipoAcomodacaoList), BorderLayout.CENTER);
+        tipoAcomodacaoTextArea = new JTextArea();
+        tipoAcomodacaoTextArea.setEditable(false);
+        viewPanel.add(new JScrollPane(tipoAcomodacaoTextArea), BorderLayout.CENTER);
 
         JButton refreshButton = new JButton("Refresh");
         viewPanel.add(refreshButton, BorderLayout.SOUTH);
 
         refreshButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                handleRefreshButton();
+                listTipoAcomodacoes();
             }
         });
 
         return viewPanel;
     }
 
-    private void handleRefreshButton() {
+    private void listTipoAcomodacoes() {
+        tipoAcomodacaoTextArea.setText("");
         Set<String> tiposAcomodacao = acomodacaoController.getTiposAcomodacao();
-        tipoAcomodacaoList.setListData(tiposAcomodacao.toArray(new String[0]));
+        for (String tipo : tiposAcomodacao) {
+            tipoAcomodacaoTextArea.append(tipo + "\n");
+        }
     }
 
     private JPanel createSearchPanel() {
@@ -126,14 +129,14 @@ public class TipoAcomodacaoView extends JFrame {
 
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                handleSearchButton();
+                searchTipoAcomodacoes();
             }
         });
 
         return searchPanel;
     }
 
-    private void handleSearchButton() {
+    private void searchTipoAcomodacoes() {
         try {
             String nome = searchNomeField.getText();
             TipoAcomodacaoDto tipoAcomodacaoDto = acomodacaoController.getTipoAcomodacao(nome);

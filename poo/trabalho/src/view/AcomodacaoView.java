@@ -22,7 +22,7 @@ public class AcomodacaoView extends JFrame {
     private JTextField numeroField;
     private JTextField ocupacaoMaxField;
     private JComboBox<String> tipoComboBox;
-    private JList<String> acomodacaoList;
+    private JTextArea acomodacaoTextArea;
     private JTextField searchNumeroField;
     private JTextArea acomodacaoDetailsArea;
     private JTextField numeroField2;
@@ -36,7 +36,7 @@ public class AcomodacaoView extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        tabbedPane.addTab("Criar", createCreatePanel());
+        tabbedPane.addTab("Criar", createAddPannel());
         tabbedPane.addTab("Listar Acomodações", createListPanel());
         tabbedPane.addTab("Buscar acomodação", createSearchPanel());
         tabbedPane.addTab("Alterar Estado", createAlterarEstadoPanel());
@@ -44,13 +44,13 @@ public class AcomodacaoView extends JFrame {
         add(tabbedPane);
     }
 
-    private JPanel createCreatePanel() {
+    private JPanel createAddPannel() {
         JPanel createPanel = new JPanel(new GridLayout(5, 2));
         createPanel.add(new JLabel("Numero (numérico):"));
         numeroField = new JTextField();
         createPanel.add(numeroField);
 
-        createPanel.add(new JLabel("Ocupacao Max (numérico):"));
+        createPanel.add(new JLabel("Ocupacão Maxima (numérico):"));
         ocupacaoMaxField = new JTextField();
         createPanel.add(ocupacaoMaxField);
 
@@ -72,21 +72,21 @@ public class AcomodacaoView extends JFrame {
 
     private JPanel createListPanel() {
         JPanel viewPanel = new JPanel(new BorderLayout());
-        acomodacaoList = new JList<>();
-        viewPanel.add(new JScrollPane(acomodacaoList), BorderLayout.CENTER);
+        acomodacaoTextArea = new JTextArea();
+        acomodacaoTextArea.setEditable(false);
+        viewPanel.add(new JScrollPane(acomodacaoTextArea), BorderLayout.CENTER);
 
         JButton refreshButton = new JButton("Atualizar Lista");
         viewPanel.add(refreshButton, BorderLayout.SOUTH);
 
         refreshButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                refreshAcomodacaoList();
+                listAcomodacao();
             }
         });
 
         return viewPanel;
     }
-
     private JPanel createSearchPanel() {
         JPanel searchPanel = new JPanel(new BorderLayout());
         JPanel inputPanel = new JPanel(new GridLayout(2, 2));
@@ -153,9 +153,12 @@ public class AcomodacaoView extends JFrame {
         }
     }
 
-    private void refreshAcomodacaoList() {
+    private void listAcomodacao() {
+        acomodacaoTextArea.setText("");
         Set<Integer> acomodacoes = acomodacaoController.getAcomodacoes();
-        acomodacaoList.setListData(acomodacoes.stream().map(String::valueOf).toArray(String[]::new));
+        for (Integer numero : acomodacoes) {
+            acomodacaoTextArea.append(numero + "\n");
+        }
     }
 
     private void searchAcomodacao() {

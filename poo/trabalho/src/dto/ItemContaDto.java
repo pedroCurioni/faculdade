@@ -35,6 +35,6 @@ public class ItemContaDto {
     }
 
     public ItemConta toDomain() throws ItemException {
-        return new ItemConta(this.dataHora, this.preco, this.qtde, this.itemDto.toDomain());
+        return new ItemConta(this.dataHora, this.qtde, this.itemDto.toDomain());
     }
 }

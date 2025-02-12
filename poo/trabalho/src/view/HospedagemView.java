@@ -29,7 +29,7 @@ public class HospedagemView extends JFrame {
 
     private JTextField txtHospede;
     private JTextField txtAcomodacao;
-    private JList<String> hospedagemList;
+    private JTextArea hospedagemTextArea;
     private JTextField searchIdField;
     private JTextArea hospedagemDetailsArea;
     private JTextField txtHospedagemIdAddHospede;
@@ -37,7 +37,6 @@ public class HospedagemView extends JFrame {
     private JTextField txtHospedagemIdCheckout;
     private JTextField txtFinalPayment;
     private JComboBox<ETipoPagamento> cbTipoPagamento;
-    private JTextArea textAreaCheckout;
 
     public HospedagemView() {
         setTitle("Hospedagem");
@@ -47,7 +46,7 @@ public class HospedagemView extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Check-IN", createCheckInPanel());
-        tabbedPane.addTab("View Hospedagens", createViewPanel());
+        tabbedPane.addTab("View Hospedagens", createListPanel());
         tabbedPane.addTab("Buscar Hospedagem", createSearchPanel());
         tabbedPane.addTab("Adicionar Hospede", createAddHospedePanel());
         tabbedPane.addTab("Checkout", createCheckoutPanel());
@@ -79,17 +78,18 @@ public class HospedagemView extends JFrame {
         return createPanel;
     }
 
-    private JPanel createViewPanel() {
+    private JPanel createListPanel() {
         JPanel viewPanel = new JPanel(new BorderLayout());
-        hospedagemList = new JList<>();
-        viewPanel.add(new JScrollPane(hospedagemList), BorderLayout.CENTER);
+        hospedagemTextArea = new JTextArea();
+        hospedagemTextArea.setEditable(false);
+        viewPanel.add(new JScrollPane(hospedagemTextArea), BorderLayout.CENTER);
 
         JButton refreshButton = new JButton("Refresh");
         viewPanel.add(refreshButton, BorderLayout.SOUTH);
 
         refreshButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                refreshHospedagens();
+                listHospedagens();
             }
         });
 
@@ -158,14 +158,11 @@ public class HospedagemView extends JFrame {
         txtFinalPayment = new JTextField();
         JLabel lblTipoPagamento = new JLabel("Tipo de Pagamento:");
         cbTipoPagamento = new JComboBox<>(ETipoPagamento.values());
-        textAreaCheckout = new JTextArea();
-        textAreaCheckout.setEditable(false);
-        JScrollPane scrollPaneCheckout = new JScrollPane(textAreaCheckout);
         JButton btnCheckout = new JButton("Checkout");
 
         btnCheckout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                checkout();
+                confirmAndCheckout();
             }
         });
 
@@ -177,7 +174,6 @@ public class HospedagemView extends JFrame {
         checkoutPanel.add(cbTipoPagamento);
         checkoutPanel.add(new JLabel());
         checkoutPanel.add(btnCheckout);
-        checkoutPanel.add(scrollPaneCheckout);
 
         return checkoutPanel;
     }
@@ -200,9 +196,12 @@ public class HospedagemView extends JFrame {
         }
     }
 
-    private void refreshHospedagens() {
+    private void listHospedagens() {
+        hospedagemTextArea.setText("");
         Set<String> hospedagens = hospedagemController.getHospedagens();
-        hospedagemList.setListData(hospedagens.toArray(new String[0]));
+        for (String hospedagem : hospedagens) {
+            hospedagemTextArea.append(hospedagem + "\n");
+        }
     }
 
     private void searchHospedagem() {
@@ -231,25 +230,30 @@ public class HospedagemView extends JFrame {
         }
     }
 
-    private void checkout() {
+    private void confirmAndCheckout() {
         try {
             String id = txtHospedagemIdCheckout.getText();
-            PagamentoDto pagamento = null;
-            if (!txtFinalPayment.getText().isEmpty()) {
-                double finalPayment = Double.parseDouble(txtFinalPayment.getText());
-                ETipoPagamento tipoPagamento = (ETipoPagamento) cbTipoPagamento.getSelectedItem();
-                pagamento = new PagamentoDto(tipoPagamento, new Date(), finalPayment);
-            }
-            hospedagemController.checkout(id, pagamento);
+            HospedagemDto hospedagemDto = hospedagemController.getHospedagemDto(id);
 
-            textAreaCheckout.setText(hospedagemController.listarHospedagem(id).toString());
-            JOptionPane.showMessageDialog(null, "Checkout realizado com sucesso!");
-        } catch (HospedagemException | TipoAcomodacaoException | PagamentoException | AcomodacaoException | HospedeException ex) {
+            int confirm = JOptionPane.showConfirmDialog(null, "Confirma o checkout para a seguinte hospedagem?\n" + hospedagemDto.getId(), "Confirmar Checkout", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                PagamentoDto pagamento = null;
+                if (!txtFinalPayment.getText().isEmpty()) {
+                    double finalPayment = Double.parseDouble(txtFinalPayment.getText());
+                    ETipoPagamento tipoPagamento = (ETipoPagamento) cbTipoPagamento.getSelectedItem();
+                    pagamento = new PagamentoDto(tipoPagamento, new Date(), finalPayment);
+                }
+                hospedagemController.checkout(id, pagamento);
+                acomodacaoController.alterarEstadoAcomodacao(hospedagemDto.getNumeroAcomodacao(), EEstadoOcupacao.DISPONIVEL);
+                JOptionPane.showMessageDialog(null, "Checkout realizado com sucesso!");
+            }
+        } catch (HospedagemException | TipoAcomodacaoException | PagamentoException | AcomodacaoException |
+                 HospedeException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Formato invalido, campos de número deve conter apenas números", "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos: ", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

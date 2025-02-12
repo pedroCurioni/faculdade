@@ -2,6 +2,7 @@ package model;
 
 import dto.HospedeDto;
 import exception.HospedeException;
+import utils.ValidationUtils;
 
 import java.io.Serializable;
 
@@ -19,10 +20,14 @@ public class Hospede implements IHospede, Serializable {
             throw new HospedeException("Todos os dados do hospede devem ser preenchidos");
         }
 
+        if (!ValidationUtils.isValidCpf(cpf)) {
+            throw new HospedeException("CPF inválido");
+        }
+
         this.cpf = cpf;
         this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
+        setEmail(email);
+        setTelefone(telefone);
     }
 
     public String getNome() {
@@ -37,7 +42,11 @@ public class Hospede implements IHospede, Serializable {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws HospedeException {
+        if (!ValidationUtils.isValidEmail(email)) {
+            throw new HospedeException("Formato de email inválido");
+        }
+
         this.email = email;
     }
 
@@ -45,7 +54,11 @@ public class Hospede implements IHospede, Serializable {
         return telefone;
     }
 
-    public void setTelefone(long telefone) {
+    public void setTelefone(long telefone) throws HospedeException {
+        if (!ValidationUtils.isValidPhone(Long.toString(telefone))) {
+            throw new HospedeException("Formato de telefone inválido");
+        }
+
         this.telefone = telefone;
     }
 

@@ -62,6 +62,10 @@ public class HospedagemDto {
         return pagamento;
     }
 
+    public int getNumeroAcomodacao() {
+        return this.acomodacao.getNumero();
+    }
+
     public Hospedagem toDomain() throws HospedeException, TipoAcomodacaoException, AcomodacaoException, HospedagemException {
         return new Hospedagem(this.hospede.toDomain(), this.acomodacao.toDomain());
     }

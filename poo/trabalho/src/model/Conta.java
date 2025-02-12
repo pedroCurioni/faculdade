@@ -22,7 +22,7 @@ public class Conta implements IConta, Serializable {
 
 	@Override
 	public void addItem(Item item, int qtde) {
-		ItemConta ic = new ItemConta(new Date(), item.getPreco(), qtde, item);
+		ItemConta ic = new ItemConta(new Date(), qtde, item);
 		itens.add(ic);
 	}
 

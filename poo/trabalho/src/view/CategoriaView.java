@@ -26,13 +26,13 @@ public class CategoriaView extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        tabbedPane.addTab("Criar Categoria", createCreatePanel());
+        tabbedPane.addTab("Criar Categoria", createAddPanel());
         tabbedPane.addTab("Listar Todos", createListPanel());
 
         add(tabbedPane);
     }
 
-    private JPanel createCreatePanel() {
+    private JPanel createAddPanel() {
         JPanel createPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         createPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

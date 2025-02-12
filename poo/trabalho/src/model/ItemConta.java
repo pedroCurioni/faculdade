@@ -13,10 +13,10 @@ public class ItemConta implements Serializable {
 
     private final Item item;
 
-    public ItemConta(Date dataHora, double preco, int qtde, Item item) {
+    public ItemConta(Date dataHora, int qtde, Item item) {
         super();
         this.dataHora = dataHora;
-        this.preco = preco;
+        this.preco = item.getPreco();
         this.qtde = qtde;
         this.item = item;
     }
