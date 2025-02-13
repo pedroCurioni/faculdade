@@ -47,7 +47,7 @@ public class Conta implements IConta, Serializable {
 		StringBuilder sb = new StringBuilder();
 
 		for (ItemConta itemConta : itens) {
-			sb.append("\n").append(itemConta.listar());
+			sb.append(itemConta.listar()).append("\n");
 		}
 
 		return sb;

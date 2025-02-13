@@ -129,10 +129,10 @@ public class ItemView extends JFrame {
 
     private void createItem() {
         try {
-            String nomeCategoria = txtNomeCategoria.getText();
-            long codigo = Long.parseLong(txtCodigo.getText());
-            String descricao = txtDescricao.getText();
-            double preco = Double.parseDouble(txtPreco.getText());
+            String nomeCategoria = txtNomeCategoria.getText().trim();
+            long codigo = Long.parseLong(txtCodigo.getText().trim());
+            String descricao = txtDescricao.getText().trim();
+            double preco = Double.parseDouble(txtPreco.getText().trim());
             ItemDto itemDto = new ItemDto(codigo, descricao, preco);
             catalogoController.criarItens(nomeCategoria, itemDto);
             JOptionPane.showMessageDialog(null, "Item criado com sucesso!");
@@ -148,7 +148,7 @@ public class ItemView extends JFrame {
     private void listItems() {
         textAreaList.setText("");
         try {
-            String nomeCategoria = txtNomeCategoriaList.getText();
+            String nomeCategoria = txtNomeCategoriaList.getText().trim();
             if (nomeCategoria.isEmpty()) {
                 for (Long codigo : catalogoController.getItens()) {
                     textAreaList.append(codigo + "\n");
@@ -166,7 +166,7 @@ public class ItemView extends JFrame {
 
     private void getItem() {
         try {
-            long codigo = Long.parseLong(txtCodigoGet.getText());
+            long codigo = Long.parseLong(txtCodigoGet.getText().trim());
             ItemDto itemDto = catalogoController.getItemDto(codigo);
             textAreaGet.setText(itemDto.toString());
         } catch (ItemException ex) {

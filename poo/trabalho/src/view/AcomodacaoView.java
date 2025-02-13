@@ -136,8 +136,8 @@ public class AcomodacaoView extends JFrame {
 
     private void createAcomodacao() {
         try {
-            int numero = Integer.parseInt(numeroField.getText());
-            int ocupacaoMax = Integer.parseInt(ocupacaoMaxField.getText());
+            int numero = Integer.parseInt(numeroField.getText().trim());
+            int ocupacaoMax = Integer.parseInt(ocupacaoMaxField.getText().trim());
             String tipo = (String) tipoComboBox.getSelectedItem();
             TipoAcomodacaoDto tipoAcomodacaoDto = acomodacaoController.getTipoAcomodacao(tipo);
             AcomodacaoDto acomodacaoDto = new AcomodacaoDto(numero, ocupacaoMax, EEstadoOcupacao.DISPONIVEL, tipoAcomodacaoDto);
@@ -163,7 +163,7 @@ public class AcomodacaoView extends JFrame {
 
     private void searchAcomodacao() {
         try {
-            int numero = Integer.parseInt(searchNumeroField.getText());
+            int numero = Integer.parseInt(searchNumeroField.getText().trim());
             AcomodacaoDto acomodacaoDto = acomodacaoController.getAcomodacaoDto(numero);
             acomodacaoDetailsArea.setText(acomodacaoDto.toString());
         } catch (AcomodacaoException | TipoAcomodacaoException ex) {
@@ -177,7 +177,7 @@ public class AcomodacaoView extends JFrame {
 
     private void alterarEstadoAcomodacao() {
         try {
-            int numero = Integer.parseInt(numeroField2.getText());
+            int numero = Integer.parseInt(numeroField2.getText().trim());
             EEstadoOcupacao novoEstado = (EEstadoOcupacao) estadoComboBox.getSelectedItem();
             acomodacaoController.alterarEstadoAcomodacao(numero, novoEstado);
             MainController.save();

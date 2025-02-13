@@ -63,9 +63,9 @@ public class PagamentoView extends JFrame {
 
     private void addPagamento() {
         try {
-            String idHospedagem = txtHospedagemId.getText();
+            String idHospedagem = txtHospedagemId.getText().trim();
             ETipoPagamento tipoPagamento = (ETipoPagamento) comboTipoPagamento.getSelectedItem();
-            double valor = Double.parseDouble(txtValor.getText());
+            double valor = Double.parseDouble(txtValor.getText().trim());
             PagamentoDto pagamentoDto = new PagamentoDto(tipoPagamento, new Date(), valor);
             hospedagemController.addPagamento(idHospedagem, pagamentoDto);
             JOptionPane.showMessageDialog(null, "Pagamento adicionado com sucesso!");

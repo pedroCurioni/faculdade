@@ -180,8 +180,8 @@ public class HospedagemView extends JFrame {
 
     private void checkIn() {
         try {
-            HospedeDto hospede = hospedeController.getHospedeDto(txtHospede.getText());
-            AcomodacaoDto acomodacao = acomodacaoController.getAcomodacaoDto(Integer.parseInt(txtAcomodacao.getText()));
+            HospedeDto hospede = hospedeController.getHospedeDto(txtHospede.getText().trim());
+            AcomodacaoDto acomodacao = acomodacaoController.getAcomodacaoDto(Integer.parseInt(txtAcomodacao.getText().trim()));
             HospedagemDto hospedagemDto = new HospedagemDto(null, new Date(), hospede, new ArrayList<>(), acomodacao, null, new ArrayList<>(), null);
             String id = hospedagemController.createHospedagem(hospedagemDto);
             acomodacaoController.alterarEstadoAcomodacao(acomodacao.getNumero(), EEstadoOcupacao.OCUPADO);
@@ -206,7 +206,7 @@ public class HospedagemView extends JFrame {
 
     private void searchHospedagem() {
         try {
-            String id = searchIdField.getText();
+            String id = searchIdField.getText().trim();
             hospedagemDetailsArea.setText(hospedagemController.listarHospedagem(id).toString());
         } catch (HospedagemException | TipoAcomodacaoException ex) {
             hospedagemDetailsArea.setText("Erro: " + ex.getMessage());
@@ -217,8 +217,8 @@ public class HospedagemView extends JFrame {
 
     private void addHospede() {
         try {
-            String idHospedagem = txtHospedagemIdAddHospede.getText();
-            String[] hospedeCpfs = txtHospedeAdd.getText().split(",");
+            String idHospedagem = txtHospedagemIdAddHospede.getText().trim();
+            String[] hospedeCpfs = txtHospedeAdd.getText().trim().split(",");
             ArrayList<HospedeDto> hospedes = new ArrayList<>();
             for (String cpf : hospedeCpfs) {
                 hospedes.add(hospedeController.getHospedeDto(cpf.trim()));
@@ -232,19 +232,19 @@ public class HospedagemView extends JFrame {
 
     private void confirmAndCheckout() {
         try {
-            String id = txtHospedagemIdCheckout.getText();
+            String id = txtHospedagemIdCheckout.getText().trim();
             HospedagemDto hospedagemDto = hospedagemController.getHospedagemDto(id);
 
             int confirm = JOptionPane.showConfirmDialog(null, "Confirma o checkout para a seguinte hospedagem?\n" + hospedagemDto.getId(), "Confirmar Checkout", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 PagamentoDto pagamento = null;
-                if (!txtFinalPayment.getText().isEmpty()) {
-                    double finalPayment = Double.parseDouble(txtFinalPayment.getText());
+                if (!txtFinalPayment.getText().trim().isEmpty()) {
+                    double finalPayment = Double.parseDouble(txtFinalPayment.getText().trim());
                     ETipoPagamento tipoPagamento = (ETipoPagamento) cbTipoPagamento.getSelectedItem();
                     pagamento = new PagamentoDto(tipoPagamento, new Date(), finalPayment);
                 }
                 hospedagemController.checkout(id, pagamento);
-                acomodacaoController.alterarEstadoAcomodacao(hospedagemDto.getNumeroAcomodacao(), EEstadoOcupacao.DISPONIVEL);
+                acomodacaoController.alterarEstadoAcomodacao(hospedagemDto.getNumeroAcomodacao(), EEstadoOcupacao.MANUTENCAO);
                 JOptionPane.showMessageDialog(null, "Checkout realizado com sucesso!");
             }
         } catch (HospedagemException | TipoAcomodacaoException | PagamentoException | AcomodacaoException |

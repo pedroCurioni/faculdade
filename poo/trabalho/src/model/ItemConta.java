@@ -44,7 +44,7 @@ public class ItemConta implements Serializable {
     public StringBuilder listar() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\nData de compra: ").append(dataHora);
+        sb.append("Data de compra: ").append(dataHora);
         sb.append("\nPreco do item no pedido:").append(preco);
         sb.append("\nQuantidade: ").append(qtde);
 

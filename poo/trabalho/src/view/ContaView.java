@@ -132,9 +132,9 @@ public class ContaView extends JFrame {
 
     private void addItemConta() {
         try {
-            String idHospedagem = txtHospedagemIdAdd.getText();
-            long itemCodigo = Long.parseLong(txtItemCodigo.getText());
-            int quantidade = Integer.parseInt(txtQuantidade.getText());
+            String idHospedagem = txtHospedagemIdAdd.getText().trim();
+            long itemCodigo = Long.parseLong(txtItemCodigo.getText().trim());
+            int quantidade = Integer.parseInt(txtQuantidade.getText().trim());
             ItemDto item = catalogoController.getItemDto(itemCodigo);
             hospedagemController.addItemConta(idHospedagem, item, quantidade);
             JOptionPane.showMessageDialog(null, "Item adicionado com sucesso!");
@@ -149,8 +149,8 @@ public class ContaView extends JFrame {
 
     private void removeItemConta() {
         try {
-            String idHospedagem = txtHospedagemIdRemove.getText();
-            int itemIndex = Integer.parseInt(txtItemIndex.getText());
+            String idHospedagem = txtHospedagemIdRemove.getText().trim();
+            int itemIndex = Integer.parseInt(txtItemIndex.getText().trim());
             hospedagemController.removeItemConta(idHospedagem, itemIndex);
             JOptionPane.showMessageDialog(null, "Item removido com sucesso!");
         } catch (HospedagemException | TipoAcomodacaoException ex) {
@@ -165,7 +165,7 @@ public class ContaView extends JFrame {
     private void listItemsConta() {
         textAreaList.setText("");
         try {
-            String idHospedagem = txtHospedagemIdList.getText();
+            String idHospedagem = txtHospedagemIdList.getText().trim();
             String contaList = hospedagemController.listarConta(idHospedagem).toString();
             textAreaList.setText(contaList);
         } catch (HospedagemException | TipoAcomodacaoException ex) {

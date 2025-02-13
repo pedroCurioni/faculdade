@@ -162,7 +162,7 @@ public class Hospedagem implements Serializable {
             sb.append("\nCheckout: ").append(sdf.format(getCheckout()));
         }
 
-        sb.append("\n---\nConta: ").append(conta.listar()).append("\n---");
+        sb.append("\n---\nConta: \n\n").append(conta.listar()).append("\n---");
         sb.append("\nOcupantes: ").append(quantidadeOcupantes());
         sb.append("\nValor Total Diaria: ").append(calculaTotalDiaria());
         sb.append("\nTotal Pagamentos: ").append(precoTotalPagamento());

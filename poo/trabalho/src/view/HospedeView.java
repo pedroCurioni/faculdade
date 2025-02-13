@@ -45,7 +45,7 @@ public class HospedeView extends JFrame {
         JPanel createPanel = new JPanel();
         createPanel.setLayout(new GridLayout(5, 2));
 
-        createPanel.add(new JLabel("CPF:"));
+        createPanel.add(new JLabel("CPF (Somente números):"));
         cpfField = new JTextField();
         createPanel.add(cpfField);
 
@@ -120,10 +120,10 @@ public class HospedeView extends JFrame {
 
     private void createHospede() {
         try {
-            String cpf = cpfField.getText();
-            String name = nameField.getText();
-            String email = emailField.getText();
-            long phone = Long.parseLong(phoneField.getText());
+            String cpf = cpfField.getText().trim();
+            String name = nameField.getText().trim();
+            String email = emailField.getText().trim();
+            long phone = Long.parseLong(phoneField.getText().trim());
             HospedeDto hospedeDto = new HospedeDto(cpf, name, email, phone);
             hospedeController.createHospede(hospedeDto);
             MainController.save();
@@ -147,7 +147,7 @@ public class HospedeView extends JFrame {
 
     private void searchHospede() {
         try {
-            String cpf = searchCpfField.getText();
+            String cpf = searchCpfField.getText().trim();
             HospedeDto hospedeDto = hospedeController.getHospedeDto(cpf);
             hospedeDetailsArea.setText(hospedeDto.toString());
         } catch (HospedeException ex) {

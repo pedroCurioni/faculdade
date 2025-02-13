@@ -68,9 +68,9 @@ public class TipoAcomodacaoView extends JFrame {
         try {
             acomodacaoController.createTipoAcomodacao(
                     new TipoAcomodacaoDto(
-                            nomeField.getText(),
-                            Double.parseDouble(tarifaDiariaField.getText()),
-                            Double.parseDouble(adicionalAcompanhanteField.getText())
+                            nomeField.getText().trim(),
+                            Double.parseDouble(tarifaDiariaField.getText().trim()),
+                            Double.parseDouble(adicionalAcompanhanteField.getText().trim())
                     )
             );
             MainController.save();
@@ -138,7 +138,7 @@ public class TipoAcomodacaoView extends JFrame {
 
     private void searchTipoAcomodacoes() {
         try {
-            String nome = searchNomeField.getText();
+            String nome = searchNomeField.getText().trim();
             TipoAcomodacaoDto tipoAcomodacaoDto = acomodacaoController.getTipoAcomodacao(nome);
             tipoAcomodacaoDetailsArea.setText(tipoAcomodacaoDto.toString());
         } catch (TipoAcomodacaoException ex) {

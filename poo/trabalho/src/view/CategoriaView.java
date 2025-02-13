@@ -73,7 +73,7 @@ public class CategoriaView extends JFrame {
 
     private void createCategoria() {
         try {
-            String nome = txtNome.getText();
+            String nome = txtNome.getText().trim();
             CategoriaDto categoriaDto = new CategoriaDto(nome);
             catalogoController.criarCategoria(categoriaDto);
             JOptionPane.showMessageDialog(null, "Categoria criada com sucesso!");

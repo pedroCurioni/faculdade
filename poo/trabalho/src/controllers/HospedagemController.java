@@ -74,6 +74,7 @@ public class HospedagemController implements Serializable {
         Pagamento pagamento = pagamentoDto.toDomain();
 
         Hospedagem hospedagem = getHospedagem(idHospedagem);
+
         hospedagem.addPagamento(pagamento);
 
         MainController.save();

@@ -1,11 +1,10 @@
 package model;
 
+import java.io.Serializable;
+
 import dto.AcomodacaoDto;
 import enums.EEstadoOcupacao;
 import exception.AcomodacaoException;
-import exception.TipoAcomodacaoException;
-
-import java.io.Serializable;
 
 public class Acomodacao implements IAcomodacao, Serializable {
 
