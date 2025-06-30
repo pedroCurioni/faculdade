@@ -1,0 +1,2 @@
+gcc -o clean clean.c -pthread && ./clean
+gcc -o main main.c -pthread -lrt && ./main
