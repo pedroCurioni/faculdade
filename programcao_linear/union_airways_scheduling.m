@@ -1,9 +1,7 @@
 clc, clearvars;
-% 1. Função objetivo (Custo a minimizar)
 % f(x1,x2,x3,x4,x5) = 170x1 + 160x2 + 175x3 + 180x4 + 195x5
 f = [170; 160; 175; 180; 195];
 
-% 2. Matriz de restrições (A * x <= b)
 % Como as restrições originais são >=, multiplicamos os coeficientes por -1
 A = [
     -1,  0,  0,  0,  0; % x1 >= 48
@@ -18,7 +16,6 @@ A = [
      0,  0,  0,  0, -1  % x5 >= 15
 ];
 
-% 3. Vetor de termos independentes (b)
 % Como as restrições originais são >=, multiplicamos os termos por -1
 b = [-48; -79; -65; -87; -64; -73; -82; -43; -52; -15];
 
