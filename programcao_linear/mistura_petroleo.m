@@ -7,12 +7,10 @@ lucro_A = [3, -2, 2, -5];   % Lucro das misturas para Gasolina A
 lucro_Z = [9, 4, 8, 1];     % Lucro das misturas para Gasolina Z
 lucro_S = [16, 11, 15, 8];  % Lucro das misturas para Gasolina S
 
-% Concatenar para formar o vetor da função objetivo (Maximização)
-coeficientes_max = [lucro_A, lucro_Z, lucro_S];
-% Converter para Minimização (Padrão do linprog no MATLAB)
-f = -coeficientes_max'; % O ' transforma em um vetor coluna
+% Vetor da função objetivo (Minimização do lucro negativo = Maximização)
+f = -[lucro_A, lucro_Z, lucro_S]';  % O ' transforma em um vetor coluna
 
-% Restrições
+% Restrições (Ax <= b)
 A = zeros(10, 12); % Matriz de coeficientes das restrições (lado esquerdo)
 b = zeros(10, 1);  % Vetor de constantes (lado direito)
 
@@ -46,20 +44,22 @@ A(7, 9:12) = [-0.5, -0.5,  0.5, -0.5];
 A(8, 5:8) = [0.7, -0.3, -0.3, -0.3];
 
 % 5. -0.9xZ1 + 0.1xZ2 + 0.1xZ3 + 0.1xZ4 <= 0 (invertida da eq. original >=)
-A(9, 5:8) = [-0.9,  0.1,  0.1,  0.1];
+A(9, 5:8) = [0.1, -0.9, 0.1, 0.1];
 
 % Gasolina Amarela (Variáveis A: índices 1 a 4)
 % 6. 0.3xA1 - 0.7xA2 - 0.7xA3 - 0.7xA4 <= 0
 A(10, 1:4) = [0.3, -0.7, -0.7, -0.7];
 
-
 lb = zeros(12, 1); % Todas as 12 variáveis devem ser >= 0
 ub = [];           % Sem limite superior
 
-
-options = optimoptions('linprog','Display','iter');
+options = optimoptions('linprog','Display','none');
 [x_otimo, fval] = linprog(f, A, b, [], [], lb, ub, options);
 lucro_maximo = -fval; % Inverte a minimização
 
-disp('Solução ótima:'); disp(x_otimo);
-disp('Lucro Máximo:'); disp(lucro_maximo);
+fprintf('\n--- RESULTADOS DA OTIMIZAÇÃO ---\n');
+fprintf('Lucro Máximo: R$ %.2f\n\n', lucro_maximo);
+fprintf('Distribuição de Barris:\n');
+fprintf('Gasolina Amarela: %.2f | %.2f | %.2f | %.2f\n', x_otimo(1:4));
+fprintf('Gasolina Azul:    %.2f | %.2f | %.2f | %.2f\n', x_otimo(5:8));
+fprintf('Gasolina Super:   %.2f | %.2f | %.2f | %.2f\n', x_otimo(9:12));
