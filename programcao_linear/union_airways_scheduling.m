@@ -25,13 +25,11 @@ lb = zeros(5, 1);
 % 5. Limites superiores (não existem neste problema)
 ub = []; 
 
-[x, fval] = linprog(f, A, b, [], [], lb, ub);
+intcon = 1:5; % Indica que as variáveis de 1 a 5 devem ser números inteiros
 
-%intcon = 1:5; % Indica que as variáveis de 1 a 5 devem ser números inteiros
-%[x, fval] = intlinprog(f, A, b, [], [], lb, ub);
+[x, fval] = intlinprog(f, intcon, A, b, [], [], lb, ub);
 
-disp('Número de agentes atribuídos por turno (x1 a x5):');
-disp(x); % Arredondado por questões de formatação de exibição
-disp(['Custo total diário (Z): $', num2str(fval)]);
+fprintf('Custo total diário: R$ %.2f\n\n', fval);
+fprintf('Número de agentes atribuídos por turno (x1 a x5):\n');
+fprintf('%.2f  ', x); 
 fprintf('\n');
-
