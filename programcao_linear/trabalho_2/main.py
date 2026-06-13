@@ -335,12 +335,22 @@ def main():
     print("Status do modelo:", h.getModelStatus())
 
     info = h.getInfo()
-    print(f"Valor ótimo de Z = {info.objective_function_value}")
+    print(f"Valor ótimo de Z = {info.objective_function_value:.2f}\n")
 
     solution = h.getSolution()
 
-    for nome, valor in zip(var_names, solution.col_value, strict=True):
-        print(f"{nome} = {valor:.4f}")
+    print("--- ANÁLISE DAS VARIÁVEIS (Produção e Custos Reduzidos) ---")
+    print(f"{'Variável':<10} | {'Valor Ótimo':<15} | {'Custo Reduzido':<15}")
+    print("-" * 45)
+    for nome, valor, custo_reduzido in zip(var_names, solution.col_value, solution.col_dual, strict=True):
+        print(f"{nome:<10} | {valor:<15.4f} | {custo_reduzido:<15.4f}")
+
+    print("\n--- ANÁLISE DAS RESTRIÇÕES (Preços Sombra dos Recursos) ---")
+    print(f"{'Restrição':<35} | {'Preço Sombra':<15}")
+    print("-" * 55)
+    # Como as restrições foram adicionadas na ordem da lista, podemos pareá-las diretamente
+    for c, preco_sombra in zip(constraints, solution.row_dual, strict=True):
+        print(f"{c['name']:<35} | {preco_sombra:<15.4f}")
 
 
 if __name__ == "__main__":
